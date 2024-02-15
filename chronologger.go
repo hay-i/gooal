@@ -40,6 +40,9 @@ func main() {
 
 	component := hello(result.Title)
 	e := echo.New()
+
+	e.Static("/static", "assets")
+
 	e.GET("/", func(c echo.Context) error {
 		return component.Render(c.Request().Context(), c.Response().Writer)
 	})
