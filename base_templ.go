@@ -202,7 +202,7 @@ func page() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/addresses\" hx-target=\"#replaceMe\" hx-swap=\"outerHTML\">Load Another Address...</button></td></tr></tbody></table>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/address\" hx-target=\"#replaceMe\" hx-swap=\"outerHTML\">Load Another Address...</button></td></tr></tbody></table>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func getAddresses(c echo.Context) error {
+func getAddress(c echo.Context) error {
 	fake := faker.New()
 	title := fake.Address().Address()
 	component := address(title)
@@ -55,7 +55,7 @@ func main() {
 	e.GET("/", func(c echo.Context) error {
 		return component.Render(c.Request().Context(), c.Response().Writer)
 	})
-	e.GET("/addresses", getAddresses)
+	e.GET("/address", getAddress)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
