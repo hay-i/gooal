@@ -3,3 +3,12 @@ hmr:
 
 start:
 	go run .
+
+up:
+	docker compose up -d
+
+down:
+	docker compose down
+
+db:
+	docker exec -it chronologger-mongo-1 mongosh --username root --password example
