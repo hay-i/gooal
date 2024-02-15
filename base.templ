@@ -1,29 +1,74 @@
 package main
 
-templ hello(name string) {
+css btn() {
+	display: inline-block;
+	border: 0;
+	background-color: #00FF00;
+	border-radius: 999px;
+	padding: 1rem 2rem;
+	transition: 150ms;
+	cursor: pointer;
+}
+
+templ base() {
 	<!DOCTYPE html>
 	<html>
-		<head>
-			<script src="/static/js/htmx.min.js"></script>
-			<title>Chronologger</title>
-		</head>
-		<body>
-			<h1>Chronologger</h1>
-			<a href="/" class="btn">Hello, { name }</a>
-			<style type="text/css">
-                .btn {
-                    display: inline-block;
-                    border: 0;
-                    background-color: #00FF00;
-                    border-radius: 999px;
-                    padding: 1rem 2rem;
-                    transition: 150ms;
-                    cursor: pointer;
-                }
-                .btn:hover{
-                    opacity: 0.5;
-                }
-            </style>
-		</body>
+		{ children... }
 	</html>
+}
+
+templ header() {
+	<head>
+		<script src="/static/js/htmx.min.js"></script>
+		<title>Chronologger</title>
+	</head>
+	<style>
+        .btn:hover {
+            background-color: #00CC00;
+        }
+    </style>
+}
+
+templ body() {
+	<body>
+		{ children... }
+	</body>
+}
+
+templ address(address string) {
+	<tr>
+		<td colspan="3">{ address }</td>
+	</tr>
+	<tr id="replaceMe"></tr>
+}
+
+templ page() {
+	@base() {
+		@header()
+		@body() {
+			<h1>Chronologger</h1>
+			<table>
+				<thead>
+					<tr>
+						<th>Address</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="replaceMe"></tr>
+					<tr>
+						<td colspan="3">
+							<button
+								class={ btn, "btn" }
+								hx-get="/addresses"
+								hx-target="#replaceMe"
+								hx-swap="outerHTML"
+							>
+								Load Another Address...
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		}
+	}
 }
