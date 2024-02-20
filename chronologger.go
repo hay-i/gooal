@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-        ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	clientOpts := options.Client().ApplyURI("mongodb://root:example@localhost:27017")
