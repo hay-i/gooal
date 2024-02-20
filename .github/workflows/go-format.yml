@@ -1,0 +1,10 @@
+name: Golang Formatting
+on: [pull_request]
+jobs:
+  build:
+    name: Golang Formatter
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: Golang Formatting
+      run: go fmt .
