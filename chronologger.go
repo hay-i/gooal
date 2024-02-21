@@ -11,6 +11,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+func getAddress(c echo.Context) error {
+	fake := faker.New()
+	title := fake.Address().Address()
+	component := address(title)
+
+	return component.Render(c.Request().Context(), c.Response().Writer)
+}
+
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -37,11 +45,17 @@ func main() {
 	var result Goal
 	findOptions := options.FindOne().SetSort(bson.D{{Key: "created_at", Value: -1}})
 	collection.FindOne(ctx, bson.D{}, findOptions).Decode(&result)
+	// result isn't used anymore, but this can be used as an example for the moment
 
-	component := hello(result.Title)
+	component := page()
 	e := echo.New()
+
+	e.Static("/static", "assets")
+
 	e.GET("/", func(c echo.Context) error {
 		return component.Render(c.Request().Context(), c.Response().Writer)
 	})
+	e.GET("/address", getAddress)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }
