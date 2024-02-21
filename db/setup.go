@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	model "github.com/hay-i/chronologger/models"
@@ -35,20 +34,23 @@ func Seed(ctx context.Context, client *mongo.Client) {
 	collection.InsertOne(ctx, defaultTemplateTwo)
 }
 
-func GetLastTemplate(ctx context.Context, client *mongo.Client) []model.Template {
+func GetDefaultTemplates(ctx context.Context, client *mongo.Client) []model.Template {
     collection := client.Database("chronologger").Collection("templates")
 
     var results []model.Template
     // findOptions := options.FindOne().SetSort(bson.D{{Key: "created_at", Value: -1}})
     // collection.FindOne(ctx, bson.D{}, findOptions).Decode(&results)
     cursor, err := collection.Find(ctx, bson.D{})
-    // if err != nil {
-    //     panic(err)
-    // }
-    if err = cursor.All(ctx, &results); err != nil {
+
+    if err != nil {
+        // TODO: Something better than panic
         panic(err)
     }
-    fmt.Println(results)
+
+    if err = cursor.All(ctx, &results); err != nil {
+        // TODO: Something better than panic
+        panic(err)
+    }
 
     return results
 }

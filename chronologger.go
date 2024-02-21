@@ -17,7 +17,7 @@ func main() {
 	ctx, client, dbErr, cancel := db.Initialize()
 	db.Seed(ctx, client)
 
-	templates := db.GetLastTemplate(ctx, client)
+	templates := db.GetDefaultTemplates(ctx, client)
 
 	component := page()
 	e := echo.New()
@@ -34,7 +34,7 @@ func main() {
 
 	e.Logger.Fatal(e.Start(":1323"))
 
-    // TODO: do we need a teardown function?
+	// TODO: do we need a teardown function?
 	defer func() {
 		if dbErr = client.Disconnect(ctx); dbErr != nil {
 			// TODO: Something better than panic
