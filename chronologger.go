@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/labstack/echo/v4"
 
-	db "github.com/hay-i/chronologger/db"
+	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/models"
 )
 
