@@ -10,7 +10,7 @@ up: ## Start the docker containers
 down: ## Stop the docker containers
 	docker compose down
 
-db: ## Connect to the mongo db
+dbCli: ## Connect to the mongo db
 	docker exec -it chronologger-mongo-1 mongosh --username root --password example
 
 help:
