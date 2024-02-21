@@ -4,53 +4,105 @@ import (
 	"context"
 	"time"
 
-	model "github.com/hay-i/chronologger/models"
+	"github.com/hay-i/chronologger/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func Initialize() (context.Context, *mongo.Client, error, context.CancelFunc) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-
+func Initialize(ctx context.Context) (*mongo.Client, error) {
 	clientOpts := options.Client().ApplyURI("mongodb://root:example@localhost:27017")
 	client, err := mongo.Connect(ctx, clientOpts)
 
 	if err != nil {
-        // TODO: Something better than panic
 		panic(err)
 	}
 
-	return ctx, client, err, cancel
+	database := client.Database("chronologger")
+
+	collections, err := database.ListCollectionNames(ctx, bson.M{"name": "templates"})
+	if err != nil {
+		panic(err)
+	}
+
+	if len(collections) > 0 {
+		return client, nil
+	}
+
+	jsonSchema := bson.M{
+		"bsonType": "object",
+		"required": []string{"_id", "title", "description"},
+		"properties": bson.M{
+			"_id": bson.M{
+				"bsonType":    "string",
+				"description": "unique identifier for the template, which is required",
+			},
+			"title": bson.M{
+				"bsonType":    "string",
+				"description": "title of the template, which is required",
+			},
+			"description": bson.M{
+				"bsonType":    "string",
+				"description": "description of the template, which is required",
+			},
+			"created_at": bson.M{
+				"bsonType":    "date",
+				"description": "date the template was created, which is required",
+			},
+		},
+	}
+	validator := bson.M{"$jsonSchema": jsonSchema}
+	opts := options.CreateCollection().SetValidator(validator)
+
+	if err = database.CreateCollection(ctx, "templates", opts); err != nil {
+		panic(err)
+	}
+
+	return client, err
 }
 
-func Seed(ctx context.Context, client *mongo.Client) {
-    collection := client.Database("chronologger").Collection("templates")
+func Seed(ctx context.Context, database *mongo.Database) {
+	collection := database.Collection("templates")
 
-    defaultTemplate := model.DefaultTemplate{ID: "finance", Title: "Default Template #1", CreatedAt: time.Now()}
-    defaultTemplateTwo := model.DefaultTemplate{ID: "social", Title: "Default Template #2", CreatedAt: time.Now()}
+	defaultTemplates := []models.DefaultTemplate{
+		{ID: "finance", Title: "Default Template #1", Description: "My description 1", CreatedAt: time.Now()},
+		{ID: "social", Title: "Default Template #2", Description: "My description 2", CreatedAt: time.Now()},
+		{ID: "work", Title: "Default Template #3", Description: "My description 3", CreatedAt: time.Now()},
+	}
 
-	collection.InsertOne(ctx, defaultTemplate)
-	collection.InsertOne(ctx, defaultTemplateTwo)
+	for _, defaultTemplate := range defaultTemplates {
+		filter := bson.M{"_id": defaultTemplate.ID}
+		count, err := collection.CountDocuments(ctx, filter)
+		if err != nil {
+			panic(err)
+		}
+
+		if count > 0 {
+			continue
+		}
+
+		_, err = collection.InsertOne(ctx, defaultTemplate)
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
-func GetDefaultTemplates(ctx context.Context, client *mongo.Client) []model.Template {
-    collection := client.Database("chronologger").Collection("templates")
+func GetDefaultTemplates(ctx context.Context, database *mongo.Database) []models.Template {
+	collection := database.Collection("templates")
 
-    var results []model.Template
-    // findOptions := options.FindOne().SetSort(bson.D{{Key: "created_at", Value: -1}})
-    // collection.FindOne(ctx, bson.D{}, findOptions).Decode(&results)
-    cursor, err := collection.Find(ctx, bson.D{})
+	var results []models.Template
+	// findOptions := options.FindOne().SetSort(bson.D{{Key: "created_at", Value: -1}})
+	// collection.FindOne(ctx, bson.D{}, findOptions).Decode(&results)
+	cursor, err := collection.Find(ctx, bson.D{})
 
-    if err != nil {
-        // TODO: Something better than panic
-        panic(err)
-    }
+	if err != nil {
+		panic(err)
+	}
 
-    if err = cursor.All(ctx, &results); err != nil {
-        // TODO: Something better than panic
-        panic(err)
-    }
+	if err = cursor.All(ctx, &results); err != nil {
+		panic(err)
+	}
 
-    return results
+	return results
 }
