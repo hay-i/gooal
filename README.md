@@ -4,6 +4,8 @@ Chronologger is a personal review app, built with Golang.
 
 # Development
 
+You can get up and running using `make`, use `make help` to see a list of options.
+
 ## Up and running
 
 Start the application with hot module reloading using `make hmr`.
