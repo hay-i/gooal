@@ -1,0 +1,18 @@
+package components
+
+import "github.com/hay-i/chronologger/models"
+
+templ BuildTemplates(templates []models.Template) {
+	for _, template := range templates {
+		<tr>
+			<td>{ template.Title }</td>
+		</tr>
+	}
+}
+
+templ Template(template string) {
+	<tr>
+		<td colspan="3">{ template }</td>
+	</tr>
+	<tr id="replaceMe"></tr>
+}
