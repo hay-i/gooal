@@ -6,6 +6,7 @@ import (
 
 	"github.com/hay-i/chronologger/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -20,59 +21,52 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 
 	database := client.Database("chronologger")
 
-	collections, err := database.ListCollectionNames(ctx, bson.M{"name": "templates"})
-	if err != nil {
-		panic(err)
-	}
-
-	if len(collections) > 0 {
-		return client, nil
-	}
-
-	jsonSchema := bson.M{
-		"bsonType": "object",
-		"required": []string{"title", "description"},
-		"properties": bson.M{
-			"title": bson.M{
-				"bsonType":    "string",
-				"description": "title of the template, which is required",
-			},
-			"description": bson.M{
-				"bsonType":    "string",
-				"description": "description of the template, which is required",
-			},
-			"default": bson.M{
-				"bsonType":    "bool",
-				"description": "whether the template is a default seeded template",
-			},
-			"created_at": bson.M{
-				"bsonType":    "date",
-				"description": "date the template was created, which is required",
-			},
-		},
-	}
-	validator := bson.M{"$jsonSchema": jsonSchema}
-	opts := options.CreateCollection().SetValidator(validator)
-
-	if err = database.CreateCollection(ctx, "templates", opts); err != nil {
-		panic(err)
-	}
-
+	createCollections(ctx, database)
 	return client, err
 }
 
 func Seed(ctx context.Context, database *mongo.Database) {
-	collection := database.Collection("templates")
+	templateCollection := database.Collection("templates")
 
 	defaultTemplates := []models.Template{
-		{Title: "Default Template #1", Description: "My description 1", CreatedAt: time.Now(), Default: true},
-		{Title: "Default Template #2", Description: "My description 2", CreatedAt: time.Now(), Default: true},
-		{Title: "Default Template #3", Description: "My description 3", CreatedAt: time.Now(), Default: true},
+		{
+			Title:       "Default Template #1",
+			Description: "My description 1",
+			CreatedAt:   time.Now(),
+			Default:     true,
+			Questions: []models.Question{
+				{Title: "Question 1", Description: "My description 1", Type: models.TextQuestion},
+				{Title: "Question 2", Description: "My description 2", Type: models.NumberQuestion},
+				{Title: "Question 3", Description: "My description 3", Type: models.SelectQuestion},
+			},
+		},
+		{
+			Title:       "Default Template #2",
+			Description: "My description 2",
+			CreatedAt:   time.Now(),
+			Default:     true,
+			Questions: []models.Question{
+				{Title: "Question 1", Description: "My description 1", Type: models.TextQuestion},
+				{Title: "Question 2", Description: "My description 2", Type: models.NumberQuestion},
+				{Title: "Question 3", Description: "My description 3", Type: models.SelectQuestion},
+			},
+		},
+		{
+			Title:       "Default Template #3",
+			Description: "My description 3",
+			CreatedAt:   time.Now(),
+			Default:     true,
+			Questions: []models.Question{
+				{ID: primitive.NewObjectID(), Title: "Question 1", Description: "My description 1", Type: models.TextQuestion},
+				{ID: primitive.NewObjectID(), Title: "Question 2", Description: "My description 2", Type: models.NumberQuestion},
+				{ID: primitive.NewObjectID(), Title: "Question 3", Description: "My description 3", Type: models.SelectQuestion},
+			},
+		},
 	}
 
 	for _, defaultTemplate := range defaultTemplates {
 		filter := bson.M{"title": defaultTemplate.Title}
-		count, err := collection.CountDocuments(ctx, filter)
+		count, err := templateCollection.CountDocuments(ctx, filter)
 		if err != nil {
 			panic(err)
 		}
@@ -81,9 +75,33 @@ func Seed(ctx context.Context, database *mongo.Database) {
 			continue
 		}
 
-		_, err = collection.InsertOne(ctx, defaultTemplate)
+		_, err = templateCollection.InsertOne(ctx, defaultTemplate)
 		if err != nil {
 			panic(err)
+		}
+	}
+
+	templates := []models.Template{}
+	cursor, err := templateCollection.Find(ctx, bson.M{"default": true})
+	if err != nil {
+		panic(err)
+	}
+	if err = cursor.All(ctx, &templates); err != nil {
+		panic(err)
+	}
+
+	answerCollection := database.Collection("answers")
+	for _, template := range templates {
+		for _, question := range template.Questions {
+			answer := models.Answer{
+				TemplateID: template.ID,
+				QuestionID: question.ID,
+				Answer:     "My answer",
+			}
+			_, err = answerCollection.InsertOne(ctx, answer)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 }
