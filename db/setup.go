@@ -6,6 +6,7 @@ import (
 
 	"github.com/hay-i/chronologger/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -29,14 +30,11 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 		return client, nil
 	}
 
+	// TODO: Add Default boolean, and default it to false
 	jsonSchema := bson.M{
 		"bsonType": "object",
-		"required": []string{"_id", "title", "description"},
+		"required": []string{"title", "description"},
 		"properties": bson.M{
-			"_id": bson.M{
-				"bsonType":    "string",
-				"description": "unique identifier for the template, which is required",
-			},
 			"title": bson.M{
 				"bsonType":    "string",
 				"description": "title of the template, which is required",
@@ -64,14 +62,14 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 func Seed(ctx context.Context, database *mongo.Database) {
 	collection := database.Collection("templates")
 
-	defaultTemplates := []models.DefaultTemplate{
-		{ID: "finance", Title: "Default Template #1", Description: "My description 1", CreatedAt: time.Now()},
-		{ID: "social", Title: "Default Template #2", Description: "My description 2", CreatedAt: time.Now()},
-		{ID: "work", Title: "Default Template #3", Description: "My description 3", CreatedAt: time.Now()},
+	defaultTemplates := []models.Template{
+		{Title: "Default Template #1", Description: "My description 1", CreatedAt: time.Now(), Default: true},
+		{Title: "Default Template #2", Description: "My description 2", CreatedAt: time.Now(), Default: true},
+		{Title: "Default Template #3", Description: "My description 3", CreatedAt: time.Now(), Default: true},
 	}
 
 	for _, defaultTemplate := range defaultTemplates {
-		filter := bson.M{"_id": defaultTemplate.ID}
+		filter := bson.M{"title": defaultTemplate.Title}
 		count, err := collection.CountDocuments(ctx, filter)
 		if err != nil {
 			panic(err)
@@ -92,9 +90,9 @@ func GetDefaultTemplates(ctx context.Context, database *mongo.Database) []models
 	collection := database.Collection("templates")
 
 	var results []models.Template
-	// findOptions := options.FindOne().SetSort(bson.D{{Key: "created_at", Value: -1}})
-	// collection.FindOne(ctx, bson.D{}, findOptions).Decode(&results)
-	cursor, err := collection.Find(ctx, bson.D{})
+
+	filter := bson.M{"default": true}
+	cursor, err := collection.Find(ctx, filter)
 
 	if err != nil {
 		panic(err)
@@ -105,4 +103,23 @@ func GetDefaultTemplates(ctx context.Context, database *mongo.Database) []models
 	}
 
 	return results
+}
+
+// TODO: Extract to another file
+func GetTemplate(ctx context.Context, database *mongo.Database, id string) models.Template {
+	collection := database.Collection("templates")
+
+	var result models.Template
+	objectId, err := primitive.ObjectIDFromHex(id)
+
+	if err != nil {
+		panic(err)
+	}
+
+	filter := bson.M{"_id": objectId}
+	if err = collection.FindOne(ctx, filter).Decode(&result); err != nil {
+		panic(err)
+	}
+
+	return result
 }

@@ -2,18 +2,14 @@ package models
 
 import (
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Template struct {
-	Title       string    `bson:"title"`
-	Description string    `bson:"description"`
-	CreatedAt   time.Time `bson:"created_at"`
-}
-
-// TODO: is there a way to embed Template in here?
-type DefaultTemplate struct {
-	ID          string    `bson:"_id"`
-	Title       string    `bson:"title"`
-	Description string    `bson:"description"`
-	CreatedAt   time.Time `bson:"created_at"`
+	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	Title       string             `bson:"title"`
+	Description string             `bson:"description"`
+	CreatedAt   time.Time          `bson:"created_at"`
+	Default     bool               `bson:"default"`
 }

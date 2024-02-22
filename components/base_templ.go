@@ -11,6 +11,10 @@ import "io"
 import "bytes"
 import "strings"
 
+import (
+	"github.com/hay-i/chronologger/models"
+)
+
 func btn() templ.CSSClass {
 	var templ_7745c5c3_CSSBuilder strings.Builder
 	templ_7745c5c3_CSSBuilder.WriteString(`display:inline-block;`)
@@ -115,7 +119,7 @@ func body() templ.Component {
 	})
 }
 
-func Home() templ.Component {
+func Home(templates []models.Template) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -148,24 +152,15 @@ func Home() templ.Component {
 					templ_7745c5c3_Buffer = templ.GetBuffer()
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>Chronologger</h1><table><thead><tr><th>Template</th></tr></thead> <tbody><tr id=\"replaceMe\"></tr><tr><td colspan=\"3\">")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>Chronologger</h1><table><thead><tr><th>Template</th></tr></thead> <tbody>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var7 = []any{btn, "btn"}
-				templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var7...)
+				templ_7745c5c3_Err = TemplateTable(templates).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ.CSSClasses(templ_7745c5c3_Var7).String()))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-get=\"/template\" hx-target=\"#replaceMe\" hx-swap=\"outerHTML\">Load Another Template...</button></td></tr></tbody></table>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

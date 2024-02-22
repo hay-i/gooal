@@ -1,5 +1,9 @@
 package components
 
+import (
+	"github.com/hay-i/chronologger/models"
+)
+
 css btn() {
 	display: inline-block;
 	border: 0;
@@ -35,7 +39,7 @@ templ body() {
 	</body>
 }
 
-templ Home() {
+templ Home(templates []models.Template) {
 	@base() {
 		@header()
 		@body() {
@@ -47,19 +51,7 @@ templ Home() {
 					</tr>
 				</thead>
 				<tbody>
-					<tr id="replaceMe"></tr>
-					<tr>
-						<td colspan="3">
-							<button
-								class={ btn, "btn" }
-								hx-get="/template"
-								hx-target="#replaceMe"
-								hx-swap="outerHTML"
-							>
-								Load Another Template...
-							</button>
-						</td>
-					</tr>
+					@TemplateTable(templates)
 				</tbody>
 			</table>
 		}

@@ -26,15 +26,19 @@ func main() {
 	e := echo.New()
 	e.Static("/static", "assets")
 	e.GET("/", func(c echo.Context) error {
-		component := components.Home()
+		requestContext := c.Request().Context()
+		templates := db.GetDefaultTemplates(requestContext, database)
+		component := components.Home(templates)
 
-		return component.Render(c.Request().Context(), c.Response().Writer)
+		return component.Render(requestContext, c.Response().Writer)
 	})
-	e.GET("/template", func(c echo.Context) error {
-		templates := db.GetDefaultTemplates(ctx, database)
-		component := components.BuildTemplates(templates)
+	e.GET("templates/:id", func(c echo.Context) error {
+		requestContext := c.Request().Context()
+		id := c.Param("id")
+		template := db.GetTemplate(requestContext, database, id)
+		component := components.Template(template)
 
-		return component.Render(c.Request().Context(), c.Response().Writer)
+		return component.Render(requestContext, c.Response().Writer)
 	})
 
 	e.Logger.Fatal(e.Start(":1323"))
