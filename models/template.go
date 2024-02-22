@@ -11,5 +11,5 @@ type Template struct {
 	Title       string             `bson:"title"`
 	Description string             `bson:"description"`
 	CreatedAt   time.Time          `bson:"created_at"`
-	Default     bool               `bson:"default"`
+	Default     bool               `bson:"default,omitempty"`
 }
