@@ -30,7 +30,6 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 		return client, nil
 	}
 
-	// TODO: Add Default boolean, and default it to false
 	jsonSchema := bson.M{
 		"bsonType": "object",
 		"required": []string{"title", "description"},
@@ -42,6 +41,10 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 			"description": bson.M{
 				"bsonType":    "string",
 				"description": "description of the template, which is required",
+			},
+			"default": bson.M{
+				"bsonType":    "bool",
+				"description": "whether the template is a default seeded template",
 			},
 			"created_at": bson.M{
 				"bsonType":    "date",
