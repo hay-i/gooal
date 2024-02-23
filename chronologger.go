@@ -6,8 +6,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
+	"github.com/hay-i/chronologger/routing"
 )
 
 func main() {
@@ -24,22 +24,8 @@ func main() {
 	db.Seed(ctx, database)
 
 	e := echo.New()
-	e.Static("/static", "assets")
-	e.GET("/", func(c echo.Context) error {
-		requestContext := c.Request().Context()
-		templates := db.GetDefaultTemplates(requestContext, database)
-		component := components.Home(templates)
 
-		return component.Render(requestContext, c.Response().Writer)
-	})
-	e.GET("templates/:id", func(c echo.Context) error {
-		requestContext := c.Request().Context()
-		id := c.Param("id")
-		template := db.GetTemplate(requestContext, database, id)
-		component := components.Template(template)
-
-		return component.Render(requestContext, c.Response().Writer)
-	})
+	routing.Initialize(e, database)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
