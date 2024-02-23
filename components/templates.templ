@@ -22,7 +22,7 @@ templ TemplateTable(templates []models.Template) {
 		<tr>
 			<td>{ template.Title }</td>
 			<td colspan="3">
-				<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
+				<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
 			</td>
 		</tr>
 	}
@@ -34,7 +34,6 @@ templ Template(template models.Template, answers []models.Answer) {
 		<div>{ template.Title }</div>
 		<div>Answers per question:</div>
 		for _, question := range template.Questions {
-			<div>{ question.Title }</div>
 			@questionAnswers(question, answers)
 		}
 	</div>
