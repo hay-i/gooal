@@ -1,8 +1,6 @@
 package routing
 
 import (
-	"fmt"
-
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/hay-i/chronologger/components"
@@ -28,15 +26,9 @@ func Initialize(e *echo.Echo, database *mongo.Database) {
 		requestContext := c.Request().Context()
 		id := c.Param("id")
 		template := db.GetTemplate(requestContext, database, id)
-		component := components.Template(template)
+		answers := db.GetAnswers(requestContext, database, id)
+		component := components.Template(template, answers)
 
-		return component.Render(requestContext, c.Response().Writer)
-	})
-
-	e.POST("templates/:id/responses", func(c echo.Context) error {
-		fmt.Println("PATCH /templates/:id/responses")
-		requestContext := c.Request().Context()
-		component := components.Response("Wow!")
 		return component.Render(requestContext, c.Response().Writer)
 	})
 }

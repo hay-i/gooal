@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/hay-i/chronologger/models"
@@ -89,8 +90,19 @@ func seedAnswers(ctx context.Context, database *mongo.Database) {
 			answer := models.Answer{
 				TemplateID: template.ID,
 				QuestionID: question.ID,
-				Answer:     "My answer",
+				Answer:     fmt.Sprintf("Answer for: %s", question.Title),
 			}
+
+			filter := bson.M{"title": answer.Answer}
+			count, err := templateCollection.CountDocuments(ctx, filter)
+			if err != nil {
+				panic(err)
+			}
+
+			if count > 0 {
+				continue
+			}
+
 			_, err = answerCollection.InsertOne(ctx, answer)
 			if err != nil {
 				panic(err)
