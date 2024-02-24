@@ -32,6 +32,7 @@ templ Template(template models.Template, answers []models.Answer) {
 	<div>
 		<div>{ template.Description }</div>
 		<div>{ template.Title }</div>
+        <a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
 		<div>Answers per question:</div>
 		for _, question := range template.Questions {
 			@questionAnswers(question, answers)

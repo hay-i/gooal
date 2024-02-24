@@ -31,4 +31,13 @@ func Initialize(e *echo.Echo, database *mongo.Database) {
 
 		return component.Render(requestContext, c.Response().Writer)
 	})
+
+    e.GET("templates/:id/start", func(c echo.Context) error {
+        requestContext := c.Request().Context()
+        id := c.Param("id")
+		template := db.GetTemplate(requestContext, database, id)
+		component := components.Start(template)
+
+		return component.Render(requestContext, c.Response().Writer)
+    })
 }

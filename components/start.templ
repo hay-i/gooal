@@ -1,0 +1,23 @@
+package components 
+
+import (
+    "github.com/hay-i/chronologger/models"
+)
+
+templ Start(template models.Template) {
+    <h1 class="title">{template.Title}</h1>
+    <section>
+    for _, question := range template.Questions {
+        @questionStuff(question)
+    }
+    </section>
+}
+
+templ questionStuff(question models.Question){
+    <section>
+        <p>{question.Title}</p>
+        <p>{question.Description}</p>
+        <input type="text"/>
+    </section>
+}
+
