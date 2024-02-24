@@ -1,8 +1,11 @@
+start: templ ## Start the server
+	go run .
+
+templ: ## Generate the templates
+	templ generate
+
 hmr: ## Start the hot module replacement server
 	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
-
-start: ## Start the server
-	go run .
 
 up: ## Start the docker containers
 	docker compose up -d
