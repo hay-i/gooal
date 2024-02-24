@@ -21,6 +21,7 @@ func main() {
 	}()
 	defer cancel()
 
+        // TODO: Do we want to do this via a script instead?
 	db.Seed(ctx, database)
 
 	e := echo.New()
