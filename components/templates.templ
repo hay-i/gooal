@@ -1,0 +1,40 @@
+package components
+
+import (
+	"fmt"
+
+	"github.com/hay-i/chronologger/models"
+)
+
+templ questionAnswers(question models.Question, answers []models.Answer) {
+	<div>
+		<div>{ question.Title }</div>
+		<div>
+			for _, answer := range models.AnswersForQuestion(answers, question.ID) {
+				<div>{ answer.Answer }</div>
+			}
+		</div>
+	</div>
+}
+
+templ TemplateTable(templates []models.Template) {
+	for _, template := range templates {
+		<tr>
+			<td>{ template.Title }</td>
+			<td colspan="3">
+				<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
+			</td>
+		</tr>
+	}
+}
+
+templ Template(template models.Template, answers []models.Answer) {
+	<div>
+		<div>{ template.Description }</div>
+		<div>{ template.Title }</div>
+		<div>Answers per question:</div>
+		for _, question := range template.Questions {
+			@questionAnswers(question, answers)
+		}
+	</div>
+}

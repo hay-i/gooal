@@ -4,58 +4,29 @@ import (
 	"context"
 	"time"
 
-	"github.com/jaswdr/faker"
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"github.com/hay-i/chronologger/db"
+	"github.com/hay-i/chronologger/routing"
 )
-
-func getAddress(c echo.Context) error {
-	fake := faker.New()
-	title := fake.Address().Address()
-	component := address(title)
-
-	return component.Render(c.Request().Context(), c.Response().Writer)
-}
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	clientOpts := options.Client().ApplyURI("mongodb://root:example@localhost:27017")
-	client, err := mongo.Connect(ctx, clientOpts)
-
+	client, dbErr := db.Initialize(ctx)
+	database := client.Database("chronologger")
 	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
+		if dbErr = client.Disconnect(ctx); dbErr != nil {
+			panic(dbErr)
 		}
 	}()
+	defer cancel()
 
-	if err != nil {
-		panic(err)
-	}
+	// TODO: Do we want to do this via a script instead?
+	db.Seed(ctx, database)
 
-	collection := client.Database("chronologger").Collection("goals")
-	fake := faker.New()
-	title := fake.Address().Address()
-	goal := Goal{Title: title, CreatedAt: time.Now()}
-	collection.InsertOne(ctx, goal)
-
-	var result Goal
-	findOptions := options.FindOne().SetSort(bson.D{{Key: "created_at", Value: -1}})
-	collection.FindOne(ctx, bson.D{}, findOptions).Decode(&result)
-	// result isn't used anymore, but this can be used as an example for the moment
-
-	component := page()
 	e := echo.New()
 
-	e.Static("/static", "assets")
-
-	e.GET("/", func(c echo.Context) error {
-		return component.Render(c.Request().Context(), c.Response().Writer)
-	})
-	e.GET("/address", getAddress)
+	routing.Initialize(e, database)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
