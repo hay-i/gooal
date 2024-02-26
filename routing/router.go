@@ -92,6 +92,7 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 			}
 		}
 
+		// Ideally I wanted to send in http.StatusCreated, but it seems that the redirect doesn't work with that status code
 		// See: https://github.com/labstack/echo/issues/229#issuecomment-1518502318
 		return c.Redirect(http.StatusFound, "/templates/"+templateId+"?success=true")
 	})
