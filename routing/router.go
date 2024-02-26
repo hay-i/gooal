@@ -13,6 +13,7 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 	database := client.Database("chronologger")
 
 	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
 
 	e.Static("/static", "assets")
 	adminGroup := e.Group("/admin")
