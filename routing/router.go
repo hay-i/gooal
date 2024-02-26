@@ -1,6 +1,8 @@
 package routing
 
 import (
+	"net/http"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -31,7 +33,8 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 		id := c.Param("id")
 		template := db.GetTemplate(requestContext, database, id)
 		answers := db.GetAnswers(requestContext, database, id)
-		component := components.Template(template, answers)
+		success := c.QueryParam("success")
+		component := components.Template(template, answers, success == "true")
 
 		return component.Render(requestContext, c.Response().Writer)
 	})
@@ -89,9 +92,7 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 			}
 		}
 
-		template := db.GetTemplate(requestContext, database, templateId)
-		component := components.Start(template)
-
-		return component.Render(requestContext, c.Response().Writer)
+		// See: https://github.com/labstack/echo/issues/229#issuecomment-1518502318
+		return c.Redirect(http.StatusFound, "/templates/"+templateId+"?success=true")
 	})
 }
