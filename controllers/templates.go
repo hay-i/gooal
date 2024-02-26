@@ -1,14 +1,18 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/chronologger/user"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Home(database *mongo.Database) echo.HandlerFunc {
@@ -93,5 +97,50 @@ func Respond(client *mongo.Client, database *mongo.Database) echo.HandlerFunc {
 		// Ideally I wanted to send in http.StatusCreated, but it seems that the redirect doesn't work with that status code
 		// See: https://github.com/labstack/echo/issues/229#issuecomment-1518502318
 		return c.Redirect(http.StatusFound, "/templates/"+templateId+"?success=true")
+	}
+}
+
+func SignInForm() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		component := components.SignInForm()
+
+		return component.Render(c.Request().Context(), c.Response().Writer)
+	}
+}
+
+// SignIn will be executed after SignInForm submission.
+func SignIn() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Load our "test" user.
+		storedUser := user.LoadTestUser()
+		// Initiate a new User struct.
+		u := new(user.User)
+		// Parse the submitted data and fill the User struct with the data from the SignIn form.
+		if err := c.Bind(u); err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+		// Compare the stored hashed password, with the hashed version of the password that was received.
+		if err := bcrypt.CompareHashAndPassword([]byte(storedUser.Password), []byte(u.Password)); err != nil {
+			// If the two passwords don't match, return a 401 status.
+			return echo.NewHTTPError(http.StatusUnauthorized, "Password is incorrect")
+		}
+		// If password is correct, generate tokens and set cookies.
+		err := auth.GenerateTokensAndSetCookies(storedUser, c)
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Token is incorrect")
+		}
+
+		return c.Redirect(http.StatusMovedPermanently, "/admin")
+	}
+}
+
+func Admin() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		userCookie, err := c.Cookie("user")
+		if err != nil {
+			return c.String(http.StatusUnauthorized, "You are not authorized to access this page")
+		}
+		return c.String(http.StatusOK, fmt.Sprintf("Welcome %s!", userCookie.Value))
 	}
 }
