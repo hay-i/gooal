@@ -33,9 +33,9 @@ templ detectQuestionType(question models.Question) {
 }
 
 templ textQuestion(question models.Question) {
-	<input type="number" name={ fmt.Sprintf("%s", question.ID.Hex()) }/>
+	<input type="number" name={ question.ID.Hex() }/>
 }
 
 templ numberQuestion(question models.Question) {
-	<input type="text" name={ fmt.Sprintf("%s", question.ID.Hex()) }/>
+	<input type="text" name={ question.ID.Hex() }/>
 }
