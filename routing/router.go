@@ -42,6 +42,7 @@ func Initialize(e *echo.Echo, database *mongo.Database) {
 	})
 
 	e.POST("templates/:id/response", func(c echo.Context) error {
+		// TODO: Create an answer for each question
 		requestContext := c.Request().Context()
 		id := c.Param("id")
 		template := db.GetTemplate(requestContext, database, id)
