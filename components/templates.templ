@@ -28,10 +28,21 @@ templ TemplateTable(templates []models.Template) {
 	}
 }
 
-templ Template(template models.Template, answers []models.Answer) {
+templ success() {
 	<div>
+		<h1>Success</h1>
+		<p>Your answers have been submitted.</p>
+	</div>
+}
+
+templ Template(template models.Template, answers []models.Answer, answered bool) {
+	<div>
+		if answered {
+			@success()
+		}
 		<div>{ template.Description }</div>
 		<div>{ template.Title }</div>
+		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
 		<div>Answers per question:</div>
 		for _, question := range template.Questions {
 			@questionAnswers(question, answers)

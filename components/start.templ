@@ -1,0 +1,41 @@
+package components
+
+import (
+	"github.com/hay-i/chronologger/models"
+	"fmt"
+)
+
+templ Start(template models.Template) {
+	<h1 class="title">{ template.Title }</h1>
+	<form action={ templ.SafeURL(fmt.Sprintf("/templates/%s/response", template.ID.Hex())) } method="POST">
+		for _, question := range template.Questions {
+			@questionStuff(question)
+		}
+		<button type="submit">Submit</button>
+	</form>
+}
+
+templ questionStuff(question models.Question) {
+	<section>
+		<p>{ question.Title }</p>
+		<p>{ question.Description }</p>
+		@detectQuestionType(question)
+	</section>
+}
+
+templ detectQuestionType(question models.Question) {
+	switch questionType := question.Type; questionType {
+		case models.TextQuestion:
+			@textQuestion(question)
+		case models.NumberQuestion:
+			@numberQuestion(question)
+	}
+}
+
+templ textQuestion(question models.Question) {
+	<input type="number" name={ question.ID.Hex() }/>
+}
+
+templ numberQuestion(question models.Question) {
+	<input type="text" name={ question.ID.Hex() }/>
+}

@@ -26,7 +26,7 @@ func main() {
 
 	e := echo.New()
 
-	routing.Initialize(e, database)
+	routing.Initialize(e, client)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
