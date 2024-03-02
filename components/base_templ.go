@@ -11,10 +11,6 @@ import "io"
 import "bytes"
 import "strings"
 
-import (
-	"github.com/hay-i/chronologger/models"
-)
-
 func btn() templ.CSSClass {
 	var templ_7745c5c3_CSSBuilder strings.Builder
 	templ_7745c5c3_CSSBuilder.WriteString(`display:inline-block;`)
@@ -119,7 +115,7 @@ func body() templ.Component {
 	})
 }
 
-func Home(templates []models.Template) templ.Component {
+func Home() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -152,15 +148,16 @@ func Home(templates []models.Template) templ.Component {
 					templ_7745c5c3_Buffer = templ.GetBuffer()
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>Chronologger</h1><table><thead><tr><th>Template</th></tr></thead> <tbody>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main><h1>Chronologger</h1><a href=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = TemplateTable(templates).Render(ctx, templ_7745c5c3_Buffer)
+				var templ_7745c5c3_Var7 templ.SafeURL = templ.SafeURL("/templates")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var7)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</tbody></table>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Our Templates</a></main>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

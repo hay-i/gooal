@@ -22,8 +22,15 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 
 	e.GET("/", func(c echo.Context) error {
 		requestContext := c.Request().Context()
+		component := components.Home()
+
+		return component.Render(requestContext, c.Response().Writer)
+	})
+
+	e.GET("templates", func(c echo.Context) error {
+		requestContext := c.Request().Context()
 		templates := db.GetDefaultTemplates(requestContext, database)
-		component := components.Home(templates)
+		component := components.Templates(templates)
 
 		return component.Render(requestContext, c.Response().Writer)
 	})

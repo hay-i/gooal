@@ -28,6 +28,12 @@ templ TemplateTable(templates []models.Template) {
 	}
 }
 
+templ Templates(templates []models.Template) {
+	<div>
+		@TemplateTable(templates)
+	</div>
+}
+
 templ success() {
 	<div>
 		<h1>Success</h1>
