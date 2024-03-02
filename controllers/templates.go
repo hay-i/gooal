@@ -1,9 +1,10 @@
 package controllers
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
+	"github.com/golang-jwt/jwt"
 	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
@@ -137,10 +138,14 @@ func SignIn() echo.HandlerFunc {
 
 func Admin() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		userCookie, err := c.Cookie("user")
-		if err != nil {
-			return c.String(http.StatusUnauthorized, "You are not authorized to access this page")
+		token, ok := c.Get("user").(*jwt.Token) // by default token is stored under `user` key
+		if !ok {
+			return errors.New("JWT token missing or invalid")
 		}
-		return c.String(http.StatusOK, fmt.Sprintf("Welcome %s!", userCookie.Value))
+		claims, ok := token.Claims.(jwt.MapClaims) // by default claims is of type `jwt.MapClaims`
+		if !ok {
+			return errors.New("failed to cast claims as jwt.MapClaims")
+		}
+		return c.JSON(http.StatusOK, claims)
 	}
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/controllers"
+	"github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -18,12 +19,9 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 	e.Static("/static", "assets")
 	adminGroup := e.Group("/admin")
 	adminGroup.GET("", controllers.Admin())
-	// TODO: Deprecated
-	adminGroup.Use(middleware.JWTWithConfig(middleware.JWTConfig{
-		Claims:                  &auth.Claims{},
-		SigningKey:              []byte(auth.GetJWTSecretKey()),
-		TokenLookup:             "cookie:access-token",
-		ErrorHandlerWithContext: auth.JWTErrorChecker,
+	adminGroup.Use(echojwt.WithConfig(echojwt.Config{
+		SigningKey:  []byte(auth.GetJWTSecretKey()),
+		TokenLookup: "cookie:access-token",
 	}))
 
 	e.GET("/", controllers.Home(database))
