@@ -17,21 +17,27 @@ templ questionAnswers(question models.Question, answers []models.Answer) {
 	</div>
 }
 
-templ TemplateTable(templates []models.Template) {
-	for _, template := range templates {
-		<tr>
-			<td>{ template.Title }</td>
-			<td colspan="3">
-				<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-			</td>
-		</tr>
+//<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
+templ Templates(templates []models.Template) {
+	@PageBase() {
+		<div id="template-modal"></div>
+		<div>
+			for _, template := range templates {
+				<button
+					hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
+					hx-target="#template-modal"
+					hx-trigger="click"
+					hx-swap="innerHTML"
+				>
+					Preview { template.Title }
+				</button>
+			}
+		</div>
 	}
 }
 
-templ Templates(templates []models.Template) {
-	<div>
-		@TemplateTable(templates)
-	</div>
+templ Modal(template models.Template) {
+	<h1>ligma</h1>
 }
 
 templ success() {
@@ -42,16 +48,18 @@ templ success() {
 }
 
 templ Template(template models.Template, answers []models.Answer, answered bool) {
-	<div>
-		if answered {
-			@success()
-		}
-		<div>{ template.Description }</div>
-		<div>{ template.Title }</div>
-		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
-		<div>Answers per question:</div>
-		for _, question := range template.Questions {
-			@questionAnswers(question, answers)
-		}
-	</div>
+	@PageBase() {
+		<div>
+			if answered {
+				@success()
+			}
+			<div>{ template.Description }</div>
+			<div>{ template.Title }</div>
+			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
+			<div>Answers per question:</div>
+			for _, question := range template.Questions {
+				@questionAnswers(question, answers)
+			}
+		</div>
+	}
 }

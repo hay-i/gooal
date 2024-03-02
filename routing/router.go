@@ -1,6 +1,7 @@
 package routing
 
 import (
+	"fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -42,6 +43,16 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 		answers := db.GetAnswers(requestContext, database, id)
 		success := c.QueryParam("success")
 		component := components.Template(template, answers, success == "true")
+
+		return component.Render(requestContext, c.Response().Writer)
+	})
+
+	e.GET("templates/:id/modal", func(c echo.Context) error {
+		fmt.Println("ligma")
+		requestContext := c.Request().Context()
+		id := c.Param("id")
+		template := db.GetTemplate(requestContext, database, id)
+		component := components.Modal(template)
 
 		return component.Render(requestContext, c.Response().Writer)
 	})

@@ -17,7 +17,7 @@ templ base() {
 	</html>
 }
 
-templ header() {
+templ head() {
 	<head>
 		<script src="/static/js/htmx.min.js"></script>
 		<title>Chronologger</title>
@@ -35,9 +35,20 @@ templ body() {
 	</body>
 }
 
+templ PageBase() {
+	@base() {
+		@head()
+		@body() {
+			<main>
+				{ children... }
+			</main>
+		}
+	}
+}
+
 templ Home() {
 	@base() {
-		@header()
+		@head()
 		@body() {
 			<main>
 				<h1>Chronologger</h1>
