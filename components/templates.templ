@@ -36,6 +36,7 @@ templ Templates(templates []models.Template) {
 }
 
 templ Modal(template models.Template) {
+	<div class="modal-backdrop"></div>
 	<div class="modal">
 		<h1>ligma</h1>
 		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
