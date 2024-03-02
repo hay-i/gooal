@@ -17,7 +17,6 @@ templ questionAnswers(question models.Question, answers []models.Answer) {
 	</div>
 }
 
-//<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
 templ Templates(templates []models.Template) {
 	@PageBase() {
 		<div id="template-modal"></div>
@@ -37,7 +36,10 @@ templ Templates(templates []models.Template) {
 }
 
 templ Modal(template models.Template) {
-	<h1>ligma</h1>
+	<div class="modal">
+		<h1>ligma</h1>
+		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
+	</div>
 }
 
 templ success() {
