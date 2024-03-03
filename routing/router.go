@@ -22,4 +22,5 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 	e.GET("templates/:id/modal", controllers.Modal(database))
 	e.GET("templates/:id/start", controllers.Start(database))
 	e.POST("templates/:id/response", controllers.Response(database, client))
+	e.POST("templates/dismiss", controllers.DismissModal())
 }
