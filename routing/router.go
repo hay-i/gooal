@@ -17,10 +17,11 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 
 	e.GET("/", controllers.Home(database))
 
-	e.GET("templates", controllers.Templates(database))
-	e.GET("templates/:id", controllers.Template(database))
-	e.GET("templates/:id/modal", controllers.Modal(database))
-	e.GET("templates/:id/start", controllers.Start(database))
-	e.POST("templates/:id/response", controllers.Response(database, client))
-	e.POST("templates/dismiss", controllers.DismissModal())
+	templates := e.Group("/templates")
+	templates.GET("", controllers.Templates(database))
+	templates.GET("/:id", controllers.Template(database))
+	templates.GET("/:id/modal", controllers.Modal(database))
+	templates.GET("/:id/start", controllers.Start(database))
+	templates.POST("/:id/response", controllers.Response(database, client))
+	templates.POST("/dismiss", controllers.DismissModal())
 }
