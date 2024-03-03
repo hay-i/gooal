@@ -17,8 +17,6 @@ templ questionAnswers(question models.Question, answers []models.Answer) {
 	</div>
 }
 
-//Will need to use hx-post-swap for modal animations and closing/hiding the modal.
-//Can't figure out why the class isn't being added as expected.
 templ Templates(templates []models.Template) {
 	@PageBase() {
 		<div id="template-modal"></div>
@@ -29,7 +27,6 @@ templ Templates(templates []models.Template) {
 					hx-target="#template-modal"
 					hx-trigger="click"
 					hx-swap="innerHTML"
-					hx-post-swap="document.getElementById('template-modal').classList.add('modal-open');"
 				>
 					Preview { template.Title }
 				</button>
@@ -43,7 +40,7 @@ templ Modal(template models.Template) {
 	<div class="modal">
 		<h1>ligma</h1>
 		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-		<a href="#" hx-post-swap="document.getElementById('template-modal').classList.remove('modal-open');" class={ btn, "btn" }>Close</a>
+		<a href="#" class={ btn, "btn" }>Close</a>
 	</div>
 }
 
