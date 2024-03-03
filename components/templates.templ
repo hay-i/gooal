@@ -40,6 +40,7 @@ templ Modal(template models.Template) {
 	<div class="modal">
 		<h1>{ template.Title }</h1>
 		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
+		<a href="#" class={ btn, "btn" }>Close</a>
 	</div>
 }
 
