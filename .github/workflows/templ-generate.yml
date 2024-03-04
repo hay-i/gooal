@@ -17,4 +17,7 @@ jobs:
       run: go install github.com/a-h/templ/cmd/templ@latest
 
     - name: Templ Generator
-      run: if [ "$(templ generate && git status --porcelain | wc -l)" -gt 0 ]; then exit 1; fi
+      run: tempe generate
+
+    - name: Check for changes
+      run: if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then exit 1; fi
