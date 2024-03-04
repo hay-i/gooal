@@ -1,0 +1,28 @@
+name: Minify SCSS to CSS
+on: [pull_request]
+jobs:
+  build:
+    name: Minify SCSS to CSS
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install Sass
+      run: npm install -g sass
+
+    - name: SCSS to CSS
+      run: |
+        sass .
+
+    - name: Check for changes
+      run: |
+        if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then
+          echo "Error: SCSS files need to be updated. Run `sass .`."
+          exit 1
+        fi
