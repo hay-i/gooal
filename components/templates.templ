@@ -23,6 +23,7 @@ templ Templates(templates []models.Template) {
 		<div>
 			for _, template := range templates {
 				<button
+					class="btn"
 					hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
 					hx-target="#template-modal"
 					hx-trigger="click"
@@ -39,7 +40,14 @@ templ Modal(template models.Template) {
 	<div class="modal">
 		<h1>{ template.Title }</h1>
 		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-		<button hx-post="/templates/dismiss" hx-target="#template-modal" hx-trigger="click" class={ btn, "btn" }>Close</button>
+		<button
+			hx-post="/templates/dismiss"
+			hx-target="#template-modal"
+			hx-trigger="click"
+			class={ btn, "btn" }
+		>
+			Close
+		</button>
 	</div>
 }
 
