@@ -1,0 +1,10 @@
+name: Golang Generation
+on: [pull_request]
+jobs:
+  build:
+    name: Templ Generator
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@main
+    - name: Templ Generator
+      run: if [ "$(templ generate && git status --porcelain | wc -l)" -gt 0 ]; then exit 1; fi
