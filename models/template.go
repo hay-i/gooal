@@ -9,9 +9,13 @@ import (
 type QuestionType string
 
 const (
-	TextQuestion   QuestionType = "text"
-	NumberQuestion QuestionType = "number"
-	SelectQuestion QuestionType = "select"
+	TextQuestion     QuestionType = "text"
+	NumberQuestion   QuestionType = "number"
+	SelectQuestion   QuestionType = "select"
+	RangeQuestion    QuestionType = "range"
+	TextAreaQuestion QuestionType = "text_area"
+	RadioQuestion    QuestionType = "radio"
+	CheckboxQuestion QuestionType = "checkbox"
 )
 
 type Question struct {
@@ -19,6 +23,10 @@ type Question struct {
 	Title       string             `bson:"title"`
 	Description string             `bson:"description,omitempty"`
 	Type        QuestionType       `bson:"type"`
+	Options     []string           `bson:"options,omitempty"`
+	Min         int                `bson:"min,omitempty"`
+	Max         int                `bson:"max,omitempty"`
+	Order       int                `bson:"order"`
 }
 
 type Template struct {

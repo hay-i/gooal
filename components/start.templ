@@ -31,6 +31,16 @@ templ detectQuestionType(question models.Question) {
 			@textQuestion(question)
 		case models.NumberQuestion:
 			@numberQuestion(question)
+		case models.SelectQuestion:
+			@selectQuestion(question)
+		case models.RangeQuestion:
+			@rangeQuestion(question)
+		case models.TextAreaQuestion:
+			@textAreaQuestion(question)
+		case models.RadioQuestion:
+			@radioQuestion(question)
+		case models.CheckboxQuestion:
+			@checkboxQuestion(question)
 	}
 }
 
@@ -40,4 +50,35 @@ templ textQuestion(question models.Question) {
 
 templ numberQuestion(question models.Question) {
 	<input type="text" name={ question.ID.Hex() }/>
+}
+
+templ selectQuestion(question models.Question) {
+	<select name={ question.ID.Hex() }>
+		<option value="" disabled selected>Select your option</option>
+		for _, option := range question.Options {
+			<option value={ option }>{ option }</option>
+		}
+	</select>
+}
+
+templ rangeQuestion(question models.Question) {
+	<input type="range" name={ question.ID.Hex() } min={ templ.EscapeString(fmt.Sprintf("%s", question.Min)) } max={ templ.EscapeString(fmt.Sprintf("%s", question.Max)) }/>
+}
+
+templ textAreaQuestion(question models.Question) {
+	<textarea name={ question.ID.Hex() }></textarea>
+}
+
+templ radioQuestion(question models.Question) {
+	for _, option := range question.Options {
+		<input type="radio" name={ question.ID.Hex() } value={ option }/>
+		<label>{ option }</label>
+	}
+}
+
+templ checkboxQuestion(question models.Question) {
+	for _, option := range question.Options {
+		<input type="checkbox" name={ question.ID.Hex() } value={ option }/>
+		<label>{ option }</label>
+	}
 }

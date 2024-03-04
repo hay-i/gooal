@@ -16,6 +16,6 @@ jobs:
     - name: Golang Formatting
       run: |
         if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
-          echo "Error: Golang files need to be formatted. Run `gofmt -s -w .`."
+          echo "Error: Golang files need to be formatted. Run 'gofmt -s -w .'."
           exit 1
         fi

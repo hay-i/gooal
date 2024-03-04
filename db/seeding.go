@@ -21,31 +21,13 @@ func seedTemplates(ctx context.Context, database *mongo.Database) {
 			CreatedAt:   time.Now(),
 			Default:     true,
 			Questions: []models.Question{
-				{ID: primitive.NewObjectID(), Title: "Template 1, Question 1", Description: ":)", Type: models.TextQuestion},
-				{ID: primitive.NewObjectID(), Title: "Template 1, Question 2", Description: ":)", Type: models.NumberQuestion},
-				{ID: primitive.NewObjectID(), Title: "Template 1, Question 3", Description: ":)", Type: models.SelectQuestion},
-			},
-		},
-		{
-			Title:       "Default Template #2",
-			Description: "My description 2",
-			CreatedAt:   time.Now(),
-			Default:     true,
-			Questions: []models.Question{
-				{ID: primitive.NewObjectID(), Title: "Template 2, Question 1", Description: ":)", Type: models.TextQuestion},
-				{ID: primitive.NewObjectID(), Title: "Template 2, Question 2", Description: ":)", Type: models.NumberQuestion},
-				{ID: primitive.NewObjectID(), Title: "Template 2, Question 3", Description: ":)", Type: models.SelectQuestion},
-			},
-		},
-		{
-			Title:       "Default Template #3",
-			Description: "My description 3",
-			CreatedAt:   time.Now(),
-			Default:     true,
-			Questions: []models.Question{
-				{ID: primitive.NewObjectID(), Title: "Template 3, Question 1", Description: ":)", Type: models.TextQuestion},
-				{ID: primitive.NewObjectID(), Title: "Template 3, Question 2", Description: ":)", Type: models.NumberQuestion},
-				{ID: primitive.NewObjectID(), Title: "Template 3, Question 3", Description: ":)", Type: models.SelectQuestion},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 1", Description: ":)", Type: models.TextQuestion, Order: 1},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 2", Description: ":)", Type: models.NumberQuestion, Order: 2},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 3", Description: ":)", Type: models.SelectQuestion, Order: 3, Options: []string{"Option 1", "Option 2", "Option 3"}},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 4", Description: ":)", Type: models.RangeQuestion, Order: 4, Min: 1, Max: 10},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 5", Description: ":)", Type: models.TextAreaQuestion, Order: 5},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 6", Description: ":)", Type: models.RadioQuestion, Order: 6, Options: []string{"Option 1", "Option 2", "Option 3"}},
+				{ID: primitive.NewObjectID(), Title: "Template 1, Question 7", Description: ":)", Type: models.CheckboxQuestion, Order: 7, Options: []string{"Option 1", "Option 2", "Option 3"}},
 			},
 		},
 	}
