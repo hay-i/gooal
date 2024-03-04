@@ -38,18 +38,20 @@ templ Templates(templates []models.Template) {
 }
 
 templ Modal(template models.Template) {
-	<div class="modal-backdrop"></div>
-	<div class="modal">
-		<h1>{ template.Title }</h1>
-		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-		<button
-			hx-post="/templates/dismiss"
-			hx-target="#template-modal"
-			hx-trigger="click"
-			class={ btn, "btn" }
-		>
-			Close
-		</button>
+	<div hx-ext="class-tools">
+		<div class="modal-backdrop"></div>
+		<div class="modal" classes="add active">
+			<h1>{ template.Title }</h1>
+			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
+			<button
+				hx-post="/templates/dismiss"
+				hx-target="#template-modal"
+				hx-trigger="click"
+				class={ btn, "btn" }
+			>
+				Close
+			</button>
+		</div>
 	</div>
 }
 
