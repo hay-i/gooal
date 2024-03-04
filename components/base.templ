@@ -1,9 +1,5 @@
 package components
 
-import (
-	"github.com/hay-i/chronologger/models"
-)
-
 css btn() {
 	display: inline-block;
 	border: 0;
@@ -21,8 +17,9 @@ templ base() {
 	</html>
 }
 
-templ header() {
+templ head() {
 	<head>
+		<link rel="stylesheet" href="/static/css/styles.css"/>
 		<script src="/static/js/htmx.min.js"></script>
 		<title>Chronologger</title>
 	</head>
@@ -39,21 +36,25 @@ templ body() {
 	</body>
 }
 
-templ Home(templates []models.Template) {
+templ PageBase() {
 	@base() {
-		@header()
+		@head()
 		@body() {
-			<h1>Chronologger</h1>
-			<table>
-				<thead>
-					<tr>
-						<th>Template</th>
-					</tr>
-				</thead>
-				<tbody>
-					@TemplateTable(templates)
-				</tbody>
-			</table>
+			<main>
+				{ children... }
+			</main>
+		}
+	}
+}
+
+templ Home() {
+	@base() {
+		@head()
+		@body() {
+			<main>
+				<h1>Chronologger</h1>
+				<a href={ templ.SafeURL("/templates") }>Our Templates</a>
+			</main>
 		}
 	}
 }
