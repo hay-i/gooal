@@ -21,6 +21,7 @@ templ head() {
 	<head>
 		<link rel="stylesheet" href="/static/scss/styles.css"/>
 		<script src="/static/js/htmx.min.js"></script>
+		<script src="/static/js/htmx-class-tools.js"></script>
 		<title>Chronologger</title>
 	</head>
 	<style>
@@ -51,7 +52,7 @@ templ Home() {
 	@base() {
 		@head()
 		@body() {
-			<main>
+			<main class="width-wrap">
 				<h1>Chronologger</h1>
 				<a href={ templ.SafeURL("/templates") }>Our Templates</a>
 			</main>

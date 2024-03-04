@@ -20,9 +20,10 @@ templ questionAnswers(question models.Question, answers []models.Answer) {
 templ Templates(templates []models.Template) {
 	@PageBase() {
 		<div id="template-modal"></div>
-		<div>
+		<div class="width-wrap">
 			for _, template := range templates {
 				<button
+					class="btn"
 					hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
 					hx-target="#template-modal"
 					hx-trigger="click"
@@ -35,11 +36,20 @@ templ Templates(templates []models.Template) {
 }
 
 templ Modal(template models.Template) {
-	<div class="modal-backdrop"></div>
-	<div class="modal">
-		<h1>{ template.Title }</h1>
-		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-		<button hx-post="/templates/dismiss" hx-target="#template-modal" hx-trigger="click" class={ btn, "btn" }>Close</button>
+	<div hx-ext="class-tools">
+		<div class="modal-backdrop"></div>
+		<div class="modal" classes="add active">
+			<h1>{ template.Title }</h1>
+			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
+			<button
+				hx-post="/templates/dismiss"
+				hx-target="#template-modal"
+				hx-trigger="click"
+				class={ btn, "btn" }
+			>
+				Close
+			</button>
+		</div>
 	</div>
 }
 
