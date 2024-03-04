@@ -3,7 +3,7 @@ module github.com/hay-i/chronologger
 go 1.21
 
 require (
-	github.com/a-h/templ v0.2.543
+	github.com/a-h/templ v0.2.598
 	github.com/labstack/echo/v4 v4.11.4
 	go.mongodb.org/mongo-driver v1.14.0
 )
