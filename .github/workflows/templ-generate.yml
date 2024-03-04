@@ -14,7 +14,7 @@ jobs:
         go-version: '1.21'
 
     - name: Install Templ
-      run: go install github.com/a-h/templ/cmd/templ@latest
+      run: go install github.com/a-h/templ/cmd/templ@v0.2.598
 
     - name: Templ Generator
       run: templ generate
@@ -22,6 +22,6 @@ jobs:
     - name: Check for changes
       run: |
         if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then
-          echo "Error: Templ files need to be updated. Run 'templ generate'."
+          echo "Error: Templ files need to be updated. Run 'templ generate .' using v0.2.598."
           exit 1
         fi

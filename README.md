@@ -8,8 +8,8 @@ You can get up and running using `make`, use `make help` to see a list of option
 
 ## Installation
 
-1) Install Golang using ASDF
-2) Install Templ from the [docs](https://templ.guide/quick-start/installation) / `go install github.com/a-h/templ/cmd/templ@latest`
+1) Install Golang using [asdf](https://asdf-vm.com/guide/getting-started.html) / `asdf plugin add golang && asdf install`
+2) Install Templ from the [docs](https://templ.guide/quick-start/installation) / `go install github.com/a-h/templ/cmd/templ@v0.2.598`
 3) Install Docker
 4) Install SASS CLI from the [docs](https://sass-lang.com/install/) / `brew install sass/sass/sass`
 
