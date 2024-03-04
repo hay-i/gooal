@@ -1,0 +1,34 @@
+$tablet: 768px;
+$l-tablet: 1024px;
+$desktop: 1280px;
+$pc: 1600px;
+
+@mixin tablet {
+  @media (min-width: #{$tablet}) {
+    @content;
+  }
+}
+
+@mixin ltab {
+  @media (min-width: #{$l-tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  }
+}
+
+@mixin pc {
+  @media (min-width: #{$pc}) {
+    @content;
+  }
+}
+
+@mixin bg-img {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
