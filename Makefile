@@ -1,11 +1,17 @@
-hmr: up ## Start the hot module replacement server
+hmr: ## Start the hot module replacement server
+	$(MAKE) -j2 sass templProxy
+
+templProxy: ## Start the hot module replacement server for templ
 	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
 
-start: templ ## Generate templates and start the server
-	go run .
+sass: ## Compile and minify SASS
+	sass --watch --style compressed .
 
 templ: ## Generate the templates
 	templ generate
+
+start: ## Generate templates and start the server
+	go run .
 
 up: ## Start the docker containers
 	docker compose up -d

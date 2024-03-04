@@ -72,7 +72,7 @@ func head() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><link rel=\"stylesheet\" href=\"/static/css/styles.css\"><script src=\"/static/js/htmx.min.js\"></script><title>Chronologger</title></head><style>\n        .btn:hover {\n            background-color: #00CC00;\n        }\n    </style>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><link rel=\"stylesheet\" href=\"/static/scss/styles.css\"><script src=\"/static/js/htmx.min.js\"></script><title>Chronologger</title></head><style>\n        .btn:hover {\n            background-color: #00CC00;\n        }\n    </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
