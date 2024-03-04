@@ -21,18 +21,16 @@ templ Templates(templates []models.Template) {
 	@PageBase() {
 		<div id="template-modal"></div>
 		<div class="width-wrap">
-			<div>
-				for _, template := range templates {
-					<button
-						class="btn"
-						hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
-						hx-target="#template-modal"
-						hx-trigger="click"
-					>
-						Preview { template.Title }
-					</button>
-				}
-			</div>
+			for _, template := range templates {
+				<button
+					class="btn"
+					hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
+					hx-target="#template-modal"
+					hx-trigger="click"
+				>
+					Preview { template.Title }
+				</button>
+			}
 		</div>
 	}
 }
