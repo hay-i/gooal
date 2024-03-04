@@ -31,6 +31,8 @@ templ detectQuestionType(question models.Question) {
 			@textQuestion(question)
 		case models.NumberQuestion:
 			@numberQuestion(question)
+		case models.SelectQuestion:
+			@selectQuestion(question)
 	}
 }
 
@@ -40,4 +42,13 @@ templ textQuestion(question models.Question) {
 
 templ numberQuestion(question models.Question) {
 	<input type="text" name={ question.ID.Hex() }/>
+}
+
+templ selectQuestion(question models.Question) {
+	<select name={ question.ID.Hex() }>
+		<option value="" disabled selected>Select your option</option>
+		for _, option := range question.Options {
+			<option value={ option }>{ option }</option>
+		}
+	</select>
 }

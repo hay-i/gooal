@@ -19,6 +19,8 @@ type Question struct {
 	Title       string             `bson:"title"`
 	Description string             `bson:"description,omitempty"`
 	Type        QuestionType       `bson:"type"`
+	Order       int                `bson:"order"`
+	Options     []string           `bson:"options,omitempty"`
 }
 
 type Template struct {
