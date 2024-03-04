@@ -6,13 +6,15 @@ import (
 )
 
 templ Start(template models.Template) {
-	<h1 class="title">{ template.Title }</h1>
-	<form action={ templ.SafeURL(fmt.Sprintf("/templates/%s/response", template.ID.Hex())) } method="POST">
-		for _, question := range template.Questions {
-			@questionStuff(question)
-		}
-		<button type="submit">Submit</button>
-	</form>
+	@PageBase() {
+		<h1 class="title">{ template.Title }</h1>
+		<form action={ templ.SafeURL(fmt.Sprintf("/templates/%s/response", template.ID.Hex())) } method="POST">
+			for _, question := range template.Questions {
+				@questionStuff(question)
+			}
+			<button type="submit">Submit</button>
+		</form>
+	}
 }
 
 templ questionStuff(question models.Question) {
