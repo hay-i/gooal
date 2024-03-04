@@ -1,0 +1,19 @@
+// Abstract files
+@import "./abstracts/fonts";
+@import "./abstracts/mixins";
+@import "./abstracts/variables";
+@import "./abstracts/reset";
+
+// Core files
+@import "./core/typography";
+@import "./core/globals";
+
+// Components
+@import "./components/buttons";
+
+// Layout
+@import "./layouts/footer";
+@import "./layouts/header";
+
+// Pages
+@import "./pages/frontpage";
