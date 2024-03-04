@@ -5,7 +5,7 @@ templ: ## Generate the templates
 	templ generate
 
 sass: ## Generate SASS
-	sass --watch .
+	sass --watch --style compressed .
 
 hmr: ## Start the hot module replacement server
 	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
