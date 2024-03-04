@@ -20,4 +20,8 @@ jobs:
       run: templ generate
 
     - name: Check for changes
-      run: if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then exit 1; fi
+      run: |
+        if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then
+          echo "Error: Templ files need to be updated. Run `templ generate`."
+          exit 1
+        fi

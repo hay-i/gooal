@@ -5,6 +5,17 @@ jobs:
     name: Golang Formatter
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@main
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.21'
+
     - name: Golang Formatting
-      run: if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then exit 1; fi
+      run: |
+        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+          echo "Error: Golang files need to be formatted. Run `gofmt -s -w .`."
+          exit 1
+        fi
