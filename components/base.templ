@@ -19,8 +19,9 @@ templ base() {
 
 templ head() {
 	<head>
-		<link rel="stylesheet" href="/static/scss/styles.css"/>
+		<link rel="stylesheet" href="/static/scss/styles.css?v2"/>
 		<script src="/static/js/htmx.min.js"></script>
+		<script src="/static/js/htmx-class-tools.js"></script>
 		<title>Chronologger</title>
 	</head>
 	<style>
@@ -51,9 +52,12 @@ templ Home() {
 	@base() {
 		@head()
 		@body() {
-			<main>
+			<main class="width-wrap">
 				<h1>Chronologger</h1>
 				<a href={ templ.SafeURL("/templates") }>Our Templates</a>
+				<div hx-ext="class-tools">
+					<div class="foo" classes="toggle bar:1s">hi</div> <!-- toggles the class "foo" every 1s -->
+				</div>
 			</main>
 		}
 	}

@@ -1,0 +1,10 @@
+.foo {
+  transition: 150ms ease-in-out;
+  color: black;
+  transform: translateX(15px);
+
+  &.bar {
+    transform: translateX(30px);
+    color: red;
+  }
+}
