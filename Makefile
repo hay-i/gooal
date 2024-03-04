@@ -1,14 +1,19 @@
 hmr: ## Start the hot module replacement server
-	$(MAKE) -j2 sass templProxy
+	$(MAKE) -j2 sassWatch templProxy
 
 templProxy: ## Start the hot module replacement server for templ
 	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
 
-sass: ## Compile and minify SASS
-	sass --watch --style compressed .
+sassWatch: ## Compile, minify and watch SASS changes
+	sass --style compressed --watch .
+
+sassGen: ## Compile and minify SASS
+	sass --style compressed .
 
 templ: ## Generate the templates
 	templ generate
+
+build: templ sassGen ## Generate the templates and compile the SASS
 
 start: ## Generate templates and start the server
 	go run .
