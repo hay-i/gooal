@@ -1,17 +1,17 @@
-start: templ sass ## Start the server
+hmr: up sass ## Start the hot module replacement server
+	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
+
+start: templ ## Generate templates and start the server
 	go run .
 
 templ: ## Generate the templates
 	templ generate
 
-sass: ## Generate SASS
-	sass --watch --style compressed .
-
-hmr: ## Start the hot module replacement server
-	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
-
 up: ## Start the docker containers
 	docker compose up -d
+
+sass: ## Compile and minify SASS
+	sass --watch --style compressed .
 
 down: ## Stop the docker containers
 	docker compose down
