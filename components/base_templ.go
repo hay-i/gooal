@@ -227,7 +227,7 @@ func Home() templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Our Templates</a><div hx-ext=\"class-tools\"><div class=\"foo\" classes=\"toggle bar:0.5s\">hi</div><!-- toggles the class \"foo\" every 1s --></div></main>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">Our Templates</a></main>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
