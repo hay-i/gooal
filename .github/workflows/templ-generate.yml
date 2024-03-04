@@ -7,8 +7,8 @@ jobs:
     steps:
     - uses: actions/checkout@main
     - name: Install Templ
-      run: |
-        go install github.com/a-h/templ/cmd/templ@latest
-        echo "::add-path::$(go env GOPATH)/bin"
+      run: go install github.com/a-h/templ/cmd/templ@latest
+    - name: Set up environment
+      run: echo "PATH=\$HOME/go/bin:\$PATH" >> $GITHUB_ENV
     - name: Templ Generator
       run: if [ "$(templ generate && git status --porcelain | wc -l)" -gt 0 ]; then exit 1; fi
