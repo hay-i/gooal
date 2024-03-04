@@ -22,6 +22,6 @@ jobs:
     - name: Check for changes
       run: |
         if [ "$(git status --porcelain | wc -l)" -gt 0 ]; then
-          echo "Error: Templ files need to be formatted. Run `templ fmt .`."
+          echo "Error: Templ files need to be formatted. Run 'templ fmt .'."
           exit 1
         fi
