@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -30,4 +31,20 @@ func setCookie(signedToken string, expiry time.Time, c echo.Context) {
 	// https://github.com/hay-i/chronologger/issues/35
 	// cookie.Secure = true
 	c.SetCookie(cookie)
+}
+
+func parseToken(tokenString string) (jwt.MapClaims, error) {
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(SecretKey), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	} else {
+		return nil, fmt.Errorf("Invalid or expired token")
+	}
 }

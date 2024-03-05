@@ -95,22 +95,6 @@ func SignIn() echo.HandlerFunc {
 	}
 }
 
-func parseToken(tokenString string) jwt.MapClaims {
-	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
-		}
-
-		return []byte(SecretKey), nil
-	})
-
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims
-	} else {
-		return nil
-	}
-}
-
 func Profile(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
@@ -120,10 +104,10 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 
 		tokenString := cookie.Value
 
-		parsedToken := parseToken(tokenString)
+		parsedToken, err := parseToken(tokenString)
 
 		if err != nil {
-			return c.JSON(http.StatusUnauthorized, "Invalid or expired token")
+			return c.JSON(http.StatusUnauthorized, err.Error())
 		}
 
 		requestContext := c.Request().Context()
