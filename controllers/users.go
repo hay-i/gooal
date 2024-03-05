@@ -82,19 +82,17 @@ func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 
 func SignUp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestContext := c.Request().Context()
 		component := components.SignUp()
 
-		return component.Render(requestContext, c.Response().Writer)
+		return render(c, component)
 	}
 }
 
 func SignIn() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestContext := c.Request().Context()
 		component := components.SignIn()
 
-		return component.Render(requestContext, c.Response().Writer)
+		return render(c, component)
 	}
 }
 
@@ -115,10 +113,9 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 			return c.JSON(http.StatusUnauthorized, err.Error())
 		}
 
-		requestContext := c.Request().Context()
 		component := components.Profile(parsedToken["sub"].(string))
 
-		return component.Render(requestContext, c.Response().Writer)
+		return render(c, component)
 	}
 }
 
