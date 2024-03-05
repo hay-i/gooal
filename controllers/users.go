@@ -18,7 +18,7 @@ import (
 // https://github.com/hay-i/chronologger/issues/35
 var SecretKey = "my_secret"
 
-func Register(database *mongo.Database) echo.HandlerFunc {
+func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		collection := database.Collection("users")
 		var user models.User
@@ -31,7 +31,7 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		user.Password = string(hashedPassword)
 
-		_, err := collection.InsertOne(context.TODO(), user)
+		_, err := collection.InsertOne(ctx, user)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Error while registering")
 		}
@@ -47,7 +47,7 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func Login(database *mongo.Database) echo.HandlerFunc {
+func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		collection := database.Collection("users")
 		var credentials models.User
@@ -56,7 +56,7 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		var user models.User
-		err := collection.FindOne(context.TODO(), bson.M{"username": credentials.Username}).Decode(&user)
+		err := collection.FindOne(ctx, bson.M{"username": credentials.Username}).Decode(&user)
 		if err != nil {
 			return c.JSON(http.StatusBadRequest, "Invalid username or password")
 		}

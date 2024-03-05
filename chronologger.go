@@ -7,7 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/hay-i/chronologger/db"
-	"github.com/hay-i/chronologger/routing"
+	"github.com/hay-i/chronologger/router"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 
 	e := echo.New()
 
-	routing.Initialize(e, client)
+	router.Initialize(e, client, ctx)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
