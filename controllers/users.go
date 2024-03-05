@@ -2,11 +2,9 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
-	"github.com/golang-jwt/jwt"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/models"
 	"github.com/labstack/echo/v4"
@@ -26,23 +24,24 @@ func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 			return err
 		}
 
-		user.CreatedAt = time.Now()
-
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		user.Password = string(hashedPassword)
 
 		_, err := collection.InsertOne(ctx, user)
 		if err != nil {
+			// TODO: Return a template with the error message
 			return c.JSON(http.StatusInternalServerError, "Error while registering")
 		}
 
 		expiry, signedToken, err := signToken(user)
 		if err != nil {
+			// TODO: Return a template with the error message
 			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
 		}
 
 		setCookie(signedToken, expiry, c)
 
+		// TODO: Return a template with the success message
 		return c.JSON(http.StatusCreated, "User created")
 	}
 }
@@ -58,21 +57,25 @@ func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 		var user models.User
 		err := collection.FindOne(ctx, bson.M{"username": credentials.Username}).Decode(&user)
 		if err != nil {
+			// TODO: Return a template with the error message
 			return c.JSON(http.StatusBadRequest, "Invalid username or password")
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 		if err != nil {
+			// TODO: Return a template with the error message
 			return c.JSON(http.StatusBadRequest, "Invalid username or password")
 		}
 
 		expirationTime, signedToken, err := signToken(user)
 		if err != nil {
+			// TODO: Return a template with the error message
 			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
 		}
 
 		setCookie(signedToken, expirationTime, c)
 
+		// TODO: Return a template with the success message
 		return c.JSON(http.StatusOK, echo.Map{"token": signedToken})
 	}
 }
@@ -99,6 +102,7 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
+			// TODO: Return a template with the error message
 			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
 		}
 
@@ -107,6 +111,7 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 		parsedToken, err := parseToken(tokenString)
 
 		if err != nil {
+			// TODO: Return a template with the error message
 			return c.JSON(http.StatusUnauthorized, err.Error())
 		}
 
@@ -121,6 +126,7 @@ func Logout(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		setCookie("", time.Now(), c)
 
+		// TODO: Return a template with the success message
 		return c.JSON(http.StatusOK, "Logged out")
 	}
 }

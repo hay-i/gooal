@@ -12,6 +12,7 @@ func jwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
+			// TODO: Return a template with the error message
 			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
 		}
 
@@ -23,6 +24,7 @@ func jwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
+			// TODO: Return a template with the error message
 			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid or expired token")
 		}
 
