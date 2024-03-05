@@ -15,9 +15,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Get this from an environment variable
-// generate some sort of csrf token
-// OpenSSL package to generate
+// https://github.com/hay-i/chronologger/issues/35
 var SecretKey = "my_secret"
 
 // Register handles user registration.
@@ -52,7 +50,7 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 		cookie.Value = signedToken
 		cookie.Expires = expirationTime
 		cookie.HttpOnly = true // Make the cookie inaccessible to JavaScript running in the browser
-		// TODO: Check if you're in prod
+		// https://github.com/hay-i/chronologger/issues/35
 		// cookie.Secure = true
 		c.SetCookie(cookie)
 
@@ -99,7 +97,7 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		cookie.Value = signedToken
 		cookie.Expires = expirationTime
 		cookie.HttpOnly = true // Make the cookie inaccessible to JavaScript running in the browser
-		// TODO: Check if you're in prod
+		// https://github.com/hay-i/chronologger/issues/35
 		// cookie.Secure = true
 		c.SetCookie(cookie)
 
