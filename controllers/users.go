@@ -18,7 +18,6 @@ import (
 // https://github.com/hay-i/chronologger/issues/35
 var SecretKey = "my_secret"
 
-// Register handles user registration.
 func Register(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		collection := database.Collection("users")
@@ -26,6 +25,8 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 		if err := c.Bind(&user); err != nil {
 			return err
 		}
+
+		user.CreatedAt = time.Now()
 
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		user.Password = string(hashedPassword)
@@ -46,7 +47,6 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-// Login handles user login.
 func Login(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		collection := database.Collection("users")
@@ -95,11 +95,8 @@ func SignIn() echo.HandlerFunc {
 	}
 }
 
-// Function to parse, decode, and verify the JWT
 func parseToken(tokenString string) jwt.MapClaims {
-	// Parse the token
 	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}

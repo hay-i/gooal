@@ -1,7 +1,9 @@
 package models
 
-// User represents the user model.
+import "time"
+
 type User struct {
-	Username string `bson:"username" form:"username"`
-	Password string `bson:"password" form:"password"`
+	Username  string    `bson:"username" form:"username"`
+	Password  string    `bson:"password" form:"password"`
+	CreatedAt time.Time `bson:"created_at"`
 }
