@@ -30,6 +30,8 @@ func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 		_, err := collection.InsertOne(ctx, user)
 		if err != nil {
 			// TODO: Return a template with the error message
+			// TODO URGENT: Getting some weird issue here where this is being hit,
+			// but when restarting the server and submitting the same form, it works.
 			return c.JSON(http.StatusInternalServerError, "Error while registering")
 		}
 

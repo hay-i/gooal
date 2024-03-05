@@ -14,7 +14,23 @@ import (
 
 func Home(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return render(c, components.Home())
+		var isLoggedIn bool
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			isLoggedIn = false
+		} else {
+			_, err = parseToken(cookie.Value)
+
+			if err != nil {
+				isLoggedIn = false
+			} else {
+				isLoggedIn = true
+			}
+		}
+
+		component := components.Home(isLoggedIn)
+
+		return render(c, component)
 	}
 }
 
