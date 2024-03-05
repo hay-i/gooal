@@ -2,7 +2,6 @@ package routing
 
 import (
 	"net/http"
-	"strings"
 
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -14,12 +13,12 @@ import (
 
 func JwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		authorizationHeader := c.Request().Header.Get("Authorization")
-		if authorizationHeader == "" {
-			return echo.NewHTTPError(http.StatusUnauthorized, "Authorization header is required")
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
 		}
 
-		tokenString := strings.TrimPrefix(authorizationHeader, "Bearer ")
+		tokenString := cookie.Value
 		claims := &jwt.StandardClaims{}
 
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
@@ -40,10 +39,14 @@ func Initialize(e *echo.Echo, client *mongo.Client) {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	e.GET("/register", controllers.SignUp())
+	e.GET("/login", controllers.SignIn())
+	e.GET("/logout", controllers.Logout(database))
+
 	e.POST("/register", controllers.Register(database))
 	e.POST("/login", controllers.Login(database))
 
-	// e.GET("/profile", Profile, JwtAuthenticationMiddleware)
+	e.GET("/profile", controllers.Profile(database), JwtAuthenticationMiddleware)
 
 	e.Static("/static", "assets")
 

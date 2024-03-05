@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
+	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/models"
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
@@ -35,6 +36,26 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, "Error while registering")
 		}
 
+		// extract this stuff
+		expirationTime := time.Now().Add(1 * time.Hour)
+		claims := &jwt.StandardClaims{
+			Subject:   user.Username,
+			ExpiresAt: expirationTime.Unix(),
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		signedToken, err := token.SignedString([]byte(SecretKey))
+
+		// Set the token as a cookie
+		cookie := new(http.Cookie)
+		cookie.Name = "token"
+		cookie.Value = signedToken
+		cookie.Expires = expirationTime
+		cookie.HttpOnly = true // Make the cookie inaccessible to JavaScript running in the browser
+		// TODO: Check if you're in prod
+		// cookie.Secure = true
+		c.SetCookie(cookie)
+
+		// Optionally, return a success message or status
 		return c.JSON(http.StatusCreated, "User created")
 	}
 }
@@ -71,6 +92,55 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
 		}
 
+		// Set the token as a cookie
+		cookie := new(http.Cookie)
+		cookie.Name = "token"
+		cookie.Value = signedToken
+		cookie.Expires = expirationTime
+		cookie.HttpOnly = true // Make the cookie inaccessible to JavaScript running in the browser
+		// TODO: Check if you're in prod
+		// cookie.Secure = true
+		c.SetCookie(cookie)
+
 		return c.JSON(http.StatusOK, echo.Map{"token": signedToken})
+	}
+}
+
+func SignUp() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
+		component := components.SignUp()
+
+		return component.Render(requestContext, c.Response().Writer)
+	}
+}
+
+func SignIn() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
+		component := components.SignIn()
+
+		return component.Render(requestContext, c.Response().Writer)
+	}
+}
+
+func Profile(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
+		component := components.Profile()
+
+		return component.Render(requestContext, c.Response().Writer)
+	}
+}
+
+func Logout(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		cookie := new(http.Cookie)
+		cookie.Name = "token"
+		cookie.Value = ""
+		cookie.Expires = time.Now()
+		c.SetCookie(cookie)
+
+		return c.JSON(http.StatusOK, "Logged out")
 	}
 }
