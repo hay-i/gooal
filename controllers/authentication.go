@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -124,10 +125,42 @@ func SignIn() echo.HandlerFunc {
 	}
 }
 
+// Function to parse, decode, and verify the JWT
+func parseToken(tokenString string) jwt.MapClaims {
+	// Parse the token
+	token, _ := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(SecretKey), nil
+	})
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims
+	} else {
+		return nil
+	}
+}
+
 func Profile(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
+		}
+
+		tokenString := cookie.Value
+
+		parsedToken := parseToken(tokenString)
+
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, "Invalid or expired token")
+		}
+
 		requestContext := c.Request().Context()
-		component := components.Profile()
+		component := components.Profile(parsedToken["sub"].(string))
 
 		return component.Render(requestContext, c.Response().Writer)
 	}
