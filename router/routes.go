@@ -1,6 +1,8 @@
-package routing
+package router
 
 import (
+	"context"
+
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/hay-i/chronologger/controllers"
@@ -8,10 +10,20 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Initialize(e *echo.Echo, client *mongo.Client) {
+func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	database := client.Database("chronologger")
 
 	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.GET("/register", controllers.SignUp())
+	e.GET("/login", controllers.SignIn())
+	e.GET("/logout", controllers.Logout(database))
+
+	e.POST("/register", controllers.Register(database, ctx))
+	e.POST("/login", controllers.Login(database, ctx))
+
+	e.GET("/profile", controllers.Profile(database), jwtAuthenticationMiddleware)
 
 	e.Static("/static", "assets")
 

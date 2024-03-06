@@ -1,0 +1,28 @@
+package components
+
+templ SignUp() {
+	@PageBase() {
+		<form action="/register" method="post">
+			<input type="text" placeholder="Username" name="username"/>
+			<input type="password" placeholder="Password" name="password"/>
+			<button type="submit">Sign Up</button>
+		</form>
+	}
+}
+
+templ SignIn() {
+	@PageBase() {
+		<form action="/login" method="post">
+			<input type="text" placeholder="Username" name="username"/>
+			<input type="password" placeholder="Password" name="password"/>
+			<button type="submit">Sign In</button>
+		</form>
+	}
+}
+
+templ Profile(username string) {
+	@PageBase() {
+		<h1>Welcome { username }</h1>
+		<a href="/logout">Logout</a>
+	}
+}
