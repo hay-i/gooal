@@ -24,6 +24,7 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	e.POST("/login", controllers.Login(database, ctx))
 
 	e.GET("/profile", controllers.Profile(database), jwtAuthenticationMiddleware)
+	e.GET("/my-templates", controllers.MyTemplates(database), jwtAuthenticationMiddleware)
 
 	e.Static("/static", "assets")
 

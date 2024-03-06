@@ -1,0 +1,21 @@
+package components
+
+templ Home(signedIn bool) {
+	@base() {
+		@head()
+		@body() {
+			<main class="width-wrap">
+				<h1>Chronologger</h1>
+				<a href={ templ.SafeURL("/templates") }>Our Templates</a>
+				if signedIn {
+					<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
+					<a href={ templ.SafeURL("/profile") }>My Profile</a>
+					<a href={ templ.SafeURL("/logout") }>Logout</a>
+				} else {
+					<a href={ templ.SafeURL("/register") }>Register</a>
+					<a href={ templ.SafeURL("/login") }>Login</a>
+				}
+			</main>
+		}
+	}
+}

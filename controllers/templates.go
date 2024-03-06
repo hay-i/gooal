@@ -12,23 +12,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Home(database *mongo.Database) echo.HandlerFunc {
+func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var isLoggedIn bool
+		requestContext := c.Request().Context()
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			isLoggedIn = false
-		} else {
-			_, err = parseToken(cookie.Value)
-
-			if err != nil {
-				isLoggedIn = false
-			} else {
-				isLoggedIn = true
-			}
+			// TODO: Return a template with the error message
+			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
 		}
 
-		component := components.Home(isLoggedIn)
+		tokenString := cookie.Value
+
+		parsedToken, err := parseToken(tokenString)
+
+		if err != nil {
+			// TODO: Return a template with the error message
+			return c.JSON(http.StatusUnauthorized, err.Error())
+		}
+
+		username := parsedToken["sub"].(string)
+
+		templates := db.GetMyTemplates(requestContext, database, username)
+
+		component := components.Templates(templates)
 
 		return render(c, component)
 	}
