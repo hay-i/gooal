@@ -35,5 +35,4 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	templates.GET("/:id/modal", controllers.Modal(database))
 	templates.GET("/:id/start", controllers.Start(database))
 	templates.POST("/:id/response", controllers.Response(database, client))
-	templates.POST("/dismiss", controllers.DismissModal())
 }

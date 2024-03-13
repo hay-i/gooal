@@ -31,12 +31,6 @@ func Templates(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func DismissModal() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.String(http.StatusOK, "")
-	}
-}
-
 func Template(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestContext := c.Request().Context()

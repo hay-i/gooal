@@ -42,10 +42,8 @@ templ Modal(template models.Template) {
 			<h1>{ template.Title }</h1>
 			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
 			<button
-				hx-post="/templates/dismiss"
-				hx-target="#template-modal"
-				hx-trigger="click"
 				class={ btn, "btn" }
+				data-dismissable="template-modal"
 			>
 				Close
 			</button>
