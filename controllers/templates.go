@@ -136,6 +136,6 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			}
 		}
 
-		return redirect(c, "/templates/"+templateId+"?success=true", http.StatusFound)
+		return redirect(c, "/templates/"+templateId+"?success=true")
 	}
 }
