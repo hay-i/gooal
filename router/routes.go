@@ -20,8 +20,8 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	e.GET("/login", controllers.SignIn())
 	e.GET("/logout", controllers.Logout(database))
 
-	e.POST("/register", controllers.Register(database, ctx))
-	e.POST("/login", controllers.Login(database, ctx))
+	e.POST("/register", controllers.Register(database))
+	e.POST("/login", controllers.Login(database))
 
 	e.GET("/profile", controllers.Profile(database), jwtAuthenticationMiddleware)
 	e.GET("/my-templates", controllers.MyTemplates(database), jwtAuthenticationMiddleware)

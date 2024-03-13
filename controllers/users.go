@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"context"
 	"net/http"
 	"time"
 
@@ -16,8 +15,9 @@ import (
 // https://github.com/hay-i/chronologger/issues/35
 var SecretKey = "my_secret"
 
-func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
+func Register(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
 		collection := database.Collection("users")
 		var user models.User
 		if err := c.Bind(&user); err != nil {
@@ -27,11 +27,9 @@ func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		user.Password = string(hashedPassword)
 
-		_, err := collection.InsertOne(ctx, user)
+		_, err := collection.InsertOne(requestContext, user)
 		if err != nil {
 			// TODO: Return a template with the error message
-			// TODO URGENT: Getting some weird issue here where this is being hit,
-			// but when restarting the server and submitting the same form, it works.
 			return c.JSON(http.StatusInternalServerError, "Error while registering")
 		}
 
@@ -48,8 +46,9 @@ func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 	}
 }
 
-func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
+func Login(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
 		collection := database.Collection("users")
 		var credentials models.User
 		if err := c.Bind(&credentials); err != nil {
@@ -57,7 +56,7 @@ func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 		}
 
 		var user models.User
-		err := collection.FindOne(ctx, bson.M{"username": credentials.Username}).Decode(&user)
+		err := collection.FindOne(requestContext, bson.M{"username": credentials.Username}).Decode(&user)
 		if err != nil {
 			// TODO: Return a template with the error message
 			return c.JSON(http.StatusBadRequest, "Invalid username or password")
