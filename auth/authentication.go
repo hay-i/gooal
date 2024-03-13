@@ -51,3 +51,18 @@ func ParseToken(tokenString string) (jwt.MapClaims, error) {
 		return nil, fmt.Errorf("Invalid or expired token")
 	}
 }
+
+func IsLoggedIn(c echo.Context) bool {
+	cookie, err := c.Cookie("token")
+	if err != nil {
+		return false
+	} else {
+		_, err = ParseToken(cookie.Value)
+
+		if err != nil {
+			return false
+		} else {
+			return true
+		}
+	}
+}

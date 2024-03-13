@@ -10,21 +10,7 @@ import (
 
 func Home(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		var isLoggedIn bool
-		cookie, err := c.Cookie("token")
-		if err != nil {
-			isLoggedIn = false
-		} else {
-			_, err = auth.ParseToken(cookie.Value)
-
-			if err != nil {
-				isLoggedIn = false
-			} else {
-				isLoggedIn = true
-			}
-		}
-
-		component := components.Home(isLoggedIn)
+		component := components.Home(auth.IsLoggedIn(c))
 
 		return render(c, component)
 	}
