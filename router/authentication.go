@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/hay-i/chronologger/controllers"
+	"github.com/hay-i/chronologger/auth"
 	"github.com/labstack/echo/v4"
 )
 
@@ -20,7 +20,7 @@ func jwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		claims := &jwt.StandardClaims{}
 
 		token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-			return []byte(controllers.SecretKey), nil
+			return []byte(auth.SecretKey), nil
 		})
 
 		if err != nil || !token.Valid {

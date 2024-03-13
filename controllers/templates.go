@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/models"
@@ -23,7 +24,7 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 
 		tokenString := cookie.Value
 
-		parsedToken, err := parseToken(tokenString)
+		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
 			// TODO: Return a template with the error message

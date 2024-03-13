@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/models"
 	"github.com/labstack/echo/v4"
@@ -11,9 +12,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
-
-// https://github.com/hay-i/chronologger/issues/35
-var SecretKey = "my_secret"
 
 func Register(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -33,13 +31,13 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 			return c.JSON(http.StatusInternalServerError, "Error while registering")
 		}
 
-		expiry, signedToken, err := signToken(user)
+		expiry, signedToken, err := auth.SignToken(user)
 		if err != nil {
 			// TODO: Return a template with the error message
 			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
 		}
 
-		setCookie(signedToken, expiry, c)
+		auth.SetCookie(signedToken, expiry, c)
 
 		// TODO: Return a template with the success message
 		return c.JSON(http.StatusCreated, "User created")
@@ -68,13 +66,13 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 			return c.JSON(http.StatusBadRequest, "Invalid username or password")
 		}
 
-		expirationTime, signedToken, err := signToken(user)
+		expirationTime, signedToken, err := auth.SignToken(user)
 		if err != nil {
 			// TODO: Return a template with the error message
 			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
 		}
 
-		setCookie(signedToken, expirationTime, c)
+		auth.SetCookie(signedToken, expirationTime, c)
 
 		// TODO: Return a template with the success message
 		return c.JSON(http.StatusOK, echo.Map{"token": signedToken})
@@ -107,7 +105,7 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 
 		tokenString := cookie.Value
 
-		parsedToken, err := parseToken(tokenString)
+		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
 			// TODO: Return a template with the error message
@@ -122,7 +120,7 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 
 func Logout(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		setCookie("", time.Now(), c)
+		auth.SetCookie("", time.Now(), c)
 
 		// TODO: Return a template with the success message
 		return c.JSON(http.StatusOK, "Logged out")
