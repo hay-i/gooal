@@ -21,11 +21,11 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 
 	e.GET("/register", controllers.SignUp())
 	e.GET("/login", controllers.SignIn())
-	e.GET("/logout", controllers.Logout(database))
 
 	e.POST("/register", controllers.Register(database))
 	e.POST("/login", controllers.Login(database))
 
+	e.GET("/logout", controllers.Logout(database), controllers.JwtAuthenticationMiddleware)
 	e.GET("/profile", controllers.Profile(database), controllers.JwtAuthenticationMiddleware)
 	// TODO: This is not routed, not displays anything. It will be addressed in
 	// https://github.com/hay-i/chronologger/issues/43
