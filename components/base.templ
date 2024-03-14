@@ -71,6 +71,21 @@ templ PageBase(flash []interface{}, signedIn bool, child templ.Component) {
 	}
 }
 
+templ BaseBody(flash []interface{}, child templ.Component) {
+	@base() {
+		@head()
+		@body() {
+			<main class="width-wrap">
+				<h1>Chronologger</h1>
+				for _, flash := range flash {
+					@FlashMessage(flash)
+				}
+				@child
+			</main>
+		}
+	}
+}
+
 templ FlashMessage(flash interface{}) {
 	<div>
 		A message

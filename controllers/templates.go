@@ -39,7 +39,7 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 
 		component := components.Templates(templates)
 
-		return render(c, component)
+		return renderBase(c, component)
 	}
 }
 
@@ -49,7 +49,7 @@ func Templates(database *mongo.Database) echo.HandlerFunc {
 		templates := db.GetDefaultTemplates(requestContext, database)
 		component := components.Templates(templates)
 
-		return render(c, component)
+		return renderBase(c, component)
 	}
 }
 
@@ -68,7 +68,7 @@ func Template(database *mongo.Database) echo.HandlerFunc {
 
 		component := components.Template(template, answers)
 
-		return render(c, component)
+		return renderBase(c, component)
 	}
 }
 
@@ -79,7 +79,7 @@ func Modal(database *mongo.Database) echo.HandlerFunc {
 		template := db.GetTemplate(requestContext, database, id)
 		component := components.Modal(template)
 
-		return renderWithoutBase(c, component)
+		return renderNoBase(c, component)
 	}
 }
 
@@ -90,7 +90,7 @@ func Start(database *mongo.Database) echo.HandlerFunc {
 		template := db.GetTemplate(requestContext, database, id)
 		component := components.Start(template)
 
-		return render(c, component)
+		return renderBase(c, component)
 	}
 }
 

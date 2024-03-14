@@ -10,14 +10,20 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func render(c echo.Context, component templ.Component) error {
-	base := components.PageBase(views.GetFlash(c), auth.IsLoggedIn(c), component)
+func renderNoBase(c echo.Context, component templ.Component) error {
+	return component.Render(c.Request().Context(), c.Response().Writer)
+}
+
+func renderWithoutNav(c echo.Context, component templ.Component) error {
+	base := components.BaseBody(views.GetFlash(c), component)
 
 	return base.Render(c.Request().Context(), c.Response().Writer)
 }
 
-func renderWithoutBase(c echo.Context, component templ.Component) error {
-	return component.Render(c.Request().Context(), c.Response().Writer)
+func renderBase(c echo.Context, component templ.Component) error {
+	base := components.PageBase(views.GetFlash(c), auth.IsLoggedIn(c), component)
+
+	return base.Render(c.Request().Context(), c.Response().Writer)
 }
 
 func redirect(c echo.Context, url string) error {

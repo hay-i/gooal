@@ -11,6 +11,6 @@ func Home(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.Home()
 
-		return render(c, component)
+		return renderBase(c, component)
 	}
 }

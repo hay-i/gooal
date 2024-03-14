@@ -85,7 +85,7 @@ func SignUp() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.SignUp()
 
-		return render(c, component)
+		return renderWithoutNav(c, component)
 	}
 }
 
@@ -93,7 +93,7 @@ func SignIn() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.SignIn()
 
-		return render(c, component)
+		return renderWithoutNav(c, component)
 	}
 }
 
@@ -126,6 +126,6 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 
 		component := components.Profile(parsedToken["sub"].(string))
 
-		return render(c, component)
+		return renderBase(c, component)
 	}
 }
