@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/golang-jwt/jwt"
 	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/views"
@@ -26,8 +24,9 @@ func JwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			// TODO: Return a template with the error message
-			return echo.NewHTTPError(http.StatusUnauthorized, "Invalid or expired token")
+			views.AddFlash(c, "Invalid or expired token")
+
+			return redirect(c, "/login")
 		}
 
 		return next(c)
