@@ -20,8 +20,9 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 		requestContext := c.Request().Context()
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			// TODO: Return a template with the error message
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
+			views.AddFlash(c, "You must be logged in to access that page")
+
+			return redirect(c, "/login")
 		}
 
 		tokenString := cookie.Value
@@ -29,8 +30,9 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusUnauthorized, err.Error())
+			views.AddFlash(c, "Invalid or expired token")
+
+			return redirect(c, "/login")
 		}
 
 		username := parsedToken["sub"].(string)

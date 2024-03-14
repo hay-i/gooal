@@ -27,6 +27,8 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	e.POST("/login", controllers.Login(database))
 
 	e.GET("/profile", controllers.Profile(database), controllers.JwtAuthenticationMiddleware)
+	// TODO: This is not routed, not displays anything. It will be addressed in
+	// https://github.com/hay-i/chronologger/issues/43
 	e.GET("/my-templates", controllers.MyTemplates(database), controllers.JwtAuthenticationMiddleware)
 
 	e.Static("/static", "assets")

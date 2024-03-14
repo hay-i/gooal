@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/hay-i/chronologger/auth"
@@ -29,14 +28,16 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 
 		_, err := collection.InsertOne(requestContext, user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusInternalServerError, "Error while registering")
+			views.AddFlash(c, "Error while registering")
+
+			return redirect(c, "/register")
 		}
 
 		expiry, signedToken, err := auth.SignToken(user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
+			views.AddFlash(c, "Error while registering")
+
+			return redirect(c, "/register")
 		}
 
 		auth.SetCookie(signedToken, expiry, c)
@@ -58,20 +59,23 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		var user models.User
 		err := collection.FindOne(requestContext, bson.M{"username": credentials.Username}).Decode(&user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusBadRequest, "Invalid username or password")
+			views.AddFlash(c, "Invalid username or password")
+
+			return redirect(c, "/login")
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusBadRequest, "Invalid username or password")
+			views.AddFlash(c, "Invalid username or password")
+
+			return redirect(c, "/login")
 		}
 
 		expirationTime, signedToken, err := auth.SignToken(user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
+			views.AddFlash(c, "Error while logging in")
+
+			return redirect(c, "/login")
 		}
 
 		auth.SetCookie(signedToken, expirationTime, c)
@@ -111,8 +115,9 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			// TODO: Return a template with the error message
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
+			views.AddFlash(c, "You must be logged in to access that page")
+
+			return redirect(c, "/login")
 		}
 
 		tokenString := cookie.Value
@@ -120,8 +125,9 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusUnauthorized, err.Error())
+			views.AddFlash(c, "Invalid or expired token")
+
+			return redirect(c, "/login")
 		}
 
 		component := components.Profile(parsedToken["sub"].(string))
