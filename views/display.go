@@ -10,9 +10,11 @@ import (
 var SessionStore = sessions.NewCookieStore([]byte("secret"))
 
 func GetFlash(c echo.Context) []interface{} {
-	sess, _ := SessionStore.Get(c.Request(), "session")
+	session, _ := SessionStore.Get(c.Request(), "session")
 
-	return sess.Flashes()
+	defer session.Save(c.Request(), c.Response())
+
+	return session.Flashes()
 }
 
 func SaveFlash(c echo.Context, flash string) {
