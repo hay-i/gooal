@@ -40,7 +40,7 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		auth.SetCookie(signedToken, expiry, c)
-		views.SaveFlash(c, "You have successfully registered")
+		views.AddFlash(c, "You have successfully registered")
 
 		return redirect(c, "/")
 	}
@@ -75,7 +75,7 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		auth.SetCookie(signedToken, expirationTime, c)
-		views.SaveFlash(c, "You have successfully logged in")
+		views.AddFlash(c, "You have successfully logged in")
 
 		return redirect(c, "/")
 	}
@@ -101,7 +101,7 @@ func Logout(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		auth.SetCookie("", time.Now(), c)
 
-		views.SaveFlash(c, "You have successfully logged out")
+		views.AddFlash(c, "You have successfully logged out")
 
 		return redirect(c, "/")
 	}

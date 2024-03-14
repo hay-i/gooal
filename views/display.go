@@ -17,14 +17,10 @@ func GetFlash(c echo.Context) []interface{} {
 	return session.Flashes()
 }
 
-func SaveFlash(c echo.Context, flash string) {
+func AddFlash(c echo.Context, flash string) {
 	session, _ := SessionStore.Get(c.Request(), "session")
 
-	if flashes := session.Flashes(); len(flashes) > 0 {
-		// TODO: Delete old flashes?
-	} else {
-		session.AddFlash(flash)
-	}
+	session.AddFlash(flash)
 
 	session.Save(c.Request(), c.Response())
 }

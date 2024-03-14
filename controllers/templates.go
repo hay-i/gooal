@@ -139,7 +139,7 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			}
 		}
 
-		views.SaveFlash(c, "Your response has been saved")
+		views.AddFlash(c, "Your response has been saved")
 
 		return redirect(c, "/templates/"+templateId)
 	}
