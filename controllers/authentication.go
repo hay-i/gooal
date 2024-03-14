@@ -1,19 +1,21 @@
-package router
+package controllers
 
 import (
 	"net/http"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/hay-i/chronologger/auth"
+	"github.com/hay-i/chronologger/views"
 	"github.com/labstack/echo/v4"
 )
 
-func jwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func JwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			// TODO: Return a template with the error message
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
+			views.AddFlash(c, "You must be logged in to access that page")
+
+			return redirect(c, "/login")
 		}
 
 		tokenString := cookie.Value
