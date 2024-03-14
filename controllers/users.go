@@ -7,6 +7,8 @@ import (
 	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/chronologger/views"
+
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -38,9 +40,9 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		auth.SetCookie(signedToken, expiry, c)
+		views.SaveFlash(c, "You have successfully registered")
 
-		// TODO: Return a template with the success message
-		return c.JSON(http.StatusCreated, "User created")
+		return redirect(c, "/")
 	}
 }
 
@@ -73,9 +75,9 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		auth.SetCookie(signedToken, expirationTime, c)
+		views.SaveFlash(c, "You have successfully logged in")
 
-		// TODO: Return a template with the success message
-		return c.JSON(http.StatusOK, echo.Map{"token": signedToken})
+		return redirect(c, "/")
 	}
 }
 
@@ -92,6 +94,16 @@ func SignIn() echo.HandlerFunc {
 		component := components.SignIn()
 
 		return render(c, component)
+	}
+}
+
+func Logout(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		auth.SetCookie("", time.Now(), c)
+
+		views.SaveFlash(c, "You have successfully logged out")
+
+		return redirect(c, "/")
 	}
 }
 
@@ -115,14 +127,5 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 		component := components.Profile(parsedToken["sub"].(string))
 
 		return render(c, component)
-	}
-}
-
-func Logout(database *mongo.Database) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		auth.SetCookie("", time.Now(), c)
-
-		// TODO: Return a template with the success message
-		return c.JSON(http.StatusOK, "Logged out")
 	}
 }

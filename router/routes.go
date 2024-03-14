@@ -6,6 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/hay-i/chronologger/controllers"
+	"github.com/hay-i/chronologger/views"
+	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -15,6 +17,7 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(session.Middleware(views.SessionStore))
 
 	e.GET("/register", controllers.SignUp())
 	e.GET("/login", controllers.SignIn())

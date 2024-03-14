@@ -10,6 +10,8 @@ import (
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/models"
+
+	"github.com/hay-i/chronologger/views"
 	"github.com/labstack/echo/v4"
 )
 
@@ -63,8 +65,8 @@ func Template(database *mongo.Database) echo.HandlerFunc {
 		id := c.Param("id")
 		template := db.GetTemplate(requestContext, database, id)
 		answers := db.GetAnswers(requestContext, database, id)
-		success := c.QueryParam("success")
-		component := components.Template(template, answers, success == "true")
+
+		component := components.Template(template, answers)
 
 		return render(c, component)
 	}
@@ -77,7 +79,7 @@ func Modal(database *mongo.Database) echo.HandlerFunc {
 		template := db.GetTemplate(requestContext, database, id)
 		component := components.Modal(template)
 
-		return render(c, component)
+		return renderWithoutBase(c, component)
 	}
 }
 
@@ -104,17 +106,17 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			panic(err)
 		}
 
-		session, err := client.StartSession()
+		dbSession, err := client.StartSession()
 		if err != nil {
 			panic(err)
 		}
-		defer session.EndSession(requestContext)
-		err = session.StartTransaction()
+		defer dbSession.EndSession(requestContext)
+		err = dbSession.StartTransaction()
 		if err != nil {
 			panic(err)
 		}
-		defer session.AbortTransaction(requestContext)
-		defer session.CommitTransaction(requestContext)
+		defer dbSession.AbortTransaction(requestContext)
+		defer dbSession.CommitTransaction(requestContext)
 
 		templateObjectId, err := primitive.ObjectIDFromHex(templateId)
 		if err != nil {
@@ -137,6 +139,8 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			}
 		}
 
-		return redirect(c, "/templates/"+templateId+"?success=true")
+		views.SaveFlash(c, "Your response has been saved")
+
+		return redirect(c, "/templates/"+templateId)
 	}
 }

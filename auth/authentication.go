@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// TODO: Move Secret to ENV
 // https://github.com/hay-i/chronologger/issues/35
 var SecretKey = "my_secret"
 
