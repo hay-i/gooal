@@ -87,8 +87,7 @@ templ BaseBody(flash []interface{}, child templ.Component) {
 }
 
 templ FlashMessage(flash interface{}) {
-	<div>
-		A message
+	<div class="flash">
 		<h1>{ fmt.Sprintf("%v", flash) }</h1>
 		<p>{ fmt.Sprintf("%v", flash) }</p>
 	</div>

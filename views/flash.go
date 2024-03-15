@@ -1,6 +1,8 @@
 package views
 
 import (
+	"net/http"
+
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo/v4"
 )
@@ -9,8 +11,18 @@ import (
 // https://github.com/hay-i/chronologger/issues/35
 var SessionStore = sessions.NewCookieStore([]byte("secret"))
 
-func GetFlash(c echo.Context) []interface{} {
-	session, _ := SessionStore.Get(c.Request(), "session")
+func getSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
+	session, err := SessionStore.Get(r, "my-session")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		panic("No session!")
+	}
+
+	return session
+}
+
+func GetFlashes(c echo.Context) []interface{} {
+	session := getSession(c.Response(), c.Request())
 
 	defer session.Save(c.Request(), c.Response())
 
@@ -18,7 +30,7 @@ func GetFlash(c echo.Context) []interface{} {
 }
 
 func AddFlash(c echo.Context, flash string) {
-	session, _ := SessionStore.Get(c.Request(), "session")
+	session := getSession(c.Response(), c.Request())
 
 	session.AddFlash(flash)
 

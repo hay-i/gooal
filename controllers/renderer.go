@@ -15,13 +15,14 @@ func renderNoBase(c echo.Context, component templ.Component) error {
 }
 
 func renderWithoutNav(c echo.Context, component templ.Component) error {
-	base := components.BaseBody(views.GetFlash(c), component)
+	base := components.BaseBody(views.GetFlashes(c), component)
 
 	return base.Render(c.Request().Context(), c.Response().Writer)
 }
 
 func renderBase(c echo.Context, component templ.Component) error {
-	base := components.PageBase(views.GetFlash(c), auth.IsLoggedIn(c), component)
+	flashes := views.GetFlashes(c)
+	base := components.PageBase(flashes, auth.IsLoggedIn(c), component)
 
 	return base.Render(c.Request().Context(), c.Response().Writer)
 }
