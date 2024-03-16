@@ -61,7 +61,7 @@ templ selectQuestion(question models.Question) {
 }
 
 templ rangeQuestion(question models.Question) {
-	<input type="range" name={ question.ID.Hex() } min={ templ.EscapeString(fmt.Sprintf("%s", question.Min)) } max={ templ.EscapeString(fmt.Sprintf("%s", question.Max)) }/>
+	<input type="range" name={ question.ID.Hex() } min={ templ.EscapeString(fmt.Sprintf("%d", question.Min)) } max={ templ.EscapeString(fmt.Sprintf("%d", question.Max)) }/>
 }
 
 templ textAreaQuestion(question models.Question) {
