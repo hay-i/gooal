@@ -20,7 +20,7 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 		requestContext := c.Request().Context()
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			views.AddFlash(c, "You must be logged in to access that page")
+			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
 
 			return redirect(c, "/login")
 		}
@@ -30,7 +30,7 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
-			views.AddFlash(c, "Invalid or expired token")
+			views.AddFlash(c, "Invalid or expired token", views.FlashError)
 
 			return redirect(c, "/login")
 		}
@@ -141,7 +141,7 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			}
 		}
 
-		views.AddFlash(c, "Your response has been saved")
+		views.AddFlash(c, "Your response has been saved", views.FlashSuccess)
 
 		return redirect(c, "/templates/"+templateId)
 	}

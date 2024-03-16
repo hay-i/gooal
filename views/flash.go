@@ -7,6 +7,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+type Flashes map[FlashType][]string
+
+type FlashType string
+
+const (
+	FlashError   FlashType = "error"
+	FlashWarning FlashType = "warning"
+	FlashInfo    FlashType = "info"
+	FlashSuccess FlashType = "success"
+)
+
 // TODO: Move Secret to ENV
 // https://github.com/hay-i/chronologger/issues/35
 var SessionStore = sessions.NewCookieStore([]byte("secret"))
@@ -21,18 +32,30 @@ func getSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
 	return session
 }
 
-func GetFlashes(c echo.Context) []interface{} {
+func GetFlashes(c echo.Context) Flashes {
 	session := getSession(c.Response(), c.Request())
 
 	defer session.Save(c.Request(), c.Response())
 
-	return session.Flashes()
+	flashMap := make(Flashes)
+
+	for _, flashType := range []FlashType{FlashError, FlashWarning, FlashInfo, FlashSuccess} {
+		flashMessages := []string{}
+
+		for _, flash := range session.Flashes(string(flashType)) {
+			flashMessages = append(flashMessages, flash.(string))
+		}
+
+		flashMap[flashType] = flashMessages
+	}
+
+	return flashMap
 }
 
-func AddFlash(c echo.Context, flash string) {
+func AddFlash(c echo.Context, message string, flashType FlashType) {
 	session := getSession(c.Response(), c.Request())
 
-	session.AddFlash(flash)
+	session.AddFlash(message, string(flashType))
 
 	session.Save(c.Request(), c.Response())
 }
