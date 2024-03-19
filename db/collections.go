@@ -10,10 +10,10 @@ import (
 
 func createCollections(ctx context.Context, database *mongo.Database) {
 	createTemplateCollection(ctx, database)
-	createAnswers(ctx, database)
+	createAnswersCollection(ctx, database)
 }
 
-func createAnswers(ctx context.Context, database *mongo.Database) {
+func createAnswersCollection(ctx context.Context, database *mongo.Database) {
 	collections, err := database.ListCollectionNames(ctx, bson.M{"name": "answers"})
 
 	if err != nil {
