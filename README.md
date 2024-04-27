@@ -20,7 +20,9 @@ You can get up and running using `make`, use `make help` to see a list of option
 
 ## Up and running
 
-Start the application with hot module reloading using `make hmr`.
+1) Start your docker.
+2) Start the docker containers using `make up`.
+3) Start the application with hot module reloading using `make hmr`.
 
 Alternatively, if you don't need hot module reloading, you can just run `go run .` or `make start`
 
