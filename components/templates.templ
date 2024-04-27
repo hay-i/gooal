@@ -18,21 +18,19 @@ templ questionAnswers(question models.Question, answers []models.Answer) {
 }
 
 templ Templates(templates []models.Template) {
-	@PageBase() {
-		<div id="template-modal"></div>
-		<div class="width-wrap">
-			for _, template := range templates {
-				<button
-					class="btn"
-					hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
-					hx-target="#template-modal"
-					hx-trigger="click"
-				>
-					Preview { template.Title }
-				</button>
-			}
-		</div>
-	}
+	<div id="template-modal"></div>
+	<div class="width-wrap">
+		for _, template := range templates {
+			<button
+				class="btn"
+				hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
+				hx-target="#template-modal"
+				hx-trigger="click"
+			>
+				Preview { template.Title }
+			</button>
+		}
+	</div>
 }
 
 templ Modal(template models.Template) {
@@ -53,26 +51,14 @@ templ Modal(template models.Template) {
 	</div>
 }
 
-templ success() {
+templ Template(template models.Template, answers []models.Answer) {
 	<div>
-		<h1>Success</h1>
-		<p>Your answers have been submitted.</p>
+		<div>{ template.Description }</div>
+		<div>{ template.Title }</div>
+		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
+		<div>Answers per question:</div>
+		for _, question := range template.Questions {
+			@questionAnswers(question, answers)
+		}
 	</div>
-}
-
-templ Template(template models.Template, answers []models.Answer, answered bool) {
-	@PageBase() {
-		<div>
-			if answered {
-				@success()
-			}
-			<div>{ template.Description }</div>
-			<div>{ template.Title }</div>
-			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
-			<div>Answers per question:</div>
-			for _, question := range template.Questions {
-				@questionAnswers(question, answers)
-			}
-		</div>
-	}
 }

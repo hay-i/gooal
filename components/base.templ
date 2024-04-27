@@ -1,5 +1,9 @@
 package components
 
+import (
+	"fmt"
+)
+
 css btn() {
 	display: inline-block;
 	border: 0;
@@ -37,25 +41,54 @@ templ body() {
 	</body>
 }
 
-templ PageBase() {
+templ nav(signedIn bool) {
+	<nav>
+		if signedIn {
+			<a href={ templ.SafeURL("/") }>Home</a>
+			<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
+			<a href={ templ.SafeURL("/profile") }>My Profile</a>
+			<a href={ templ.SafeURL("/logout") }>Logout</a>
+		} else {
+			<a href={ templ.SafeURL("/register") }>Register</a>
+			<a href={ templ.SafeURL("/login") }>Login</a>
+		}
+	</nav>
+}
+
+templ PageBase(flash []interface{}, signedIn bool, child templ.Component) {
 	@base() {
 		@head()
 		@body() {
-			<main>
-				{ children... }
+			@nav(signedIn)
+			<main class="width-wrap">
+				<h1>Chronologger</h1>
+				for _, flash := range flash {
+					@FlashMessage(flash)
+				}
+				@child
 			</main>
 		}
 	}
 }
 
-templ Home() {
+templ BaseBody(flash []interface{}, child templ.Component) {
 	@base() {
 		@head()
 		@body() {
 			<main class="width-wrap">
 				<h1>Chronologger</h1>
-				<a href={ templ.SafeURL("/templates") }>Our Templates</a>
+				for _, flash := range flash {
+					@FlashMessage(flash)
+				}
+				@child
 			</main>
 		}
 	}
+}
+
+templ FlashMessage(flash interface{}) {
+	<div class="flash">
+		<h1>{ fmt.Sprintf("%v", flash) }</h1>
+		<p>{ fmt.Sprintf("%v", flash) }</p>
+	</div>
 }

@@ -6,18 +6,42 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/models"
+
+	"github.com/hay-i/chronologger/views"
 	"github.com/labstack/echo/v4"
 )
 
-func Home(database *mongo.Database) echo.HandlerFunc {
+func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestContext := c.Request().Context()
-		component := components.Home()
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			views.AddFlash(c, "You must be logged in to access that page")
 
-		return component.Render(requestContext, c.Response().Writer)
+			return redirect(c, "/login")
+		}
+
+		tokenString := cookie.Value
+
+		parsedToken, err := auth.ParseToken(tokenString)
+
+		if err != nil {
+			views.AddFlash(c, "Invalid or expired token")
+
+			return redirect(c, "/login")
+		}
+
+		username := parsedToken["sub"].(string)
+
+		templates := db.GetMyTemplates(requestContext, database, username)
+
+		component := components.Templates(templates)
+
+		return renderBase(c, component)
 	}
 }
 
@@ -27,7 +51,7 @@ func Templates(database *mongo.Database) echo.HandlerFunc {
 		templates := db.GetDefaultTemplates(requestContext, database)
 		component := components.Templates(templates)
 
-		return component.Render(requestContext, c.Response().Writer)
+		return renderBase(c, component)
 	}
 }
 
@@ -43,10 +67,10 @@ func Template(database *mongo.Database) echo.HandlerFunc {
 		id := c.Param("id")
 		template := db.GetTemplate(requestContext, database, id)
 		answers := db.GetAnswers(requestContext, database, id)
-		success := c.QueryParam("success")
-		component := components.Template(template, answers, success == "true")
 
-		return component.Render(requestContext, c.Response().Writer)
+		component := components.Template(template, answers)
+
+		return renderBase(c, component)
 	}
 }
 
@@ -57,7 +81,7 @@ func Modal(database *mongo.Database) echo.HandlerFunc {
 		template := db.GetTemplate(requestContext, database, id)
 		component := components.Modal(template)
 
-		return component.Render(requestContext, c.Response().Writer)
+		return renderNoBase(c, component)
 	}
 }
 
@@ -68,7 +92,7 @@ func Start(database *mongo.Database) echo.HandlerFunc {
 		template := db.GetTemplate(requestContext, database, id)
 		component := components.Start(template)
 
-		return component.Render(requestContext, c.Response().Writer)
+		return renderBase(c, component)
 	}
 }
 
@@ -84,17 +108,17 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			panic(err)
 		}
 
-		session, err := client.StartSession()
+		dbSession, err := client.StartSession()
 		if err != nil {
 			panic(err)
 		}
-		defer session.EndSession(requestContext)
-		err = session.StartTransaction()
+		defer dbSession.EndSession(requestContext)
+		err = dbSession.StartTransaction()
 		if err != nil {
 			panic(err)
 		}
-		defer session.AbortTransaction(requestContext)
-		defer session.CommitTransaction(requestContext)
+		defer dbSession.AbortTransaction(requestContext)
+		defer dbSession.CommitTransaction(requestContext)
 
 		templateObjectId, err := primitive.ObjectIDFromHex(templateId)
 		if err != nil {
@@ -117,8 +141,8 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			}
 		}
 
-		// Ideally I wanted to send in http.StatusCreated, but it seems that the redirect doesn't work with that status code
-		// See: https://github.com/labstack/echo/issues/229#issuecomment-1518502318
-		return c.Redirect(http.StatusFound, "/templates/"+templateId+"?success=true")
+		views.AddFlash(c, "Your response has been saved")
+
+		return redirect(c, "/templates/"+templateId)
 	}
 }
