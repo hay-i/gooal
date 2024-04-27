@@ -1,4 +1,5 @@
 # Chronologger
+[![GO Test](https://github.com/hay-i/chronologger/actions/workflows/go-test.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/go-test.yml/badge.svg)
 [![GO Formatting](https://github.com/hay-i/chronologger/actions/workflows/go-format.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/go-format.yml/badge.svg)
 [![Templ Formatiing](https://github.com/hay-i/chronologger/actions/workflows/templ-format.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/templ-format.yml/badge.svg)
 [![Templ Compilation](https://github.com/hay-i/chronologger/actions/workflows/templ-generate.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/templ-generate.yml/badge.svg)
@@ -23,6 +24,14 @@ Start the application with hot module reloading using `make hmr`.
 
 Alternatively, if you don't need hot module reloading, you can just run `go run .` or `make start`
 
+### Using MongoDB
+
+To view a collection, enter the mongo cli with `make dbCli` and run the following:
+```
+use chronologger
+db.templates.find()
+```
+
 ### Pushing Code
 
 Due to the way `templ`s watch feature works, the generated go code will look different when running a watch instead of a standard `templ generate`.
@@ -31,10 +40,6 @@ Because of this, it's recommended to run `make build` before committing code.
 
 Note: The differently generated code would work in production, but it's not recommended to commit it as it's less performant.
 
-## Using MongoDB
+### Testing
 
-To view a collection, enter the mongo cli with `make dbCli` and run the following:
-```
-use chronologger
-db.templates.find()
-```
+To add tests, create a file with the suffix `_test.go` next to the file you're testing, and run `make test` to run the tests.

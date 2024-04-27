@@ -1,20 +1,19 @@
 package components
 
 import (
-	"github.com/hay-i/chronologger/models"
 	"fmt"
+
+	"github.com/hay-i/chronologger/models"
 )
 
 templ Start(template models.Template) {
-	@PageBase() {
-		<h1 class="title">{ template.Title }</h1>
-		<form action={ templ.SafeURL(fmt.Sprintf("/templates/%s/response", template.ID.Hex())) } method="POST">
-			for _, question := range template.Questions {
-				@questionDetails(question)
-			}
-			<button type="submit">Submit</button>
-		</form>
-	}
+	<h1 class="title">{ template.Title }</h1>
+	<form action={ templ.SafeURL(fmt.Sprintf("/templates/%s/response", template.ID.Hex())) } method="POST">
+		for _, question := range template.Questions {
+			@questionDetails(question)
+		}
+		<button type="submit">Submit</button>
+	</form>
 }
 
 templ questionDetails(question models.Question) {
@@ -62,7 +61,7 @@ templ selectQuestion(question models.Question) {
 }
 
 templ rangeQuestion(question models.Question) {
-	<input type="range" name={ question.ID.Hex() } min={ templ.EscapeString(fmt.Sprintf("%s", question.Min)) } max={ templ.EscapeString(fmt.Sprintf("%s", question.Max)) }/>
+	<input type="range" name={ question.ID.Hex() } min={ templ.EscapeString(fmt.Sprintf("%d", question.Min)) } max={ templ.EscapeString(fmt.Sprintf("%d", question.Max)) }/>
 }
 
 templ textAreaQuestion(question models.Question) {

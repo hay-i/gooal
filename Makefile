@@ -27,5 +27,8 @@ down: ## Stop the docker containers
 dbCli: ## Connect to the mongo db
 	docker exec -it chronologger-mongo-1 mongosh --username root --password example
 
+tests: ## Run the tests
+	go test -v ./...
+
 help:
 	@sed -n -E "s/(^[^ ]+):.* ## (.*)/`printf "\033[32m"`\1|`printf "\033[0m"` \2/p" $(MAKEFILE_LIST) | sort | column -t -s '|'

@@ -1,23 +1,22 @@
 package controllers
 
 import (
-	"context"
-	"net/http"
 	"time"
 
+	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/chronologger/views"
+
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// https://github.com/hay-i/chronologger/issues/35
-var SecretKey = "my_secret"
-
-func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
+func Register(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
 		collection := database.Collection("users")
 		var user models.User
 		if err := c.Bind(&user); err != nil {
@@ -27,27 +26,30 @@ func Register(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 		user.Password = string(hashedPassword)
 
-		_, err := collection.InsertOne(ctx, user)
+		_, err := collection.InsertOne(requestContext, user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusInternalServerError, "Error while registering")
+			views.AddFlash(c, "Error while registering", views.FlashError)
+
+			return redirect(c, "/register")
 		}
 
-		expiry, signedToken, err := signToken(user)
+		expiry, signedToken, err := auth.SignToken(user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
+			views.AddFlash(c, "Error while registering", views.FlashError)
+
+			return redirect(c, "/register")
 		}
 
-		setCookie(signedToken, expiry, c)
+		auth.SetCookie(signedToken, expiry, c)
+		views.AddFlash(c, "You have successfully registered", views.FlashSuccess)
 
-		// TODO: Return a template with the success message
-		return c.JSON(http.StatusCreated, "User created")
+		return redirect(c, "/")
 	}
 }
 
-func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
+func Login(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		requestContext := c.Request().Context()
 		collection := database.Collection("users")
 		var credentials models.User
 		if err := c.Bind(&credentials); err != nil {
@@ -55,46 +57,57 @@ func Login(database *mongo.Database, ctx context.Context) echo.HandlerFunc {
 		}
 
 		var user models.User
-		err := collection.FindOne(ctx, bson.M{"username": credentials.Username}).Decode(&user)
+		err := collection.FindOne(requestContext, bson.M{"username": credentials.Username}).Decode(&user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusBadRequest, "Invalid username or password")
+			views.AddFlash(c, "Invalid username or password", views.FlashError)
+
+			return redirect(c, "/login")
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusBadRequest, "Invalid username or password")
+			views.AddFlash(c, "Invalid username or password", views.FlashError)
+
+			return redirect(c, "/login")
 		}
 
-		expirationTime, signedToken, err := signToken(user)
+		expirationTime, signedToken, err := auth.SignToken(user)
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusInternalServerError, "Failed to sign token")
+			views.AddFlash(c, "Error while logging in", views.FlashError)
+
+			return redirect(c, "/login")
 		}
 
-		setCookie(signedToken, expirationTime, c)
+		auth.SetCookie(signedToken, expirationTime, c)
+		views.AddFlash(c, "You have successfully logged in", views.FlashSuccess)
 
-		// TODO: Return a template with the success message
-		return c.JSON(http.StatusOK, echo.Map{"token": signedToken})
+		return redirect(c, "/")
 	}
 }
 
 func SignUp() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestContext := c.Request().Context()
 		component := components.SignUp()
 
-		return component.Render(requestContext, c.Response().Writer)
+		return renderWithoutNav(c, component)
 	}
 }
 
 func SignIn() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestContext := c.Request().Context()
 		component := components.SignIn()
 
-		return component.Render(requestContext, c.Response().Writer)
+		return renderWithoutNav(c, component)
+	}
+}
+
+func Logout(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		auth.SetCookie("", time.Now(), c)
+
+		views.AddFlash(c, "You have successfully logged out", views.FlashSuccess)
+
+		return redirect(c, "/")
 	}
 }
 
@@ -102,31 +115,23 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			// TODO: Return a template with the error message
-			return echo.NewHTTPError(http.StatusUnauthorized, "Missing or invalid token")
+			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
+
+			return redirect(c, "/login")
 		}
 
 		tokenString := cookie.Value
 
-		parsedToken, err := parseToken(tokenString)
+		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
-			// TODO: Return a template with the error message
-			return c.JSON(http.StatusUnauthorized, err.Error())
+			views.AddFlash(c, "Invalid or expired token", views.FlashError)
+
+			return redirect(c, "/login")
 		}
 
-		requestContext := c.Request().Context()
 		component := components.Profile(parsedToken["sub"].(string))
 
-		return component.Render(requestContext, c.Response().Writer)
-	}
-}
-
-func Logout(database *mongo.Database) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		setCookie("", time.Now(), c)
-
-		// TODO: Return a template with the success message
-		return c.JSON(http.StatusOK, "Logged out")
+		return renderBase(c, component)
 	}
 }
