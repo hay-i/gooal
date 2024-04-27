@@ -11,7 +11,7 @@ func JwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			views.AddFlash(c, "You must be logged in to access that page")
+			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
 
 			return redirect(c, "/login")
 		}
@@ -24,7 +24,7 @@ func JwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			views.AddFlash(c, "Invalid or expired token")
+			views.AddFlash(c, "Invalid or expired token", views.FlashError)
 
 			return redirect(c, "/login")
 		}

@@ -28,20 +28,20 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 
 		_, err := collection.InsertOne(requestContext, user)
 		if err != nil {
-			views.AddFlash(c, "Error while registering")
+			views.AddFlash(c, "Error while registering", views.FlashError)
 
 			return redirect(c, "/register")
 		}
 
 		expiry, signedToken, err := auth.SignToken(user)
 		if err != nil {
-			views.AddFlash(c, "Error while registering")
+			views.AddFlash(c, "Error while registering", views.FlashError)
 
 			return redirect(c, "/register")
 		}
 
 		auth.SetCookie(signedToken, expiry, c)
-		views.AddFlash(c, "You have successfully registered")
+		views.AddFlash(c, "You have successfully registered", views.FlashSuccess)
 
 		return redirect(c, "/")
 	}
@@ -59,27 +59,27 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		var user models.User
 		err := collection.FindOne(requestContext, bson.M{"username": credentials.Username}).Decode(&user)
 		if err != nil {
-			views.AddFlash(c, "Invalid username or password")
+			views.AddFlash(c, "Invalid username or password", views.FlashError)
 
 			return redirect(c, "/login")
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 		if err != nil {
-			views.AddFlash(c, "Invalid username or password")
+			views.AddFlash(c, "Invalid username or password", views.FlashError)
 
 			return redirect(c, "/login")
 		}
 
 		expirationTime, signedToken, err := auth.SignToken(user)
 		if err != nil {
-			views.AddFlash(c, "Error while logging in")
+			views.AddFlash(c, "Error while logging in", views.FlashError)
 
 			return redirect(c, "/login")
 		}
 
 		auth.SetCookie(signedToken, expirationTime, c)
-		views.AddFlash(c, "You have successfully logged in")
+		views.AddFlash(c, "You have successfully logged in", views.FlashSuccess)
 
 		return redirect(c, "/")
 	}
@@ -105,7 +105,7 @@ func Logout(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		auth.SetCookie("", time.Now(), c)
 
-		views.AddFlash(c, "You have successfully logged out")
+		views.AddFlash(c, "You have successfully logged out", views.FlashSuccess)
 
 		return redirect(c, "/")
 	}
@@ -115,7 +115,7 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {
-			views.AddFlash(c, "You must be logged in to access that page")
+			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
 
 			return redirect(c, "/login")
 		}
@@ -125,7 +125,7 @@ func Profile(database *mongo.Database) echo.HandlerFunc {
 		parsedToken, err := auth.ParseToken(tokenString)
 
 		if err != nil {
-			views.AddFlash(c, "Invalid or expired token")
+			views.AddFlash(c, "Invalid or expired token", views.FlashError)
 
 			return redirect(c, "/login")
 		}

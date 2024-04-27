@@ -2,6 +2,8 @@ package components
 
 import (
 	"fmt"
+
+	"github.com/hay-i/chronologger/views"
 )
 
 css btn() {
@@ -55,15 +57,15 @@ templ nav(signedIn bool) {
 	</nav>
 }
 
-templ PageBase(flash []interface{}, signedIn bool, child templ.Component) {
+templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
 	@base() {
 		@head()
 		@body() {
 			@nav(signedIn)
 			<main class="width-wrap">
 				<h1>Chronologger</h1>
-				for _, flash := range flash {
-					@FlashMessage(flash)
+				for flashType, flash := range flashes {
+					@FlashMessage(flashType, flash)
 				}
 				@child
 			</main>
@@ -71,14 +73,14 @@ templ PageBase(flash []interface{}, signedIn bool, child templ.Component) {
 	}
 }
 
-templ BaseBody(flash []interface{}, child templ.Component) {
+templ BaseBody(flashes views.Flashes, child templ.Component) {
 	@base() {
 		@head()
 		@body() {
 			<main class="width-wrap">
 				<h1>Chronologger</h1>
-				for _, flash := range flash {
-					@FlashMessage(flash)
+				for flashType, flash := range flashes {
+					@FlashMessage(flashType, flash)
 				}
 				@child
 			</main>
@@ -86,9 +88,11 @@ templ BaseBody(flash []interface{}, child templ.Component) {
 	}
 }
 
-templ FlashMessage(flash interface{}) {
-	<div class="flash">
-		<h1>{ fmt.Sprintf("%v", flash) }</h1>
-		<p>{ fmt.Sprintf("%v", flash) }</p>
-	</div>
+templ FlashMessage(flashType views.FlashType, flashes []string) {
+	for _, flash := range flashes {
+		<div class={ fmt.Sprintf("flash flash_%v", flashType) }>
+			<h1>{ fmt.Sprintf("%v", flashType) }</h1>
+			<p>{ fmt.Sprintf("%v", flash) }</p>
+		</div>
+	}
 }
