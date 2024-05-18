@@ -146,3 +146,10 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		return redirect(c, "/templates/"+templateId)
 	}
 }
+
+func GetStarted(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		component := components.GetStarted()
+		return renderBase(c, component)
+	}
+}

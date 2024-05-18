@@ -31,6 +31,8 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	// https://github.com/hay-i/chronologger/issues/43
 	e.GET("/my-templates", controllers.MyTemplates(database), controllers.JwtAuthenticationMiddleware)
 
+	e.GET("/get-started", controllers.GetStarted(database))
+
 	e.Static("/static", "assets")
 
 	e.GET("/", controllers.Home(database))
