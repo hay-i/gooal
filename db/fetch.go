@@ -9,6 +9,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+func GetMyTemplates(ctx context.Context, database *mongo.Database, username string) []models.Template {
+	collection := database.Collection("templates")
+
+	var results []models.Template
+
+	filter := bson.M{"username": username}
+	cursor, err := collection.Find(ctx, filter)
+
+	if err != nil {
+		panic(err)
+	}
+
+	if err = cursor.All(ctx, &results); err != nil {
+		panic(err)
+	}
+
+	return results
+}
+
 func GetDefaultTemplates(ctx context.Context, database *mongo.Database) []models.Template {
 	collection := database.Collection("templates")
 

@@ -1,5 +1,11 @@
 package components
 
+import (
+	"fmt"
+
+	"github.com/hay-i/chronologger/views"
+)
+
 css btn() {
 	display: inline-block;
 	border: 0;
@@ -38,25 +44,56 @@ templ body() {
 	</body>
 }
 
-templ PageBase() {
+templ nav(signedIn bool) {
+	<nav>
+		if signedIn {
+			<a href={ templ.SafeURL("/") }>Home</a>
+			<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
+			<a href={ templ.SafeURL("/profile") }>My Profile</a>
+			<a href={ templ.SafeURL("/logout") }>Logout</a>
+		} else {
+			<a href={ templ.SafeURL("/register") }>Register</a>
+			<a href={ templ.SafeURL("/login") }>Login</a>
+		}
+	</nav>
+}
+
+templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
 	@base() {
 		@head()
 		@body() {
-			<main>
-				{ children... }
+			@nav(signedIn)
+			<main class="width-wrap">
+				<h1>Chronologger</h1>
+				for flashType, flash := range flashes {
+					@FlashMessage(flashType, flash)
+				}
+				@child
 			</main>
 		}
 	}
 }
 
-templ Home() {
+templ BaseBody(flashes views.Flashes, child templ.Component) {
 	@base() {
 		@head()
 		@body() {
 			<main class="width-wrap">
 				<h1>Chronologger</h1>
-				<a href={ templ.SafeURL("/templates") }>Our Templates</a>
+				for flashType, flash := range flashes {
+					@FlashMessage(flashType, flash)
+				}
+				@child
 			</main>
 		}
+	}
+}
+
+templ FlashMessage(flashType views.FlashType, flashes []string) {
+	for _, flash := range flashes {
+		<div class={ fmt.Sprintf("flash flash_%v", flashType) }>
+			<h1>{ fmt.Sprintf("%v", flashType) }</h1>
+			<p>{ fmt.Sprintf("%v", flash) }</p>
+		</div>
 	}
 }

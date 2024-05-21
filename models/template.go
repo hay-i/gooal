@@ -35,5 +35,6 @@ type Template struct {
 	Description string             `bson:"description"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	Default     bool               `bson:"default,omitempty"`
+	Username    string             `bson:"username"`
 	Questions   []Question         `bson:"questions,omitempty"`
 }
