@@ -310,7 +310,46 @@ func GetStarted() templ.Component {
 			templ_7745c5c3_Var16 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Get Started with tracking your goals</h2><ul class=\"cards\"><li class=\"card\"><button><p>Fitness</p></button></li><li class=\"card\"><button><p>Social</p></button></li><li class=\"card\"><button><p>Finanical</p></button></li><li class=\"card\"><button><p>Work</p></button></li><li class=\"card\"><button><p>Personal</p></button></li><li class=\"card\"><button><p>Cats</p></button></li></ul>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Get Started with tracking your goals</h2><form hx-post=\"/template-questionnaire\" hx-swap=\"innerHTML\"><div><input type=\"checkbox\" id=\"fitness\" name=\"options\" value=\"fitness\"> <label for=\"fitness\">Fitness</label></div><div><input type=\"checkbox\" id=\"financial\" name=\"options\" value=\"financial\"> <label for=\"financial\">Financial</label></div><div><input type=\"checkbox\" id=\"social\" name=\"options\" value=\"social\"> <label for=\"social\">Social</label></div><button type=\"submit\">Continue</button></form>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if !templ_7745c5c3_IsBuffer {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func TemplateQuestionnaire(selectedOptions []string) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var17 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var17 == nil {
+			templ_7745c5c3_Var17 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Selected Options:</h2><ul>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, option := range selectedOptions {
+			var templ_7745c5c3_Var18 string
+			templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(option)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/templates.templ`, Line: 88, Col: 11}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	// "fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -151,5 +152,18 @@ func GetStarted(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.GetStarted()
 		return renderBase(c, component)
+	}
+}
+
+func TemplateQuestionnaire(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if err := c.Request().ParseForm(); err != nil {
+			return err
+		}
+
+		selectedOptions := c.Request().Form["options"]
+
+		component := components.TemplateQuestionnaire(selectedOptions)
+		return renderNoBase(c, component)
 	}
 }

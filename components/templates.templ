@@ -65,36 +65,28 @@ templ Template(template models.Template, answers []models.Answer) {
 
 templ GetStarted() {
 	<h2>Get Started with tracking your goals</h2>
-	<ul class="cards">
-		<li class="card">
-			<button>
-				<p>Fitness</p>
-			</button>
-		</li>
-		<li class="card">
-			<button>
-				<p>Social</p>
-			</button>
-		</li>
-		<li class="card">
-			<button>
-				<p>Finanical</p>
-			</button>
-		</li>
-		<li class="card">
-			<button>
-				<p>Work</p>
-			</button>
-		</li>
-		<li class="card">
-			<button>
-				<p>Personal</p>
-			</button>
-		</li>
-		<li class="card">
-			<button>
-				<p>Cats</p>
-			</button>
-		</li>
+	<form hx-post="/template-questionnaire" hx-swap="innerHTML">
+		<div>
+			<input type="checkbox" id="fitness" name="options" value="fitness"/>
+			<label for="fitness">Fitness</label>
+		</div>
+		<div>
+			<input type="checkbox" id="financial" name="options" value="financial"/>
+			<label for="financial">Financial</label>
+		</div>
+		<div>
+			<input type="checkbox" id="social" name="options" value="social"/>
+			<label for="social">Social</label>
+		</div>
+		<button type="submit">Continue</button>
+	</form>
+}
+
+templ TemplateQuestionnaire(selectedOptions []string) {
+	<h3>Your selected options:</h3>
+	<ul>
+		for _, option := range selectedOptions {
+			{ option }
+		}
 	</ul>
 }
