@@ -6,11 +6,11 @@ templ Drag_n_Drop() {
 		<aside class="left">
 			<form class="sortable" hx-post="/items" hx-trigger="end">
 				<div class="htmx-indicator">Updating...</div>
-				<div><input type="hidden" name="item" value="1"/>Text Input</div>
-				<div><input type="hidden" name="item" value="2"/>Number Input</div>
-				<div><input type="hidden" name="item" value="3"/>Range</div>
-				<div><input type="hidden" name="item" value="4"/>Select Input</div>
-				<div><input type="hidden" name="item" value="5"/>Radio Button</div>
+				<div data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
+				<div data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
+				<div data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
+				<div data-type="select"><input type="hidden" name="item" value="4"/>Select Input</div>
+				<div data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
 			</form>
 		</aside>
 		<main class="right sortable"></main>
@@ -25,7 +25,6 @@ templ Drag_n_Drop() {
     main{
         border: 2px solid red;
     }
-
 
     aside{
         border: 1px solid blue;
@@ -54,8 +53,46 @@ templ Drag_n_Drop() {
                 ghostClass: 'blue-background-class',
                 onAdd: function(evt) {
                     var itemEl = evt.item;
-                    var clonedEl = itemEl.cloneNode(true);
-                    evt.item.parentNode.replaceChild(clonedEl, evt.item);
+                    var inputType = itemEl.getAttribute('data-type');
+                    var inputEl;
+
+                    switch(inputType) {
+                        case 'text':
+                            inputEl = document.createElement('input');
+                            inputEl.type = 'text';
+                            inputEl.placeholder = 'Text Input';
+                            break;
+                        case 'number':
+                            inputEl = document.createElement('input');
+                            inputEl.type = 'number';
+                            inputEl.placeholder = 'Number Input';
+                            break;
+                        case 'range':
+                            inputEl = document.createElement('input');
+                            inputEl.type = 'range';
+                            break;
+                        case 'select':
+                            inputEl = document.createElement('select');
+                            var option1 = document.createElement('option');
+                            option1.value = 'option1';
+                            option1.text = 'Option 1';
+                            var option2 = document.createElement('option');
+                            option2.value = 'option2';
+                            option2.text = 'Option 2';
+                            inputEl.add(option1);
+                            inputEl.add(option2);
+                            break;
+                        case 'radio':
+                            inputEl = document.createElement('input');
+                            inputEl.type = 'radio';
+                            inputEl.name = 'radio';
+                            break;
+                    }
+
+                    if (inputEl) {
+                        itemEl.innerHTML = '';
+                        itemEl.appendChild(inputEl);
+                    }
                 }
             });
         });
