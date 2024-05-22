@@ -69,7 +69,18 @@ templ Drag_n_Drop() {
                 onAdd: function(evt) {
                     var itemEl = evt.item;
                     var inputType = itemEl.getAttribute('data-type');
+                    var formGroup = document.createElement('div');
+                    formGroup.className = 'form-group';
+
+                    var label = document.createElement('label');
+                    label.contentEditable = true;
+                    label.textContent = 'Label';
+
+                    var inputWrapper = document.createElement('div');
+                    inputWrapper.className = 'input-wrapper';
+
                     var inputEl;
+                    var editOptions;
 
                     switch(inputType) {
                         case 'text':
@@ -96,6 +107,39 @@ templ Drag_n_Drop() {
                             option2.text = 'Option 2';
                             inputEl.add(option1);
                             inputEl.add(option2);
+
+                            editOptions = document.createElement('span');
+                            editOptions.className = 'edit-options';
+                            editOptions.textContent = 'Edit Options';
+
+                            var optionsContainer = document.createElement('div');
+                            optionsContainer.className = 'options-container';
+
+                            var addOptionInput = document.createElement('input');
+                            addOptionInput.type = 'text';
+                            addOptionInput.placeholder = 'New Option';
+
+                            var addOptionButton = document.createElement('button');
+                            addOptionButton.type = 'button';
+                            addOptionButton.textContent = 'Add Option';
+
+                            optionsContainer.appendChild(addOptionInput);
+                            optionsContainer.appendChild(addOptionButton);
+
+                            editOptions.addEventListener('click', function() {
+                                optionsContainer.classList.toggle('visible');
+                            });
+
+                            addOptionButton.addEventListener('click', function() {
+                                var newOption = document.createElement('option');
+                                newOption.value = addOptionInput.value;
+                                newOption.text = addOptionInput.value;
+                                inputEl.add(newOption);
+                                addOptionInput.value = '';
+                            });
+
+                            inputWrapper.appendChild(editOptions);
+                            inputWrapper.appendChild(optionsContainer);
                             break;
                         case 'radio':
                             inputEl = document.createElement('input');
@@ -105,8 +149,11 @@ templ Drag_n_Drop() {
                     }
 
                     if (inputEl) {
+                        inputWrapper.insertBefore(inputEl, inputWrapper.firstChild);
+                        formGroup.appendChild(label);
+                        formGroup.appendChild(inputWrapper);
                         itemEl.innerHTML = '';
-                        itemEl.appendChild(inputEl);
+                        itemEl.appendChild(formGroup);
                     }
                 }
             });
