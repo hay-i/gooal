@@ -1,0 +1,63 @@
+package components
+
+templ Drag_n_Drop() {
+	<h1>Build your questionnaire</h1>
+	<div class="grid">
+		<aside class="left">
+			<form class="sortable" hx-post="/items" hx-trigger="end">
+				<div class="htmx-indicator">Updating...</div>
+				<div><input type="hidden" name="item" value="1"/>Text Input</div>
+				<div><input type="hidden" name="item" value="2"/>Number Input</div>
+				<div><input type="hidden" name="item" value="3"/>Range</div>
+				<div><input type="hidden" name="item" value="4"/>Select Input</div>
+				<div><input type="hidden" name="item" value="5"/>Radio Button</div>
+			</form>
+		</aside>
+		<main class="right sortable"></main>
+	</div>
+	<style>
+    .grid{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    main{
+        border: 2px solid red;
+    }
+
+
+    aside{
+        border: 1px solid blue;
+    }
+
+    </style>
+	<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var leftSortable = new Sortable(document.querySelector(".left .sortable"), {
+                group: {
+                    name: "shared",
+                    pull: "clone",
+                    put: false
+                },
+                animation: 150,
+                ghostClass: 'blue-background-class'
+            });
+
+            var rightSortable = new Sortable(document.querySelector(".right"), {
+                group: {
+                    name: "shared",
+                    pull: false,
+                    put: true
+                },
+                animation: 150,
+                ghostClass: 'blue-background-class',
+                onAdd: function(evt) {
+                    var itemEl = evt.item;
+                    var clonedEl = itemEl.cloneNode(true);
+                    evt.item.parentNode.replaceChild(clonedEl, evt.item);
+                }
+            });
+        });
+    </script>
+}
