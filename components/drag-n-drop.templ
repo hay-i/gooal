@@ -4,13 +4,12 @@ templ Drag_n_Drop() {
 	<h1>Build your questionnaire</h1>
 	<div class="grid">
 		<aside class="left">
-			<form class="sortable" hx-post="/items" hx-trigger="end">
-				<div class="htmx-indicator">Updating...</div>
-				<div data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
-				<div data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
-				<div data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
-				<div data-type="select"><input type="hidden" name="item" value="4"/>Select Input</div>
-				<div data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
+			<form class="sortable sortable-grid" hx-post="/items" hx-trigger="end">
+				<div class="draggable-input" data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
+				<div class="draggable-input" data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
+				<div class="draggable-input" data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
+				<div class="draggable-input" data-type="select"><input type="hidden" name="item" value="4"/>Select Input</div>
+				<div class="draggable-input" data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
 			</form>
 		</aside>
 		<main class="right sortable"></main>
@@ -22,8 +21,24 @@ templ Drag_n_Drop() {
         gap: 2rem;
     }
 
-    main{
+    main main{
         border: 2px solid red;
+    }
+
+    .draggable-input{
+        padding: 1rem;
+        border: 1px solid #ececec;
+        margin-bottom: 1rem;
+        cursor: move;
+       display: flex; 
+       background-color: #ececec;
+    }
+
+
+    .sortable-grid{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
     }
 
     aside{
