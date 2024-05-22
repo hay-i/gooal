@@ -45,10 +45,128 @@ templ Drag_n_Drop() {
         border: 1px solid blue;
     }
 
+
+    .form-group .input-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    .edit-options {
+        margin-left: 10px;
+        cursor: pointer;
+        color: blue;
+    }
+    .options-container {
+        display: none;
+        margin-top: 10px;
+    }
+
+    .options-container.visible {
+        display: block;
+    }
+
+    .options-container input[type="text"] {
+        display: block;
+        margin-bottom: 5px;
+    }
     </style>
 	<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var leftSortable = new Sortable(document.querySelector(".left .sortable"), {
+        document.addEventListener("DOMContentLoaded", () => {
+            const createInputElement = (type) => {
+                let inputEl;
+
+                switch(type) {
+                    case 'text':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'text';
+                        inputEl.placeholder = 'Text Input';
+                        break;
+                    case 'number':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'number';
+                        inputEl.placeholder = 'Number Input';
+                        break;
+                    case 'range':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'range';
+                        break;
+                    case 'select':
+                        inputEl = document.createElement('select');
+                        ['Option 1', 'Option 2'].forEach(text => {
+                            const option = document.createElement('option');
+                            option.value = text.toLowerCase().replace(' ', '');
+                            option.text = text;
+                            inputEl.add(option);
+                        });
+                        break;
+                    case 'radio':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'radio';
+                        inputEl.name = 'radio';
+                        break;
+                    default:
+                        inputEl = null;
+                }
+
+                return inputEl;
+            };
+
+            const createFormGroup = (inputType) => {
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+
+                const label = document.createElement('label');
+                label.contentEditable = true;
+                label.textContent = 'Label';
+
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'input-wrapper';
+
+                const inputEl = createInputElement(inputType);
+                inputWrapper.appendChild(inputEl);
+
+                if (inputType === 'select') {
+                    const editOptions = document.createElement('span');
+                    editOptions.className = 'edit-options';
+                    editOptions.textContent = 'Edit Options';
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'options-container';
+
+                    const addOptionInput = document.createElement('input');
+                    addOptionInput.type = 'text';
+                    addOptionInput.placeholder = 'New Option';
+
+                    const addOptionButton = document.createElement('button');
+                    addOptionButton.type = 'button';
+                    addOptionButton.textContent = 'Add Option';
+
+                    optionsContainer.appendChild(addOptionInput);
+                    optionsContainer.appendChild(addOptionButton);
+
+                    editOptions.addEventListener('click', () => {
+                        optionsContainer.classList.toggle('visible');
+                    });
+
+                    addOptionButton.addEventListener('click', () => {
+                        const newOption = document.createElement('option');
+                        newOption.value = addOptionInput.value.toLowerCase().replace(' ', '');
+                        newOption.text = addOptionInput.value;
+                        inputEl.add(newOption);
+                        addOptionInput.value = '';
+                    });
+
+                    inputWrapper.appendChild(editOptions);
+                    inputWrapper.appendChild(optionsContainer);
+                }
+
+                formGroup.appendChild(label);
+                formGroup.appendChild(inputWrapper);
+
+                return formGroup;
+            };
+
+            const leftSortable = new Sortable(document.querySelector(".left .sortable"), {
                 group: {
                     name: "shared",
                     pull: "clone",
@@ -58,7 +176,7 @@ templ Drag_n_Drop() {
                 ghostClass: 'blue-background-class'
             });
 
-            var rightSortable = new Sortable(document.querySelector(".right"), {
+            const rightSortable = new Sortable(document.querySelector(".right"), {
                 group: {
                     name: "shared",
                     pull: false,
@@ -66,95 +184,12 @@ templ Drag_n_Drop() {
                 },
                 animation: 150,
                 ghostClass: 'blue-background-class',
-                onAdd: function(evt) {
-                    var itemEl = evt.item;
-                    var inputType = itemEl.getAttribute('data-type');
-                    var formGroup = document.createElement('div');
-                    formGroup.className = 'form-group';
-
-                    var label = document.createElement('label');
-                    label.contentEditable = true;
-                    label.textContent = 'Label';
-
-                    var inputWrapper = document.createElement('div');
-                    inputWrapper.className = 'input-wrapper';
-
-                    var inputEl;
-                    var editOptions;
-
-                    switch(inputType) {
-                        case 'text':
-                            inputEl = document.createElement('input');
-                            inputEl.type = 'text';
-                            inputEl.placeholder = 'Text Input';
-                            break;
-                        case 'number':
-                            inputEl = document.createElement('input');
-                            inputEl.type = 'number';
-                            inputEl.placeholder = 'Number Input';
-                            break;
-                        case 'range':
-                            inputEl = document.createElement('input');
-                            inputEl.type = 'range';
-                            break;
-                        case 'select':
-                            inputEl = document.createElement('select');
-                            var option1 = document.createElement('option');
-                            option1.value = 'option1';
-                            option1.text = 'Option 1';
-                            var option2 = document.createElement('option');
-                            option2.value = 'option2';
-                            option2.text = 'Option 2';
-                            inputEl.add(option1);
-                            inputEl.add(option2);
-
-                            editOptions = document.createElement('span');
-                            editOptions.className = 'edit-options';
-                            editOptions.textContent = 'Edit Options';
-
-                            var optionsContainer = document.createElement('div');
-                            optionsContainer.className = 'options-container';
-
-                            var addOptionInput = document.createElement('input');
-                            addOptionInput.type = 'text';
-                            addOptionInput.placeholder = 'New Option';
-
-                            var addOptionButton = document.createElement('button');
-                            addOptionButton.type = 'button';
-                            addOptionButton.textContent = 'Add Option';
-
-                            optionsContainer.appendChild(addOptionInput);
-                            optionsContainer.appendChild(addOptionButton);
-
-                            editOptions.addEventListener('click', function() {
-                                optionsContainer.classList.toggle('visible');
-                            });
-
-                            addOptionButton.addEventListener('click', function() {
-                                var newOption = document.createElement('option');
-                                newOption.value = addOptionInput.value;
-                                newOption.text = addOptionInput.value;
-                                inputEl.add(newOption);
-                                addOptionInput.value = '';
-                            });
-
-                            inputWrapper.appendChild(editOptions);
-                            inputWrapper.appendChild(optionsContainer);
-                            break;
-                        case 'radio':
-                            inputEl = document.createElement('input');
-                            inputEl.type = 'radio';
-                            inputEl.name = 'radio';
-                            break;
-                    }
-
-                    if (inputEl) {
-                        inputWrapper.insertBefore(inputEl, inputWrapper.firstChild);
-                        formGroup.appendChild(label);
-                        formGroup.appendChild(inputWrapper);
-                        itemEl.innerHTML = '';
-                        itemEl.appendChild(formGroup);
-                    }
+                onAdd: (evt) => {
+                    const itemEl = evt.item;
+                    const inputType = itemEl.getAttribute('data-type');
+                    const formGroup = createFormGroup(inputType);
+                    itemEl.innerHTML = '';
+                    itemEl.appendChild(formGroup);
                 }
             });
         });
