@@ -4,7 +4,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/models"
@@ -12,36 +11,6 @@ import (
 	"github.com/hay-i/chronologger/views"
 	"github.com/labstack/echo/v4"
 )
-
-func MyTemplates(database *mongo.Database) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		requestContext := c.Request().Context()
-		cookie, err := c.Cookie("token")
-		if err != nil {
-			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
-
-			return redirect(c, "/login")
-		}
-
-		tokenString := cookie.Value
-
-		parsedToken, err := auth.ParseToken(tokenString)
-
-		if err != nil {
-			views.AddFlash(c, "Invalid or expired token", views.FlashError)
-
-			return redirect(c, "/login")
-		}
-
-		username := parsedToken["sub"].(string)
-
-		templates := db.GetMyTemplates(requestContext, database, username)
-
-		component := components.Templates(templates)
-
-		return renderBase(c, component)
-	}
-}
 
 func Templates(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
