@@ -1,12 +1,19 @@
 package components
 
+templ form(attrs templ.Attributes) {
+	<form { attrs... }>
+		{ children... }
+		<button type="submit">Continue</button>
+	</form>
+}
+
 templ hiddenInput(name, value string) {
 	<input type="hidden" name={ name } value={ value }/>
 }
 
 templ GetStarted() {
 	<h2>Get Started with tracking your goals: Step one</h2>
-	<form hx-post="/questionnaire/step-one" hx-swap="outerHTML">
+	@form(templ.Attributes{"hx-post": "/questionnaire/step-one", "hx-swap": "outerHTML"}) {
 		<div>
 			<div>
 				<input type="checkbox" id="fitness" name="options" value="fitness"/>
@@ -21,13 +28,12 @@ templ GetStarted() {
 				<label for="social">Social</label>
 			</div>
 		</div>
-		<button type="submit">Continue</button>
-	</form>
+	}
 }
 
 templ StepTwo(selectedOptions []string) {
 	<h3>Step two</h3>
-	<form hx-post="/questionnaire/step-two" hx-swap="outerHTML">
+	@form(templ.Attributes{"hx-post": "/questionnaire/step-two", "hx-swap": "outerHTML"}) {
 		for _, option := range selectedOptions {
 			@hiddenInput("stepOne[]", option)
 		}
@@ -39,6 +45,5 @@ templ StepTwo(selectedOptions []string) {
 			<input type="checkbox" id="5k" name="options" value="5k"/>
 			<label for="5k">5K Run</label>
 		</div>
-		<button type="submit">Continue</button>
-	</form>
+	}
 }
