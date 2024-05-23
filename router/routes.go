@@ -31,7 +31,8 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	e.GET("/profile", controllers.Profile(database), controllers.JwtAuthenticationMiddleware)
 	e.GET("/get-started", controllers.GetStarted(database), controllers.JwtAuthenticationMiddleware)
 
-	e.POST("/template-questionnaire", controllers.TemplateQuestionnaire(database))
+	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
+	questionnaire.POST("/step-one", controllers.StepOne(database))
 
 	e.Static("/static", "assets")
 

@@ -115,7 +115,7 @@ func GetStarted(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func TemplateQuestionnaire(database *mongo.Database) echo.HandlerFunc {
+func StepOne(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -123,7 +123,7 @@ func TemplateQuestionnaire(database *mongo.Database) echo.HandlerFunc {
 
 		selectedOptions := c.Request().Form["options"]
 
-		component := components.TemplateQuestionnaire(selectedOptions)
+		component := components.StepTwo(selectedOptions)
 		return renderNoBase(c, component)
 	}
 }
