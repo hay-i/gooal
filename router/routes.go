@@ -12,7 +12,9 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
+func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
+	e := echo.New()
+
 	database := client.Database("chronologger")
 
 	e.Use(middleware.Logger())
@@ -45,4 +47,6 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	templates.GET("/:id/start", controllers.Start(database))
 	templates.POST("/:id/response", controllers.Response(database, client))
 	templates.POST("/dismiss", controllers.DismissModal())
+
+	return e
 }
