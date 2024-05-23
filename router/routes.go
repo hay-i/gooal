@@ -30,6 +30,9 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	e.GET("/logout", controllers.Logout(database), controllers.JwtAuthenticationMiddleware)
 	e.GET("/profile", controllers.Profile(database), controllers.JwtAuthenticationMiddleware)
 	e.GET("/get-started", controllers.GetStarted(database), controllers.JwtAuthenticationMiddleware)
+	// TODO: This is not routed, not displays anything. It will be addressed in
+	// https://github.com/hay-i/chronologger/issues/43
+	e.GET("/my-templates", controllers.MyTemplates(database), controllers.JwtAuthenticationMiddleware)
 
 	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
 	questionnaire.POST("/step-one", controllers.StepOne(database))

@@ -48,6 +48,7 @@ templ nav(signedIn bool) {
 	<nav>
 		if signedIn {
 			<a href={ templ.SafeURL("/") }>Home</a>
+			<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
 			<a href={ templ.SafeURL("/profile") }>My Profile</a>
 			<a href={ templ.SafeURL("/logout") }>Logout</a>
 		} else {
