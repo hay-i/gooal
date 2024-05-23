@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	// "fmt"
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
