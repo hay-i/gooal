@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"net/http"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -52,12 +50,6 @@ func Templates(database *mongo.Database) echo.HandlerFunc {
 		component := components.Templates(templates)
 
 		return renderBase(c, component)
-	}
-}
-
-func DismissModal() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return c.String(http.StatusOK, "")
 	}
 }
 
