@@ -33,8 +33,6 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	// https://github.com/hay-i/chronologger/issues/43
 	e.GET("/my-templates", controllers.MyTemplates(database), controllers.JwtAuthenticationMiddleware)
 
-	e.GET("/drag-n-drop", controllers.Drag_n_Drop(database))
-
 	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
 	questionnaire.GET("/step-one", controllers.StepOne(database))
 	questionnaire.GET("/step-two", controllers.StepTwo(database))

@@ -64,4 +64,211 @@ templ Template(template models.Template, answers []models.Answer) {
 templ Build(goal, aim string) {
 	<h1>{ goal }</h1>
 	<h2>{ aim }</h2>
+	<h1>Build your template:</h1>
+	<section id="template-builder" class="grid">
+		<aside class="left">
+			<form class="sortable sortable-grid" hx-post="/items" hx-trigger="end">
+				<div class="draggable-input" data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
+				<div class="draggable-input" data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
+				<div class="draggable-input" data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
+				<div class="draggable-input" data-type="select"><input type="hidden" name="item" value="4"/>Select Input</div>
+				<div class="draggable-input" data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
+			</form>
+		</aside>
+		<section class="right sortable"></section>
+	</section>
+	<style>
+    .grid{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    main section{
+        border: 2px solid red;
+    }
+
+    .draggable-input{
+        padding: 1rem;
+        border: 1px solid #ececec;
+        margin-bottom: 1rem;
+        cursor: move;
+        display: flex; 
+        background-color: #ececec;
+    }
+
+    .sortable-grid{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
+
+    aside{
+        border: 1px solid blue;
+    }
+
+    .right .draggable-input::after{
+        content: "X";
+        display: block;
+        text-align: center;
+        color: #fff;
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        opacity: 0;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .right .draggable-input:hover::after{
+        opacity: 1;
+    }
+
+    .form-group .input-wrapper{
+        display: flex;
+        align-items: center;
+    }
+
+    .edit-options{
+        margin-left: 10px;
+        cursor: pointer;
+        color: blue;
+    }
+
+    .options-container{
+        display: none;
+        margin-top: 10px;
+    }
+
+    .options-container.visible{
+        display: block;
+    }
+
+    .options-container input[type="text"]{
+        display: block;
+        margin-bottom: 5px;
+    }
+    </style>
+	<script>
+            const createInputElement = (type) => {
+                let inputEl;
+
+                switch(type) {
+                    case 'text':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'text';
+                        inputEl.placeholder = 'Text Input';
+                        break;
+                    case 'number':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'number';
+                        inputEl.placeholder = 'Number Input';
+                        break;
+                    case 'range':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'range';
+                        break;
+                    case 'select':
+                        inputEl = document.createElement('select');
+                        ['Option 1', 'Option 2'].forEach(text => {
+                            const option = document.createElement('option');
+                            option.value = text.toLowerCase().replace(' ', '');
+                            option.text = text;
+                            inputEl.add(option);
+                        });
+                        break;
+                    case 'radio':
+                        inputEl = document.createElement('input');
+                        inputEl.type = 'radio';
+                        inputEl.name = 'radio';
+                        break;
+                    default:
+                        inputEl = null;
+                }
+
+                return inputEl;
+            };
+
+            const createFormGroup = (inputType) => {
+                const formGroup = document.createElement('div');
+                formGroup.className = 'form-group';
+
+                const label = document.createElement('label');
+                label.contentEditable = true;
+                label.textContent = 'Label';
+
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'input-wrapper';
+
+                const inputEl = createInputElement(inputType);
+                inputWrapper.appendChild(inputEl);
+
+                if (inputType === 'select' | 'range') {
+                    const editOptions = document.createElement('span');
+                    editOptions.className = 'edit-options';
+                    editOptions.textContent = 'Edit Options';
+
+                    const optionsContainer = document.createElement('div');
+                    optionsContainer.className = 'options-container';
+
+                    const addOptionInput = document.createElement('input');
+                    addOptionInput.type = 'text';
+                    addOptionInput.placeholder = 'New Option';
+
+                    const addOptionButton = document.createElement('button');
+                    addOptionButton.type = 'button';
+                    addOptionButton.textContent = 'Add Option';
+
+                    optionsContainer.appendChild(addOptionInput);
+                    optionsContainer.appendChild(addOptionButton);
+
+                    editOptions.addEventListener('click', () => {
+                        optionsContainer.classList.toggle('visible');
+                    });
+
+                    addOptionButton.addEventListener('click', () => {
+                        const newOption = document.createElement('option');
+                        newOption.value = addOptionInput.value.toLowerCase().replace(' ', '');
+                        newOption.text = addOptionInput.value;
+                        inputEl.add(newOption);
+                        addOptionInput.value = '';
+                    });
+
+                    inputWrapper.appendChild(editOptions);
+                    inputWrapper.appendChild(optionsContainer);
+                }
+
+                formGroup.appendChild(label);
+                formGroup.appendChild(inputWrapper);
+
+                return formGroup;
+            };
+
+            const leftSortable = new Sortable(document.querySelector(".left .sortable"), {
+                group: {
+                    name: "shared",
+                    pull: "clone",
+                    put: false
+                },
+                animation: 150,
+                ghostClass: 'blue-background-class'
+            });
+
+            const rightSortable = new Sortable(document.querySelector(".right"), {
+                group: {
+                    name: "shared",
+                    pull: false,
+                    put: true
+                },
+                animation: 150,
+                ghostClass: 'blue-background-class',
+                onAdd: (evt) => {
+                    const itemEl = evt.item;
+                    const inputType = itemEl.getAttribute('data-type');
+                    const formGroup = createFormGroup(inputType);
+                    itemEl.innerHTML = '';
+                    itemEl.appendChild(formGroup);
+                }
+            });
+    </script>
 }
