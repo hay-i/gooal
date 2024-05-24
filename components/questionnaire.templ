@@ -7,15 +7,14 @@ import (
 templ StepOne() {
 	<div id="questionnaire-wrapper">
 		<h1>Get Started with tracking your goals: Step one</h1>
-		@button(templ.Attributes{"hx-post": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "Fitness", "primary")
-		@button(templ.Attributes{"hx-post": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "Financial", "primary")
-		@button(templ.Attributes{"hx-post": "/questionnaire/step-two?goal=social", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "Social", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=social", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Social", "primary")
 	</div>
 }
 
-// TODO: Change URL
 templ StepTwo(goal string) {
 	<h1>Step two</h1>
-	@button(templ.Attributes{"hx-post": fmt.Sprintf("/templates/build?goal=%s&focus=5k", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "5K", "primary")
-	@button(templ.Attributes{"hx-post": fmt.Sprintf("/templates/build?goal=%s&focus=weightloss", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "weightloss", "primary")
+	@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=5k", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "5K", "primary")
+	@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=weightloss", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "weightloss", "primary")
 }

@@ -36,14 +36,14 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 
 	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
 	questionnaire.GET("/step-one", controllers.StepOne(database))
-	questionnaire.POST("/step-two", controllers.StepTwo(database))
+	questionnaire.GET("/step-two", controllers.StepTwo(database))
 
 	e.Static("/static", "assets")
 
 	e.GET("/", controllers.Home(database))
 
 	templates := e.Group("/templates")
-	templates.POST("/build", controllers.Build(database))
+	templates.GET("/build", controllers.Build(database))
 	templates.GET("", controllers.Templates(database))
 	templates.GET("/:id", controllers.Template(database))
 	templates.GET("/:id/modal", controllers.Modal(database))
