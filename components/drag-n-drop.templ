@@ -1,8 +1,8 @@
 package components
 
 templ Drag_n_Drop() {
-	<h1>Build your questionnaire</h1>
-	<div class="grid">
+	<h1>Build your template:</h1>
+	<section id="template-builder" class="grid">
 		<aside class="left">
 			<form class="sortable sortable-grid" hx-post="/items" hx-trigger="end">
 				<div class="draggable-input" data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
@@ -12,8 +12,8 @@ templ Drag_n_Drop() {
 				<div class="draggable-input" data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
 			</form>
 		</aside>
-		<main class="right sortable"></main>
-	</div>
+		<section class="right sortable"></section>
+	</section>
 	<style>
     .grid{
         display: grid;
@@ -21,7 +21,7 @@ templ Drag_n_Drop() {
         gap: 2rem;
     }
 
-    main main{
+    main section{
         border: 2px solid red;
     }
 
@@ -44,7 +44,6 @@ templ Drag_n_Drop() {
         border: 1px solid blue;
     }
 
-
     .right .draggable-input::after{
         content: "X";
         display: block;
@@ -58,30 +57,31 @@ templ Drag_n_Drop() {
         transition: all 0.3s;
     }
 
-    .right .draggable-input:hover::after {
+    .right .draggable-input:hover::after{
         opacity: 1;
     }
 
-    .form-group .input-wrapper {
+    .form-group .input-wrapper{
         display: flex;
         align-items: center;
     }
 
-    .edit-options {
+    .edit-options{
         margin-left: 10px;
         cursor: pointer;
         color: blue;
     }
-    .options-container {
+
+    .options-container{
         display: none;
         margin-top: 10px;
     }
 
-    .options-container.visible {
+    .options-container.visible{
         display: block;
     }
 
-    .options-container input[type="text"] {
+    .options-container input[type="text"]{
         display: block;
         margin-bottom: 5px;
     }
