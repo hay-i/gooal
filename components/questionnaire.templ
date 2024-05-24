@@ -9,12 +9,13 @@ templ StepOne() {
 		<h1>Get Started with tracking your goals: Step one</h1>
 		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary")
 		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary")
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=social", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Social", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary")
 	</div>
 }
 
-templ StepTwo(goal string) {
+templ StepTwo(goal string, nextOptions []string) {
 	<h1>Step two</h1>
-	@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=5k", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "5K", "primary")
-	@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=weightloss", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "weightloss", "primary")
+	for _, option := range nextOptions {
+		@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, option, "primary")
+	}
 }

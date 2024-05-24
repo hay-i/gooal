@@ -39,7 +39,7 @@ func StepOne() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=social", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Social", "primary").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,8 +54,7 @@ func StepOne() templ.Component {
 	})
 }
 
-// TODO: Change URL
-func StepTwo(goal string) templ.Component {
+func StepTwo(goal string, nextOptions []string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -72,13 +71,11 @@ func StepTwo(goal string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=5k", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "5K", "primary").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=weightloss", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "weightloss", "primary").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
+		for _, option := range nextOptions {
+			templ_7745c5c3_Err = button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, option, "primary").Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 		}
 		if !templ_7745c5c3_IsBuffer {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)

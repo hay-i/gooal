@@ -23,7 +23,18 @@ func StepTwo(database *mongo.Database) echo.HandlerFunc {
 
 		goal := c.QueryParam("goal")
 
-		component := components.StepTwo(goal)
+		var nextOptions []string
+
+		switch goal {
+		case "fitness":
+			nextOptions = []string{"5k", "weightloss"}
+		case "finance":
+			nextOptions = []string{"savings", "investments"}
+		case "career":
+			nextOptions = []string{"promotion", "pay raise"}
+		}
+
+		component := components.StepTwo(goal, nextOptions)
 		return renderNoBase(c, component)
 	}
 }
