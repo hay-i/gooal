@@ -4,8 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/labstack/echo/v4"
-
 	"github.com/hay-i/chronologger/db"
 	"github.com/hay-i/chronologger/router"
 )
@@ -24,9 +22,7 @@ func main() {
 	// TODO: Do we want to do this via a script instead?
 	db.Seed(ctx, database)
 
-	e := echo.New()
-
-	router.Initialize(e, client, ctx)
+	e := router.Initialize(client, ctx)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -12,7 +12,9 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
+func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
+	e := echo.New()
+
 	database := client.Database("chronologger")
 
 	e.Use(middleware.Logger())
@@ -31,14 +33,21 @@ func Initialize(e *echo.Echo, client *mongo.Client, ctx context.Context) {
 	// https://github.com/hay-i/chronologger/issues/43
 	e.GET("/my-templates", controllers.MyTemplates(database), controllers.JwtAuthenticationMiddleware)
 
+	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
+	questionnaire.GET("/step-one", controllers.StepOne(database))
+	questionnaire.GET("/step-two", controllers.StepTwo(database))
+
 	e.Static("/static", "assets")
 
 	e.GET("/", controllers.Home(database))
 
 	templates := e.Group("/templates")
+	templates.GET("/build", controllers.Build(database))
 	templates.GET("", controllers.Templates(database))
 	templates.GET("/:id", controllers.Template(database))
 	templates.GET("/:id/modal", controllers.Modal(database))
 	templates.GET("/:id/start", controllers.Start(database))
 	templates.POST("/:id/response", controllers.Response(database, client))
+
+	return e
 }
