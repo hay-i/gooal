@@ -138,3 +138,18 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		return redirect(c, "/templates/"+templateId)
 	}
 }
+
+func Build(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if err := c.Request().ParseForm(); err != nil {
+			return err
+		}
+
+		goal := c.QueryParam("goal")
+		focus := c.QueryParam("focus")
+
+		component := components.Build(goal, focus)
+
+		return renderNoBase(c, component)
+	}
+}

@@ -8,22 +8,22 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func GetStarted(database *mongo.Database) echo.HandlerFunc {
+func StepOne(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		component := components.GetStarted()
+		component := components.StepOne()
 		return renderBase(c, component)
 	}
 }
 
-func StepOne(database *mongo.Database) echo.HandlerFunc {
+func StepTwo(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
 		}
 
-		selectedOptions := c.Request().Form["options"]
+		goal := c.QueryParam("goal")
 
-		component := components.StepTwo(selectedOptions)
+		component := components.StepTwo(goal)
 		return renderNoBase(c, component)
 	}
 }

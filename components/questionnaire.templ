@@ -1,49 +1,21 @@
 package components
 
-templ form(attrs templ.Attributes) {
-	<form { attrs... }>
-		{ children... }
-		<button type="submit">Continue</button>
-	</form>
+import (
+	"fmt"
+)
+
+templ StepOne() {
+	<div id="questionnaire-wrapper">
+		<h1>Get Started with tracking your goals: Step one</h1>
+		@button(templ.Attributes{"hx-post": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "Fitness", "primary")
+		@button(templ.Attributes{"hx-post": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "Financial", "primary")
+		@button(templ.Attributes{"hx-post": "/questionnaire/step-two?goal=social", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "Social", "primary")
+	</div>
 }
 
-templ hiddenInput(name, value string) {
-	<input type="hidden" name={ name } value={ value }/>
-}
-
-templ GetStarted() {
-	<h2>Get Started with tracking your goals: Step one</h2>
-	@form(templ.Attributes{"hx-post": "/questionnaire/step-one", "hx-swap": "outerHTML"}) {
-		<div>
-			<div>
-				<input type="checkbox" id="fitness" name="options" value="fitness"/>
-				<label for="fitness">Fitness</label>
-			</div>
-			<div>
-				<input type="checkbox" id="financial" name="options" value="financial"/>
-				<label for="financial">Financial</label>
-			</div>
-			<div>
-				<input type="checkbox" id="social" name="options" value="social"/>
-				<label for="social">Social</label>
-			</div>
-		</div>
-	}
-}
-
-templ StepTwo(selectedOptions []string) {
-	<h3>Step two</h3>
-	@form(templ.Attributes{"hx-post": "/questionnaire/step-two", "hx-swap": "outerHTML"}) {
-		for _, option := range selectedOptions {
-			@hiddenInput("stepOne[]", option)
-		}
-		<div>
-			<input type="checkbox" id="bodycomp" name="options" value="bodycomp"/>
-			<label for="bodycomp">Body Composition</label>
-		</div>
-		<div>
-			<input type="checkbox" id="5k" name="options" value="5k"/>
-			<label for="5k">5K Run</label>
-		</div>
-	}
+// TODO: Change URL
+templ StepTwo(goal string) {
+	<h1>Step two</h1>
+	@button(templ.Attributes{"hx-post": fmt.Sprintf("/templates/build?goal=%s&focus=5k", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "5K", "primary")
+	@button(templ.Attributes{"hx-post": fmt.Sprintf("/templates/build?goal=%s&focus=weightloss", goal), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper"}, "weightloss", "primary")
 }
