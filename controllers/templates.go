@@ -153,3 +153,18 @@ func Build(database *mongo.Database) echo.HandlerFunc {
 		return renderNoBase(c, component)
 	}
 }
+
+func Builder(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		if err := c.Request().ParseForm(); err != nil {
+			return err
+		}
+
+		var inputType components.InputType
+		inputType = components.InputType(c.QueryParam("inputType"))
+
+		component := components.Builder(inputType)
+
+		return renderNoBase(c, component)
+	}
+}

@@ -68,7 +68,7 @@ templ Build(goal, aim string) {
 		<h1>Build your template:</h1>
 		<section id="template-builder" class="grid">
 			<aside class="left">
-				<form class="sortable sortable-grid" hx-post="/templates/builder" hx-trigger="end">
+				<form class="sortable sortable-grid">
 					<div class="draggable-input" data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
 					<div class="draggable-input" data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
 					<div class="draggable-input" data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
@@ -152,129 +152,76 @@ templ Build(goal, aim string) {
     }
     </style>
 	<script>
-            const createInputElement = (type) => {
-                let inputEl;
+        const leftSortable = new Sortable(document.querySelector(".left .sortable"), {
+            group: {
+                name: "shared",
+                pull: "clone",
+                put: false
+            },
+            animation: 150,
+            ghostClass: 'blue-background-class'
+        });
 
-                switch(type) {
-                    case 'text':
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'text';
-                        inputEl.placeholder = 'Text Input';
-                        break;
-                    case 'number':
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'number';
-                        inputEl.placeholder = 'Number Input';
-                        break;
-                    case 'range':
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'range';
-                        break;
-                    case 'select':
-                        inputEl = document.createElement('select');
-                        ['Option 1', 'Option 2'].forEach(text => {
-                            const option = document.createElement('option');
-                            option.value = text.toLowerCase().replace(' ', '');
-                            option.text = text;
-                            inputEl.add(option);
-                        });
-                        break;
-                    case 'radio':
-                        inputEl = document.createElement('input');
-                        inputEl.type = 'radio';
-                        inputEl.name = 'radio';
-                        break;
-                    default:
-                        inputEl = null;
-                }
-
-                return inputEl;
-            };
-
-            const createFormGroup = (inputType) => {
-                const formGroup = document.createElement('div');
-                formGroup.className = 'form-group';
-
-                const label = document.createElement('label');
-                label.contentEditable = true;
-                label.textContent = 'Label';
-
-                const inputWrapper = document.createElement('div');
-                inputWrapper.className = 'input-wrapper';
-
-                const inputEl = createInputElement(inputType);
-                inputWrapper.appendChild(inputEl);
-
-                if (inputType === 'select' | 'range') {
-                    const editOptions = document.createElement('span');
-                    editOptions.className = 'edit-options';
-                    editOptions.textContent = 'Edit Options';
-
-                    const optionsContainer = document.createElement('div');
-                    optionsContainer.className = 'options-container';
-
-                    const addOptionInput = document.createElement('input');
-                    addOptionInput.type = 'text';
-                    addOptionInput.placeholder = 'New Option';
-
-                    const addOptionButton = document.createElement('button');
-                    addOptionButton.type = 'button';
-                    addOptionButton.textContent = 'Add Option';
-
-                    optionsContainer.appendChild(addOptionInput);
-                    optionsContainer.appendChild(addOptionButton);
-
-                    editOptions.addEventListener('click', () => {
-                        optionsContainer.classList.toggle('visible');
-                    });
-
-                    addOptionButton.addEventListener('click', () => {
-                        const newOption = document.createElement('option');
-                        newOption.value = addOptionInput.value.toLowerCase().replace(' ', '');
-                        newOption.text = addOptionInput.value;
-                        inputEl.add(newOption);
-                        addOptionInput.value = '';
-                    });
-
-                    inputWrapper.appendChild(editOptions);
-                    inputWrapper.appendChild(optionsContainer);
-                }
-
-                formGroup.appendChild(label);
-                formGroup.appendChild(inputWrapper);
-
-                return formGroup;
-            };
-
-            const leftSortable = new Sortable(document.querySelector(".left .sortable"), {
-                group: {
-                    name: "shared",
-                    pull: "clone",
-                    put: false
-                },
-                animation: 150,
-                ghostClass: 'blue-background-class'
-            });
-
-            const rightSortable = new Sortable(document.querySelector(".right"), {
-                group: {
-                    name: "shared",
-                    pull: false,
-                    put: true
-                },
-                animation: 150,
-                ghostClass: 'blue-background-class',
-                onAdd: (evt) => {
-                    const itemEl = evt.item;
-                    const inputType = itemEl.getAttribute('data-type');
-                    const formGroup = createFormGroup(inputType);
-                    itemEl.innerHTML = '';
-                    itemEl.appendChild(formGroup);
-                }
-            });
+        const rightSortable = new Sortable(document.querySelector(".right"), {
+            group: {
+                name: "shared",
+                pull: false,
+                put: true
+            },
+            animation: 150,
+            ghostClass: 'blue-background-class',
+            onAdd: async (evt) => {
+                const itemEl = evt.item;
+                const inputType = itemEl.getAttribute('data-type');
+                // Hacky way to get the response to render without `Base` page
+                const response = await fetch(`/templates/builder?inputType=${inputType}`, { headers: { 'HX-Request': "true" } });
+                const formGroupHtml = await response.text();
+                itemEl.innerHTML = formGroupHtml;
+            }
+        });
     </script>
 }
 
-templ Builder() {
-	<div>ass</div>
+type InputType string
+
+const (
+	Text   InputType = "text"
+	Number InputType = "number"
+	Range  InputType = "range"
+	Select InputType = "select"
+	Radio  InputType = "radio"
+)
+
+templ Builder(inputType InputType) {
+	switch inputType {
+		case Text:
+			<div class="form-group">
+				<label for="text-input">Text Input</label>
+				<input type="text" id="text-input" name="text-input"/>
+			</div>
+		case Number:
+			<div class="form-group">
+				<label for="number-input">Number Input</label>
+				<input type="number" id="number-input" name="number-input"/>
+			</div>
+		case Range:
+			<div class="form-group">
+				<label for="range-input">Range</label>
+				<input type="range" id="range-input" name="range-input"/>
+			</div>
+		case Select:
+			<div class="form-group">
+				<label for="select-input">Select Input</label>
+				<select id="select-input" name="select-input">
+					<option value="1">Option 1</option>
+					<option value="2">Option 2</option>
+					<option value="3">Option 3</option>
+				</select>
+			</div>
+		case Radio:
+			<div class="form-group">
+				<label for="radio-input">Radio Button</label>
+				<input type="radio" id="radio-input" name="radio-input"/>
+			</div>
+	}
 }
