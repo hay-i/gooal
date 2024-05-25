@@ -31,15 +31,15 @@ func StepOne() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true", "hx-boost": "true"}, "Fitness", "primary").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true", "hx-boost": "true"}, "Financial", "primary").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true", "hx-boost": "true"}, "Career", "primary").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -72,7 +72,7 @@ func StepTwo(goal string, nextOptions []string) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		for _, option := range nextOptions {
-			templ_7745c5c3_Err = button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true", "hx-boost": "true"}, option, "primary").Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, option, "primary").Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
