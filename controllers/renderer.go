@@ -11,7 +11,10 @@ import (
 )
 
 func renderNoBase(c echo.Context, component templ.Component) error {
-	return component.Render(c.Request().Context(), c.Response().Writer)
+	if c.Request().Header.Get("HX-Request") != "" {
+		return component.Render(c.Request().Context(), c.Response().Writer)
+	}
+	return renderBase(c, component)
 }
 
 func renderWithoutNav(c echo.Context, component templ.Component) error {
