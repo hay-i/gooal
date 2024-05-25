@@ -197,31 +197,31 @@ templ Builder(inputType InputType) {
 		case Text:
 			<div class="form-group">
 				<label for="text-input">Text Input</label>
-				<input type="text" id="text-input" name="text-input"/>
+				<input disabled="disabled" type="text" id="text-input" name="text-input"/>
 			</div>
 		case Number:
 			<div class="form-group">
 				<label for="number-input">Number Input</label>
-				<input type="number" id="number-input" name="number-input"/>
+				<input disabled="disabled" type="number" id="number-input" name="number-input"/>
 			</div>
 		case Range:
 			<div class="form-group">
 				<label for="range-input">Range</label>
-				<input type="range" id="range-input" name="range-input"/>
+				<input disabled="disabled" type="range" id="range-input" name="range-input"/>
 			</div>
 		case Select:
 			<div class="form-group">
 				<label for="select-input">Select Input</label>
 				<select id="select-input" name="select-input">
-					<option value="1">Option 1</option>
-					<option value="2">Option 2</option>
-					<option value="3">Option 3</option>
+					<option disabled="disabled" value="1">Option 1</option>
+					<option disabled="disabled" value="2">Option 2</option>
+					<option disabled="disabled" value="3">Option 3</option>
 				</select>
 			</div>
 		case Radio:
 			<div class="form-group">
 				<label for="radio-input">Radio Button</label>
-				<input type="radio" id="radio-input" name="radio-input"/>
+				<input type="radio" disabled="disabled" id="radio-input" name="radio-input"/>
 			</div>
 	}
 }

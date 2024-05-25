@@ -372,27 +372,27 @@ func Builder(inputType InputType) templ.Component {
 		ctx = templ.ClearChildren(ctx)
 		switch inputType {
 		case Text:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"text-input\">Text Input</label> <input type=\"text\" id=\"text-input\" name=\"text-input\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"text-input\">Text Input</label> <input disabled=\"disabled\" type=\"text\" id=\"text-input\" name=\"text-input\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case Number:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"number-input\">Number Input</label> <input type=\"number\" id=\"number-input\" name=\"number-input\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"number-input\">Number Input</label> <input disabled=\"disabled\" type=\"number\" id=\"number-input\" name=\"number-input\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case Range:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"range-input\">Range</label> <input type=\"range\" id=\"range-input\" name=\"range-input\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"range-input\">Range</label> <input disabled=\"disabled\" type=\"range\" id=\"range-input\" name=\"range-input\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case Select:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"select-input\">Select Input</label> <select id=\"select-input\" name=\"select-input\"><option value=\"1\">Option 1</option> <option value=\"2\">Option 2</option> <option value=\"3\">Option 3</option></select></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"select-input\">Select Input</label> <select id=\"select-input\" name=\"select-input\"><option disabled=\"disabled\" value=\"1\">Option 1</option> <option disabled=\"disabled\" value=\"2\">Option 2</option> <option disabled=\"disabled\" value=\"3\">Option 3</option></select></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case Radio:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"radio-input\">Radio Button</label> <input type=\"radio\" id=\"radio-input\" name=\"radio-input\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"radio-input\">Radio Button</label> <input type=\"radio\" disabled=\"disabled\" id=\"radio-input\" name=\"radio-input\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
