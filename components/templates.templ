@@ -68,7 +68,7 @@ templ Build(goal, aim string) {
 		<h1>Build your template:</h1>
 		<section id="template-builder" class="grid">
 			<aside class="left">
-				<form class="sortable sortable-grid" hx-post="/items" hx-trigger="end">
+				<form class="sortable sortable-grid" hx-post="/templates/builder" hx-trigger="end">
 					<div class="draggable-input" data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
 					<div class="draggable-input" data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
 					<div class="draggable-input" data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
@@ -273,4 +273,8 @@ templ Build(goal, aim string) {
                 }
             });
     </script>
+}
+
+templ Builder() {
+	<div>ass</div>
 }
