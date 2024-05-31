@@ -1,16 +1,16 @@
 package controllers
 
 import (
-	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
+	"github.com/hay-i/chronologger/logger"
 	"github.com/hay-i/chronologger/models"
-
 	"github.com/hay-i/chronologger/views"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -164,8 +164,32 @@ func Builder(database *mongo.Database) echo.HandlerFunc {
 		var inputType components.InputType
 		inputType = components.InputType(c.QueryParam("inputType"))
 
-		component := components.Builder(inputType, uuid.New().String())
+		objectId := primitive.NewObjectID()
+		component := components.Builder(inputType, objectId.Hex())
 
 		return renderNoBase(c, component)
+	}
+}
+
+func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		// Parse the form
+		if err := c.Request().ParseForm(); err != nil {
+			return err
+		}
+
+		// Get all form values from the request
+
+		formValues, err := c.FormParams()
+		if err != nil {
+			return err
+		}
+		for key, values := range formValues {
+			for _, value := range values {
+				logger.LogInfo("Key: %s, Value: %s", key, value)
+			}
+		}
+		return renderNoBase(c, components.Save())
+
 	}
 }

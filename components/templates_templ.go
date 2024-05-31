@@ -336,7 +336,30 @@ func Build(goal, aim string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2><h1>Build your template:</h1><section class=\"grid\"><aside class=\"left\"><form data-sortable-left class=\"sortable sortable-grid\"><div class=\"draggable-input\" data-type=\"text\"><input type=\"hidden\" name=\"item\" value=\"1\">Text Input</div><div class=\"draggable-input\" data-type=\"number\"><input type=\"hidden\" name=\"item\" value=\"2\">Number Input</div><div class=\"draggable-input\" data-type=\"range\"><input type=\"hidden\" name=\"item\" value=\"3\">Range</div><div class=\"draggable-input\" data-type=\"select\"><input type=\"hidden\" name=\"item\" value=\"4\">Select Input</div><div class=\"draggable-input\" data-type=\"radio\"><input type=\"hidden\" name=\"item\" value=\"5\">Radio Button</div></form></aside><section class=\"right sortable\"><aside><form><div data-sortable-right class=\"right-section\"></div><button class=\"btn\" id=\"submit\">Submit</button></form></aside></section></section></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</h2><h1>Build your template:</h1><section class=\"grid\"><aside class=\"left\"><form data-sortable-left class=\"sortable sortable-grid\"><div class=\"draggable-input\" data-type=\"text\"><input type=\"hidden\" name=\"item\" value=\"1\">Text Input</div><div class=\"draggable-input\" data-type=\"number\"><input type=\"hidden\" name=\"item\" value=\"2\">Number Input</div><div class=\"draggable-input\" data-type=\"range\"><input type=\"hidden\" name=\"item\" value=\"3\">Range</div><div class=\"draggable-input\" data-type=\"select\"><input type=\"hidden\" name=\"item\" value=\"4\">Select Input</div><div class=\"draggable-input\" data-type=\"radio\"><input type=\"hidden\" name=\"item\" value=\"5\">Radio Button</div></form></aside><section class=\"right sortable\"><aside>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var19 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+			if !templ_7745c5c3_IsBuffer {
+				templ_7745c5c3_Buffer = templ.GetBuffer()
+				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-sortable-right class=\"right-section\"></div>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if !templ_7745c5c3_IsBuffer {
+				_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
+			}
+			return templ_7745c5c3_Err
+		})
+		templ_7745c5c3_Err = form(templ.Attributes{"hx-post": "/templates/save", "hx-swap": "outerHTML"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var19), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</aside></section></section></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -365,9 +388,9 @@ func Builder(inputType InputType, id string) templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var19 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var19 == nil {
-			templ_7745c5c3_Var19 = templ.NopComponent
+		templ_7745c5c3_Var20 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var20 == nil {
+			templ_7745c5c3_Var20 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		switch inputType {
@@ -516,6 +539,30 @@ func Builder(inputType InputType, id string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
+		}
+		if !templ_7745c5c3_IsBuffer {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func Save() templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var21 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var21 == nil {
+			templ_7745c5c3_Var21 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>Template saved!</h1>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
 		if !templ_7745c5c3_IsBuffer {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)

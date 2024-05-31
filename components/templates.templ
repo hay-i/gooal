@@ -78,10 +78,9 @@ templ Build(goal, aim string) {
 			</aside>
 			<section class="right sortable">
 				<aside>
-					<form>
+					@form(templ.Attributes{"hx-post": "/templates/save", "hx-swap": "outerHTML"}) {
 						<div data-sortable-right class="right-section"></div>
-						<button class="btn" id="submit">Submit</button>
-					</form>
+					}
 				</aside>
 			</section>
 		</section>
@@ -135,4 +134,8 @@ templ Builder(inputType InputType, id string) {
 				<input type="radio" disabled="disabled"/>
 			</div>
 	}
+}
+
+templ Save() {
+	<h1>Template saved!</h1>
 }

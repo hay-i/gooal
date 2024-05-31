@@ -44,6 +44,7 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	templates := e.Group("/templates")
 	templates.GET("/build", controllers.Build(database))
 	templates.GET("/builder", controllers.Builder(database))
+	templates.POST("/save", controllers.Save(database, client))
 	templates.GET("", controllers.Templates(database))
 	templates.GET("/:id", controllers.Template(database))
 	templates.GET("/:id/modal", controllers.Modal(database))
