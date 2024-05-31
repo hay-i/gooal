@@ -91,36 +91,41 @@ const (
 	Radio  InputType = "radio"
 )
 
-templ Builder(inputType InputType) {
+templ Builder(inputType InputType, id string) {
 	switch inputType {
 		case Text:
 			<div class="form-group">
-				<label for="text-input">Text Input</label>
-				<input disabled="disabled" type="text" id="text-input" name="text-input"/>
+				<label hidden for={ fmt.Sprintf("text-input-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("text-input-%s", id) } name={ fmt.Sprintf("text-input-%s", id) } placeholder="Text input"/>
+				<input disabled="disabled" type="text"/>
 			</div>
 		case Number:
 			<div class="form-group">
-				<label for="number-input">Number Input</label>
-				<input disabled="disabled" type="number" id="number-input" name="number-input"/>
+				<label hidden for={ fmt.Sprintf("number-input-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("number-input-%s", id) } name={ fmt.Sprintf("number-input-%s", id) } placeholder="Number input"/>
+				<input disabled="disabled" type="number"/>
 			</div>
 		case Range:
 			<div class="form-group">
-				<label for="range-input">Range</label>
-				<input disabled="disabled" type="range" id="range-input" name="range-input"/>
+				<label hidden for={ fmt.Sprintf("range-input-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("range-input-%s", id) } name={ fmt.Sprintf("range-input-%s", id) } placeholder="Range input"/>
+				<input disabled="disabled" type="range"/>
 			</div>
 		case Select:
 			<div class="form-group">
-				<label for="select-input">Select Input</label>
-				<select id="select-input" name="select-input">
-					<option disabled="disabled" value="1">Option 1</option>
-					<option disabled="disabled" value="2">Option 2</option>
-					<option disabled="disabled" value="3">Option 3</option>
+				<label hidden for={ fmt.Sprintf("select-input-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("select-input-%s", id) } name={ fmt.Sprintf("select-input-%s", id) } placeholder="Select input"/>
+				<select>
+					<option disabled="disabled">Option 1</option>
+					<option disabled="disabled">Option 2</option>
+					<option disabled="disabled">Option 3</option>
 				</select>
 			</div>
 		case Radio:
 			<div class="form-group">
-				<label for="radio-input">Radio Button</label>
-				<input type="radio" disabled="disabled" id="radio-input" name="radio-input"/>
+				<label hidden for={ fmt.Sprintf("radio-input-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("radio-input-%s", id) } name={ fmt.Sprintf("radio-input-%s", id) } placeholder="Radio input"/>
+				<input type="radio" disabled="disabled"/>
 			</div>
 	}
 }

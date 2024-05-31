@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -163,7 +164,7 @@ func Builder(database *mongo.Database) echo.HandlerFunc {
 		var inputType components.InputType
 		inputType = components.InputType(c.QueryParam("inputType"))
 
-		component := components.Builder(inputType)
+		component := components.Builder(inputType, uuid.New().String())
 
 		return renderNoBase(c, component)
 	}
