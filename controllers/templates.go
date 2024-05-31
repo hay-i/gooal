@@ -173,21 +173,16 @@ func Builder(database *mongo.Database) echo.HandlerFunc {
 
 func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		// Parse the form
 		if err := c.Request().ParseForm(); err != nil {
 			return err
 		}
-
-		// Get all form values from the request
 
 		formValues, err := c.FormParams()
 		if err != nil {
 			return err
 		}
 		for key, values := range formValues {
-			for _, value := range values {
-				logger.LogInfo("Key: %s, Value: %s", key, value)
-			}
+			logger.LogInfo("Key: %s, Value: %s", key, values[0])
 		}
 		return renderNoBase(c, components.Save())
 

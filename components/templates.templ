@@ -101,26 +101,26 @@ templ Builder(inputType InputType, id string) {
 	switch inputType {
 		case Text:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("text-input-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("text-input-%s", id) } name={ fmt.Sprintf("text-input-%s", id) } placeholder="Text input"/>
+				<label hidden for={ fmt.Sprintf("text-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("text-%s", id) } name={ fmt.Sprintf("text-%s", id) } placeholder="Text input"/>
 				<input disabled="disabled" type="text"/>
 			</div>
 		case Number:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("number-input-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("number-input-%s", id) } name={ fmt.Sprintf("number-input-%s", id) } placeholder="Number input"/>
+				<label hidden for={ fmt.Sprintf("number-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("number-%s", id) } name={ fmt.Sprintf("number-%s", id) } placeholder="Number input"/>
 				<input disabled="disabled" type="number"/>
 			</div>
 		case Range:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("range-input-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("range-input-%s", id) } name={ fmt.Sprintf("range-input-%s", id) } placeholder="Range input"/>
+				<label hidden for={ fmt.Sprintf("range-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("range-%s", id) } name={ fmt.Sprintf("range-%s", id) } placeholder="Range input"/>
 				<input disabled="disabled" type="range"/>
 			</div>
 		case Select:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("select-input-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("select-input-%s", id) } name={ fmt.Sprintf("select-input-%s", id) } placeholder="Select input"/>
+				<label hidden for={ fmt.Sprintf("select-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("select-%s", id) } name={ fmt.Sprintf("select-%s", id) } placeholder="Select input"/>
 				<select>
 					<option disabled="disabled">Option 1</option>
 					<option disabled="disabled">Option 2</option>
@@ -129,8 +129,8 @@ templ Builder(inputType InputType, id string) {
 			</div>
 		case Radio:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("radio-input-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("radio-input-%s", id) } name={ fmt.Sprintf("radio-input-%s", id) } placeholder="Radio input"/>
+				<label hidden for={ fmt.Sprintf("radio-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("radio-%s", id) } name={ fmt.Sprintf("radio-%s", id) } placeholder="Radio input"/>
 				<input type="radio" disabled="disabled"/>
 			</div>
 	}
