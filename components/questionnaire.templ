@@ -17,7 +17,10 @@ templ StepTwo(goal string, nextOptions []string) {
 	<div id="questionnaire-wrapper">
 		<h1>Step two</h1>
 		for _, option := range nextOptions {
-			@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option), "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, option, "primary")
+			// The last step should be a button to the builder.
+			<a href={ templ.SafeURL(fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option)) }>
+				@button(templ.Attributes{}, option, "primary")
+			</a>
 		}
 	</div>
 }
