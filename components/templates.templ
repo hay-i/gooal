@@ -76,7 +76,14 @@ templ Build(goal, aim string) {
 					<div class="draggable-input" data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
 				</form>
 			</aside>
-			<section data-sortable-right class="right sortable"></section>
+			<section class="right sortable">
+				<aside>
+					<form>
+						<div data-sortable-right class="right-section"></div>
+						<button class="btn" id="submit">Submit</button>
+					</form>
+				</aside>
+			</section>
 		</section>
 	</div>
 }
