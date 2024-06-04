@@ -1,6 +1,15 @@
 package components
 
+templ Splash() {
+	<section class="splash">
+		<h1 class="splash__title">Map your journey,<br/>Measure your success.</h1>
+	</section>
+}
+
 templ Home() {
+	<!--
 	<a href={ templ.SafeURL("/templates") }>Our Templates</a>
 	<a href={ templ.SafeURL("/questionnaire/step-one") }>Get Started</a>
+    -->
+	@Splash()
 }
