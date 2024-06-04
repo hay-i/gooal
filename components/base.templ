@@ -45,17 +45,26 @@ templ body() {
 }
 
 templ nav(signedIn bool) {
-	<nav>
-		if signedIn {
-			<a href={ templ.SafeURL("/") }>Home</a>
-			<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
-			<a href={ templ.SafeURL("/profile") }>My Profile</a>
-			<a href={ templ.SafeURL("/logout") }>Logout</a>
-		} else {
-			<a href={ templ.SafeURL("/register") }>Register</a>
-			<a href={ templ.SafeURL("/login") }>Login</a>
-		}
-	</nav>
+	<header class="header">
+		<div class="width-wrap">
+			<div class="header__inside">
+				<a href={ templ.SafeURL("/") }>
+					<img src="/static/svg/logo.svg" alt="Gooal" class="header__logo"/>
+				</a>
+				<nav class="header__nav">
+					if signedIn {
+						<a href={ templ.SafeURL("/") }>Home</a>
+						<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
+						<a href={ templ.SafeURL("/profile") }>My Profile</a>
+						<a href={ templ.SafeURL("/logout") }>Logout</a>
+					} else {
+						<a href={ templ.SafeURL("/register") }>Register</a>
+						<a href={ templ.SafeURL("/login") }>Login</a>
+					}
+				</nav>
+			</div>
+		</div>
+	</header>
 }
 
 templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
@@ -64,7 +73,6 @@ templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
 		@body() {
 			@nav(signedIn)
 			<main class="width-wrap">
-				<h1>Chronologger</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}
