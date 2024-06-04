@@ -3,3 +3,13 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+body {
+  background-color: var(--clr-grey-bg);
+  font-family: "Synonym-Regular";
+}
+
+.title {
+  font-family: "Satoshi-Bold";
+  font-size: 2rem;
+}
