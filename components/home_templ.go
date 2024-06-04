@@ -28,8 +28,8 @@ func Splash() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = anchorButton(
-			templ.Attributes{"href": "/get-started"},
-			"Anchor Button",
+			templ.Attributes{"href": "/questionnaire/step-one"},
+			"Get Started",
 			primary,
 		).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
