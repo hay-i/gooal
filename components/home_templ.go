@@ -23,7 +23,7 @@ func Splash() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"splash\"><h1 class=\"splash__title\">Map your journey,<br>Measure your success.</h1></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"splash\"><h1 class=\"splash__title\">Map your journey,<br>Measure your success.</h1><a class=\"splash__btn btn--primary\">Get Started</a></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

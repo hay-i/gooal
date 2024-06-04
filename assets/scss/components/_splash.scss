@@ -1,0 +1,12 @@
+.splash {
+  display: grid;
+  place-items: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+
+  &__title {
+    font-family: "Satoshi-Bold";
+    text-align: center;
+    font-size: 3rem;
+  }
+}
