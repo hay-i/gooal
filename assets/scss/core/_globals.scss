@@ -4,12 +4,29 @@
   margin-right: auto;
 }
 
-body {
-  background-color: var(--clr-grey-bg);
-  font-family: "Synonym-Regular";
+html {
+  scroll-behavior: smooth;
 }
 
-.title {
-  font-family: "Satoshi-Bold";
-  font-size: 2rem;
+html,
+body {
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  font-size: 16px;
+  background-color: var(--clr-grey-bg);
+  font-family: "Synonym-Regular";
+
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+footer {
+  flex-shrink: 0;
 }
