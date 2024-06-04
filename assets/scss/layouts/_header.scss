@@ -4,6 +4,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    padding-top: 2rem;
     padding-bottom: 2rem;
     border-bottom: 1px solid var(--clr-primary);
   }
@@ -16,6 +17,12 @@
     a {
       margin-bottom: 0;
       padding-bottom: 0;
+      text-decoration: none;
+      color: var(--clr-tertiary);
+
+      &:not(:last-of-type) {
+        margin-right: 0.5rem;
+      }
     }
   }
 }
