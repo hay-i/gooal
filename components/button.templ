@@ -16,3 +16,9 @@ templ button(attrs templ.Attributes, content string, variant buttonVariant) {
 		{ content }
 	</button>
 }
+
+templ anchorButton(attrs templ.Attributes, content string, variant buttonVariant) {
+	<a { attrs... } class={ fmt.Sprintf("btn--%s", variant) }>
+		{ content }
+	</a>
+}
