@@ -278,6 +278,10 @@ func PageBase(flashes views.Flashes, signedIn bool, child templ.Component) templ
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
+				templ_7745c5c3_Err = Footer().Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
 				if !templ_7745c5c3_IsBuffer {
 					_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
 				}
@@ -413,7 +417,7 @@ func FlashMessage(flashType views.FlashType, flashes []string) templ.Component {
 			var templ_7745c5c3_Var20 string
 			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%v", flashType))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 102, Col: 37}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 103, Col: 37}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 			if templ_7745c5c3_Err != nil {
@@ -426,7 +430,7 @@ func FlashMessage(flashType views.FlashType, flashes []string) templ.Component {
 			var templ_7745c5c3_Var21 string
 			templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%v", flash))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 103, Col: 32}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/base.templ`, Line: 104, Col: 32}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 			if templ_7745c5c3_Err != nil {
