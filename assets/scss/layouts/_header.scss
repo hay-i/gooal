@@ -1,0 +1,29 @@
+.header {
+  &__inside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--clr-primary);
+  }
+
+  &__logo {
+    width: 150px;
+  }
+
+  &__nav {
+    a {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}
+
+a {
+  transition: 150ms;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
