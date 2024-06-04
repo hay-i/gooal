@@ -18,7 +18,7 @@ templ button(attrs templ.Attributes, content string, variant buttonVariant) {
 }
 
 templ anchorButton(attrs templ.Attributes, content string, variant buttonVariant) {
-	<a { attrs... } class={ fmt.Sprintf("btn--%s", variant) }>
+	<a { attrs... } href={ templ.URL(attrs["href"].(string)) } class={ fmt.Sprintf("btn--%s", variant) }>
 		{ content }
 	</a>
 }

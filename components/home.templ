@@ -3,7 +3,11 @@ package components
 templ Splash() {
 	<section class="splash">
 		<h1 class="splash__title">Map your journey,<br/>Measure your success.</h1>
-		<a class="splash__btn btn--primary">Get Started</a>
+		@button(
+			templ.Attributes{"href": templ.SafeURL("/get-started")},
+			"Get Started",
+			primary,
+		)
 	</section>
 }
 
