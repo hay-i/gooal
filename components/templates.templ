@@ -8,7 +8,7 @@ import (
 
 templ questionAnswers(question models.Question, answers []models.Answer) {
 	<div>
-		<div>{ question.Title }</div>
+		<div></div>
 		<div>
 			for _, answer := range models.AnswersForQuestion(answers, question.ID) {
 				<div>{ answer.Answer }</div>
@@ -17,10 +17,10 @@ templ questionAnswers(question models.Question, answers []models.Answer) {
 	</div>
 }
 
-templ Templates(templates []models.Template) {
+templ Templates() {
 	<div id="template-modal"></div>
 	<div class="width-wrap">
-		for _, template := range templates {
+		for _, template := range []models.Template{} {
 			<button
 				class="btn"
 				hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
@@ -74,6 +74,8 @@ templ Build(goal, aim string) {
 					<div class="draggable-input" data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
 					<div class="draggable-input" data-type="select"><input type="hidden" name="item" value="4"/>Select Input</div>
 					<div class="draggable-input" data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
+					<div class="draggable-input" data-type="text_area"><input type="hidden" name="item" value="6"/>Text Area</div>
+					<div class="draggable-input" data-type="checkbox"><input type="hidden" name="item" value="7"/>Checkbox</div>
 				</form>
 			</aside>
 			<section class="right sortable">
@@ -95,37 +97,27 @@ templ Build(goal, aim string) {
 	</div>
 }
 
-type InputType string
-
-const (
-	Text   InputType = "text"
-	Number InputType = "number"
-	Range  InputType = "range"
-	Select InputType = "select"
-	Radio  InputType = "radio"
-)
-
-templ Builder(inputType InputType, id string) {
+templ Builder(inputType models.QuestionType, id string) {
 	switch inputType {
-		case Text:
+		case models.TextQuestion:
 			<div class="form-group">
 				<label hidden for={ fmt.Sprintf("text-%s", id) }></label>
 				<input type="text" id={ fmt.Sprintf("text-%s", id) } name={ fmt.Sprintf("text-%s", id) } placeholder="Text input"/>
 				<input disabled="disabled" type="text"/>
 			</div>
-		case Number:
+		case models.NumberQuestion:
 			<div class="form-group">
 				<label hidden for={ fmt.Sprintf("number-%s", id) }></label>
 				<input type="text" id={ fmt.Sprintf("number-%s", id) } name={ fmt.Sprintf("number-%s", id) } placeholder="Number input"/>
 				<input disabled="disabled" type="number"/>
 			</div>
-		case Range:
+		case models.RangeQuestion:
 			<div class="form-group">
 				<label hidden for={ fmt.Sprintf("range-%s", id) }></label>
 				<input type="text" id={ fmt.Sprintf("range-%s", id) } name={ fmt.Sprintf("range-%s", id) } placeholder="Range input"/>
 				<input disabled="disabled" type="range"/>
 			</div>
-		case Select:
+		case models.SelectQuestion:
 			<div class="form-group">
 				<label hidden for={ fmt.Sprintf("select-%s", id) }></label>
 				<input type="text" id={ fmt.Sprintf("select-%s", id) } name={ fmt.Sprintf("select-%s", id) } placeholder="Select input"/>
@@ -135,11 +127,28 @@ templ Builder(inputType InputType, id string) {
 					<option disabled="disabled">Option 3</option>
 				</select>
 			</div>
-		case Radio:
+		case models.RadioQuestion:
 			<div class="form-group">
 				<label hidden for={ fmt.Sprintf("radio-%s", id) }></label>
 				<input type="text" id={ fmt.Sprintf("radio-%s", id) } name={ fmt.Sprintf("radio-%s", id) } placeholder="Radio input"/>
 				<input type="radio" disabled="disabled"/>
+			</div>
+		case models.TextAreaQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("textarea-%s", id) }></label>
+				<input id={ fmt.Sprintf("textarea-%s", id) } name={ fmt.Sprintf("textarea-%s", id) } placeholder="Text area"/>
+				<textarea disabled="disabled"></textarea>
+			</div>
+		case models.CheckboxQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("checkbox-%s", id) }></label>
+				<input type="text" id={ fmt.Sprintf("checkbox-%s", id) } name={ fmt.Sprintf("checkbox-%s", id) } placeholder="Checkbox"/>
+				<fieldset>
+					<input type="checkbox" disabled="disabled"/>
+					<label>Option 1</label>
+					<input type="checkbox" disabled="disabled"/>
+					<label>Option 2</label>
+				</fieldset>
 			</div>
 	}
 }

@@ -21,8 +21,3 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 
 	return client, err
 }
-
-func Seed(ctx context.Context, database *mongo.Database) {
-	seedTemplates(ctx, database)
-	seedAnswers(ctx, database)
-}

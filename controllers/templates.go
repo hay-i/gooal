@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -40,18 +41,17 @@ func MyTemplates(database *mongo.Database) echo.HandlerFunc {
 		username := parsedToken["sub"].(string)
 
 		templates := db.GetMyTemplates(requestContext, database, username)
+		fmt.Println(templates[0].Title)
 
-		component := components.Templates(templates)
+		component := components.Templates()
 
 		return renderBase(c, component)
 	}
 }
 
-func Templates(database *mongo.Database) echo.HandlerFunc {
+func Templates() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		requestContext := c.Request().Context()
-		templates := db.GetDefaultTemplates(requestContext, database)
-		component := components.Templates(templates)
+		component := components.Templates()
 
 		return renderBase(c, component)
 	}
@@ -164,8 +164,8 @@ func Builder() echo.HandlerFunc {
 			return err
 		}
 
-		var inputType components.InputType
-		inputType = components.InputType(c.QueryParam("inputType"))
+		var inputType models.QuestionType
+		inputType = models.QuestionType(c.QueryParam("inputType"))
 
 		objectId := primitive.NewObjectID()
 		component := components.Builder(inputType, objectId.Hex())

@@ -11,10 +11,10 @@ type QuestionType string
 const (
 	TextQuestion     QuestionType = "text"
 	NumberQuestion   QuestionType = "number"
-	SelectQuestion   QuestionType = "select"
 	RangeQuestion    QuestionType = "range"
-	TextAreaQuestion QuestionType = "text_area"
+	SelectQuestion   QuestionType = "select"
 	RadioQuestion    QuestionType = "radio"
+	TextAreaQuestion QuestionType = "text_area"
 	CheckboxQuestion QuestionType = "checkbox"
 )
 
