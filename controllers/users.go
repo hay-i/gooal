@@ -101,7 +101,7 @@ func SignIn() echo.HandlerFunc {
 	}
 }
 
-func Logout(database *mongo.Database) echo.HandlerFunc {
+func Logout() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		auth.SetCookie("", time.Now(), c)
 
@@ -111,7 +111,7 @@ func Logout(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func Profile(database *mongo.Database) echo.HandlerFunc {
+func Profile() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {

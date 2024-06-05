@@ -27,24 +27,24 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	e.POST("/register", controllers.Register(database))
 	e.POST("/login", controllers.Login(database))
 
-	e.GET("/logout", controllers.Logout(database), controllers.JwtAuthenticationMiddleware)
-	e.GET("/profile", controllers.Profile(database), controllers.JwtAuthenticationMiddleware)
+	e.GET("/logout", controllers.Logout(), controllers.JwtAuthenticationMiddleware)
+	e.GET("/profile", controllers.Profile(), controllers.JwtAuthenticationMiddleware)
 	// TODO: This is not routed, not displays anything. It will be addressed in
 	// https://github.com/hay-i/chronologger/issues/43
 	e.GET("/my-templates", controllers.MyTemplates(database), controllers.JwtAuthenticationMiddleware)
 
 	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
-	questionnaire.GET("/step-one", controllers.StepOne(database))
-	questionnaire.GET("/step-two", controllers.StepTwo(database))
+	questionnaire.GET("/step-one", controllers.StepOne())
+	questionnaire.GET("/step-two", controllers.StepTwo())
 
 	e.Static("/static", "assets")
 
-	e.GET("/", controllers.Home(database))
+	e.GET("/", controllers.Home())
 
 	templates := e.Group("/templates")
-	templates.GET("/build", controllers.Build(database))
-	templates.GET("/builder", controllers.Builder(database))
-	templates.POST("/save", controllers.Save(database, client))
+	templates.GET("/build", controllers.Build())
+	templates.GET("/builder", controllers.Builder())
+	templates.POST("/save", controllers.Save(database, client, ctx))
 	templates.GET("", controllers.Templates(database))
 	templates.GET("/:id", controllers.Template(database))
 	templates.GET("/:id/modal", controllers.Modal(database))

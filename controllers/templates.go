@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"context"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -140,7 +142,7 @@ func Response(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	}
 }
 
-func Build(database *mongo.Database) echo.HandlerFunc {
+func Build() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -155,7 +157,7 @@ func Build(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func Builder(database *mongo.Database) echo.HandlerFunc {
+func Builder() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -171,7 +173,7 @@ func Builder(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
+func Save(database *mongo.Database, client *mongo.Client, ctx context.Context) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -184,7 +186,9 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		for key, values := range formValues {
 			logger.LogInfo("Key: %s, Value: %s", key, values[0])
 		}
-		return renderNoBase(c, components.Save())
 
+		db.SaveTemplate(database, ctx, formValues)
+
+		return renderNoBase(c, components.Save())
 	}
 }
