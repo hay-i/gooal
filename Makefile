@@ -4,7 +4,7 @@ hmr: ## Start the hot module replacement server
 templProxy: up ## Start the hot module replacement server for templ
 	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
 
-sassWatch: ## Compile, minify and watch SASS changes
+sassWatch: ## Watch SASS changes
 	sass --watch .
 
 sassGen: ## Compile and minify SASS
