@@ -6,61 +6,6 @@ import (
 	"github.com/hay-i/chronologger/models"
 )
 
-templ questionAnswers(question models.Question, answers []models.Answer) {
-	<div>
-		<div></div>
-		<div>
-			for _, answer := range models.AnswersForQuestion(answers, question.ID) {
-				<div>{ answer.Answer }</div>
-			}
-		</div>
-	</div>
-}
-
-templ Templates() {
-	<div id="template-modal"></div>
-	<div class="width-wrap">
-		for _, template := range []models.Template{} {
-			<button
-				class="btn"
-				hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
-				hx-target="#template-modal"
-				hx-trigger="click"
-			>
-				Preview { template.Title }
-			</button>
-		}
-	</div>
-}
-
-templ Modal(template models.Template) {
-	<div hx-ext="class-tools">
-		<div class="modal-backdrop"></div>
-		<div class="modal" classes="add active">
-			<h1>{ template.Title }</h1>
-			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-			<button
-				class={ btn, "btn" }
-				data-dismissable="template-modal"
-			>
-				Close
-			</button>
-		</div>
-	</div>
-}
-
-templ Template(template models.Template, answers []models.Answer) {
-	<div>
-		<div>{ template.Description }</div>
-		<div>{ template.Title }</div>
-		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
-		<div>Answers per question:</div>
-		for _, question := range template.Questions {
-			@questionAnswers(question, answers)
-		}
-	</div>
-}
-
 templ Build(goal, aim string) {
 	<div>
 		<h1>{ goal }</h1>
