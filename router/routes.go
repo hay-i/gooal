@@ -1,8 +1,6 @@
 package router
 
 import (
-	"context"
-
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/hay-i/gooal/controllers"
@@ -12,7 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
+func Initialize(client *mongo.Client) *echo.Echo {
 	e := echo.New()
 
 	database := client.Database("gooal")
@@ -40,7 +38,7 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	templates := e.Group("/templates")
 	templates.GET("/build", controllers.Build())
 	templates.GET("/builder", controllers.Builder())
-	templates.POST("/save", controllers.Save(database, client, ctx))
+	templates.POST("/save", controllers.Save(database, client))
 	templates.DELETE("/questions/delete", controllers.Delete())
 
 	return e

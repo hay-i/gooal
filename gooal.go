@@ -18,7 +18,7 @@ func main() {
 	}()
 	defer cancel()
 
-	e := router.Initialize(client, ctx)
+	e := router.Initialize(client)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

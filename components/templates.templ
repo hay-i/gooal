@@ -6,7 +6,7 @@ import (
 	"github.com/hay-i/gooal/models"
 )
 
-templ Build(goal, aim string) {
+templ Build(goal, aim, username string) {
 	<div>
 		<h1>{ goal }</h1>
 		<h2>{ aim }</h2>
@@ -34,6 +34,7 @@ templ Build(goal, aim string) {
 							<label hidden for="description"></label>
 							<input type="text" id="description" name="description" placeholder="Description"/>
 						</div>
+						<input type="hidden" name="username" value={ username }/>
 						<div data-sortable-right class="right-section"></div>
 					}
 				</aside>

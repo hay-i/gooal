@@ -14,11 +14,13 @@ func TemplateFromForm(formValues url.Values) models.Template {
 	template := models.Template{
 		Title:       formValues.Get("title"),
 		Description: formValues.Get("description"),
+		Username:    formValues.Get("username"),
 		CreatedAt:   time.Now(),
 	}
 
 	formValues.Del("title")
 	formValues.Del("description")
+	formValues.Del("username")
 
 	templatesQuestions := []models.Question{}
 

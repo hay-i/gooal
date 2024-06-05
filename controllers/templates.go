@@ -2,15 +2,18 @@ package controllers
 
 import (
 	"context"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"github.com/hay-i/gooal/auth"
 	"github.com/hay-i/gooal/components"
 	"github.com/hay-i/gooal/db"
 	"github.com/hay-i/gooal/formparser"
 	"github.com/hay-i/gooal/logger"
 	"github.com/hay-i/gooal/models"
+	"github.com/hay-i/gooal/views"
 
 	"github.com/labstack/echo/v4"
 )
@@ -24,7 +27,24 @@ func Build() echo.HandlerFunc {
 		goal := c.QueryParam("goal")
 		focus := c.QueryParam("focus")
 
-		component := components.Build(goal, focus)
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
+
+			return redirect(c, "/login")
+		}
+
+		tokenString := cookie.Value
+
+		parsedToken, err := auth.ParseToken(tokenString)
+
+		if err != nil {
+			views.AddFlash(c, "Invalid or expired token", views.FlashError)
+
+			return redirect(c, "/login")
+		}
+
+		component := components.Build(goal, focus, parsedToken["sub"].(string))
 
 		return renderNoBase(c, component)
 	}
@@ -46,8 +66,11 @@ func Builder() echo.HandlerFunc {
 	}
 }
 
-func Save(database *mongo.Database, client *mongo.Client, ctx context.Context) echo.HandlerFunc {
+func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
 		if err := c.Request().ParseForm(); err != nil {
 			return err
 		}
