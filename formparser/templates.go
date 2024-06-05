@@ -41,5 +41,7 @@ func TemplateFromForm(formValues url.Values) models.Template {
 		})
 	}
 
+	template.Questions = templatesQuestions
+
 	return template
 }

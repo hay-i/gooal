@@ -79,9 +79,6 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		if err != nil {
 			return err
 		}
-		for key, values := range formValues {
-			logger.LogInfo("Key: %s, Value: %s", key, values[0])
-		}
 
 		db.SaveTemplate(database, ctx, formparser.TemplateFromForm(formValues))
 
