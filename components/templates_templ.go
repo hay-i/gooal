@@ -346,7 +346,7 @@ func Build(goal, aim string) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div data-sortable-right class=\"right-section\"></div>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label hidden for=\"title\"></label> <input type=\"text\" id=\"title\" name=\"title\" placeholder=\"Title of Template\"></div><div class=\"form-group\"><label hidden for=\"description\"></label> <input type=\"text\" id=\"description\" name=\"description\" placeholder=\"Description\"></div><div data-sortable-right class=\"right-section\"></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

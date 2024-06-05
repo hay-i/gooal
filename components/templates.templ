@@ -79,6 +79,14 @@ templ Build(goal, aim string) {
 			<section class="right sortable">
 				<aside>
 					@form(templ.Attributes{"hx-post": "/templates/save", "hx-swap": "outerHTML"}) {
+						<div class="form-group">
+							<label hidden for="title"></label>
+							<input type="text" id="title" name="title" placeholder="Title of Template"/>
+						</div>
+						<div class="form-group">
+							<label hidden for="description"></label>
+							<input type="text" id="description" name="description" placeholder="Description"/>
+						</div>
 						<div data-sortable-right class="right-section"></div>
 					}
 				</aside>
