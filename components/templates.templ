@@ -3,65 +3,112 @@ package components
 import (
 	"fmt"
 
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/models"
 )
 
-templ questionAnswers(question models.Question, answers []models.Answer) {
+templ Build(goal, aim, username string) {
 	<div>
-		<div>{ question.Title }</div>
-		<div>
-			for _, answer := range models.AnswersForQuestion(answers, question.ID) {
-				<div>{ answer.Answer }</div>
-			}
-		</div>
+		<h1>{ goal }</h1>
+		<h2>{ aim }</h2>
+		<h1>Build your template:</h1>
+		<section class="grid">
+			<aside class="left">
+				<form data-sortable-left class="sortable sortable-grid">
+					<div class="draggable-input" data-type="text"><input type="hidden" name="item" value="1"/>Text Input</div>
+					<div class="draggable-input" data-type="number"><input type="hidden" name="item" value="2"/>Number Input</div>
+					<div class="draggable-input" data-type="range"><input type="hidden" name="item" value="3"/>Range</div>
+					<div class="draggable-input" data-type="select"><input type="hidden" name="item" value="4"/>Select Input</div>
+					<div class="draggable-input" data-type="radio"><input type="hidden" name="item" value="5"/>Radio Button</div>
+					<div class="draggable-input" data-type="text_area"><input type="hidden" name="item" value="6"/>Text Area</div>
+					<div class="draggable-input" data-type="checkbox"><input type="hidden" name="item" value="7"/>Checkbox</div>
+				</form>
+			</aside>
+			<section class="right sortable">
+				<aside>
+					@form(templ.Attributes{"hx-post": "/templates/save", "hx-swap": "outerHTML"}) {
+						<div class="form-group">
+							<label hidden for="title"></label>
+							<input type="text" id="title" name="title" placeholder="Title of Template"/>
+						</div>
+						<div class="form-group">
+							<label hidden for="description"></label>
+							<input type="text" id="description" name="description" placeholder="Description"/>
+						</div>
+						<input type="hidden" name="username" value={ username }/>
+						<div data-sortable-right class="right-section"></div>
+					}
+				</aside>
+			</section>
+		</section>
 	</div>
 }
 
-templ Templates(templates []models.Template) {
-	<div id="template-modal"></div>
-	<div class="width-wrap">
-		for _, template := range templates {
-			<button
-				class="btn"
-				hx-get={ fmt.Sprintf("/templates/%s/modal", template.ID.Hex()) }
-				hx-target="#template-modal"
-				hx-trigger="click"
-			>
-				Preview { template.Title }
-			</button>
-		}
-	</div>
+templ Builder(inputType models.QuestionType, id, order string) {
+	switch inputType {
+		case models.TextQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("text-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("text-%s-%s", id, order) } name={ fmt.Sprintf("text-%s-%s", id, order) } placeholder="Text input"/>
+				<input disabled="disabled" type="text"/>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+		case models.NumberQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("number-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("number-%s-%s", id, order) } name={ fmt.Sprintf("number-%s-%s", id, order) } placeholder="Number input"/>
+				<input disabled="disabled" type="number"/>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+		case models.RangeQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("range-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("range-%s-%s", id, order) } name={ fmt.Sprintf("range-%s-%s", id, order) } placeholder="Range input"/>
+				<input disabled="disabled" type="range"/>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+		case models.SelectQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("select-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("select-%s-%s", id, order) } name={ fmt.Sprintf("select-%s-%s", id, order) } placeholder="Select input"/>
+				<select>
+					<option disabled="disabled">Option 1</option>
+					<option disabled="disabled">Option 2</option>
+					<option disabled="disabled">Option 3</option>
+				</select>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+		case models.RadioQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("radio-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("radio-%s-%s", id, order) } name={ fmt.Sprintf("radio-%s-%s", id, order) } placeholder="Radio input"/>
+				<input type="radio" disabled="disabled"/>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+		case models.TextAreaQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("textarea-%s-%s", id, order) }></label>
+				<input id={ fmt.Sprintf("textarea-%s-%s", id, order) } name={ fmt.Sprintf("textarea-%s-%s", id, order) } placeholder="Text area"/>
+				<textarea disabled="disabled"></textarea>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+		case models.CheckboxQuestion:
+			<div class="form-group">
+				<label hidden for={ fmt.Sprintf("checkbox-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("checkbox-%s-%s", id, order) } name={ fmt.Sprintf("checkbox-%s-%s", id, order) } placeholder="Checkbox"/>
+				<fieldset>
+					<input type="checkbox" disabled="disabled"/>
+					<label>Option 1</label>
+					<input type="checkbox" disabled="disabled"/>
+					<label>Option 2</label>
+				</fieldset>
+				<button type="button" data-delete-row="true">X</button>
+			</div>
+	}
 }
 
-templ Modal(template models.Template) {
-	<div hx-ext="class-tools">
-		<div class="modal-backdrop"></div>
-		<div class="modal" classes="add active">
-			<h1>{ template.Title }</h1>
-			<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s", template.ID.Hex())) } class={ btn, "btn" }>View this template</a>
-			<button
-				class={ btn, "btn" }
-				data-dismissable="template-modal"
-			>
-				Close
-			</button>
-		</div>
-	</div>
+templ Save() {
+	<h1>Template saved!</h1>
 }
 
-templ Template(template models.Template, answers []models.Answer) {
-	<div>
-		<div>{ template.Description }</div>
-		<div>{ template.Title }</div>
-		<a href={ templ.SafeURL(fmt.Sprintf("/templates/%s/start", template.ID.Hex())) } class={ btn, "btn" }>Use this template</a>
-		<div>Answers per question:</div>
-		for _, question := range template.Questions {
-			@questionAnswers(question, answers)
-		}
-	</div>
-}
-
-templ Build(goal, aim string) {
-	<h1>{ goal }</h1>
-	<h2>{ aim }</h2>
+templ Delete() {
 }

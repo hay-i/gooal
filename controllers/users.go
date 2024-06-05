@@ -3,10 +3,10 @@ package controllers
 import (
 	"time"
 
-	"github.com/hay-i/chronologger/auth"
-	"github.com/hay-i/chronologger/components"
-	"github.com/hay-i/chronologger/models"
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/auth"
+	"github.com/hay-i/gooal/components"
+	"github.com/hay-i/gooal/models"
+	"github.com/hay-i/gooal/views"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"
@@ -101,7 +101,7 @@ func SignIn() echo.HandlerFunc {
 	}
 }
 
-func Logout(database *mongo.Database) echo.HandlerFunc {
+func Logout() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		auth.SetCookie("", time.Now(), c)
 
@@ -111,7 +111,7 @@ func Logout(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func Profile(database *mongo.Database) echo.HandlerFunc {
+func Profile() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {

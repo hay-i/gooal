@@ -3,7 +3,7 @@ package components
 import (
 	"fmt"
 
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/views"
 )
 
 css btn() {
@@ -31,7 +31,8 @@ templ head() {
 		<script src="/static/js/main.js"></script>
 		<script src="/static/js/htmx.min.js"></script>
 		<script src="/static/js/htmx-class-tools.js"></script>
-		<title>Chronologger</title>
+		<script src="/static/js/Sortable.min.js"></script>
+		<title>Gooal</title>
 	</head>
 }
 
@@ -70,6 +71,7 @@ templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
 		@body() {
 			@nav(signedIn)
 			<main class="width-wrap">
+				<h1>Gooal</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}
@@ -85,7 +87,7 @@ templ BaseBody(flashes views.Flashes, child templ.Component) {
 		@head()
 		@body() {
 			<main class="width-wrap">
-				<h1>Chronologger</h1>
+				<h1>Gooal</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}

@@ -1,10 +1,10 @@
 hmr: ## Start the hot module replacement server
 	$(MAKE) -j2 sassWatch templProxy
 
-templProxy: ## Start the hot module replacement server for templ
+templProxy: up ## Start the hot module replacement server for templ
 	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
 
-sassWatch: ## Compile, minify and watch SASS changes
+sassWatch: ## Watch SASS changes
 	sass --watch .
 
 sassGen: ## Compile and minify SASS
@@ -15,7 +15,7 @@ templ: ## Generate the templates
 
 build: templ sassGen ## Generate the templates and compile the SASS
 
-start: ## Generate templates and start the server
+start: up ## Generate templates and start the server
 	go run .
 
 up: ## Start the docker containers
@@ -24,8 +24,8 @@ up: ## Start the docker containers
 down: ## Stop the docker containers
 	docker compose down
 
-dbCli: ## Connect to the mongo db
-	docker exec -it chronologger-mongo-1 mongosh --username root --password example
+dbCli: up ## Connect to the mongo db
+	docker exec -it gooal-mongo-1 mongosh --username root --password example
 
 tests: ## Run the tests
 	go test -v ./...

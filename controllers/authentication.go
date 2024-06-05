@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"github.com/golang-jwt/jwt"
-	"github.com/hay-i/chronologger/auth"
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/auth"
+	"github.com/hay-i/gooal/views"
 	"github.com/labstack/echo/v4"
 )
 

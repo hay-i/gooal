@@ -3,49 +3,11 @@ package db
 import (
 	"context"
 
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
-
-func GetMyTemplates(ctx context.Context, database *mongo.Database, username string) []models.Template {
-	collection := database.Collection("templates")
-
-	var results []models.Template
-
-	filter := bson.M{"username": username}
-	cursor, err := collection.Find(ctx, filter)
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err = cursor.All(ctx, &results); err != nil {
-		panic(err)
-	}
-
-	return results
-}
-
-func GetDefaultTemplates(ctx context.Context, database *mongo.Database) []models.Template {
-	collection := database.Collection("templates")
-
-	var results []models.Template
-
-	filter := bson.M{"default": true}
-	cursor, err := collection.Find(ctx, filter)
-
-	if err != nil {
-		panic(err)
-	}
-
-	if err = cursor.All(ctx, &results); err != nil {
-		panic(err)
-	}
-
-	return results
-}
 
 func GetTemplate(ctx context.Context, database *mongo.Database, id string) models.Template {
 	collection := database.Collection("templates")
