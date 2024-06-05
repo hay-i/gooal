@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/hay-i/chronologger/logger"
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/logger"
+	"github.com/hay-i/gooal/models"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

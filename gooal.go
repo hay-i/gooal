@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/hay-i/chronologger/db"
-	"github.com/hay-i/chronologger/router"
+	"github.com/hay-i/gooal/db"
+	"github.com/hay-i/gooal/router"
 )
 
 func main() {

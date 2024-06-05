@@ -3,10 +3,10 @@ package controllers
 import (
 	"time"
 
-	"github.com/hay-i/chronologger/auth"
-	"github.com/hay-i/chronologger/components"
-	"github.com/hay-i/chronologger/models"
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/auth"
+	"github.com/hay-i/gooal/components"
+	"github.com/hay-i/gooal/models"
+	"github.com/hay-i/gooal/views"
 
 	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson"

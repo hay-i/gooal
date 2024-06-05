@@ -25,7 +25,7 @@ down: ## Stop the docker containers
 	docker compose down
 
 dbCli: up ## Connect to the mongo db
-	docker exec -it chronologger-mongo-1 mongosh --username root --password example
+	docker exec -it gooal-mongo-1 mongosh --username root --password example
 
 tests: ## Run the tests
 	go test -v ./...

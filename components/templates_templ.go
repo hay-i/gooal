@@ -13,7 +13,7 @@ import "bytes"
 import (
 	"fmt"
 
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/models"
 )
 
 func Build(goal, aim string) templ.Component {

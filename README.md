@@ -1,11 +1,11 @@
-# Chronologger
-[![GO Test](https://github.com/hay-i/chronologger/actions/workflows/go-test.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/go-test.yml/badge.svg)
-[![GO Formatting](https://github.com/hay-i/chronologger/actions/workflows/go-format.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/go-format.yml/badge.svg)
-[![Templ Formatiing](https://github.com/hay-i/chronologger/actions/workflows/templ-format.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/templ-format.yml/badge.svg)
-[![Templ Compilation](https://github.com/hay-i/chronologger/actions/workflows/templ-generate.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/templ-generate.yml/badge.svg)
-[![SCSS Compilation](https://github.com/hay-i/chronologger/actions/workflows/minify-css.yml/badge.svg)](https://github.com/hay-i/chronologger/actions/workflows/minify-css.yml/badge.svg)
+# Gooal
+[![GO Test](https://github.com/hay-i/gooal/actions/workflows/go-test.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/go-test.yml/badge.svg)
+[![GO Formatting](https://github.com/hay-i/gooal/actions/workflows/go-format.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/go-format.yml/badge.svg)
+[![Templ Formatiing](https://github.com/hay-i/gooal/actions/workflows/templ-format.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/templ-format.yml/badge.svg)
+[![Templ Compilation](https://github.com/hay-i/gooal/actions/workflows/templ-generate.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/templ-generate.yml/badge.svg)
+[![SCSS Compilation](https://github.com/hay-i/gooal/actions/workflows/minify-css.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/minify-css.yml/badge.svg)
 
-Chronologger is a personal review app, built with Golang.
+Gooal is a personal review app, built with Golang.
 
 # Development
 
@@ -30,7 +30,7 @@ Alternatively, if you don't need hot module reloading, you can just run `go run 
 
 To view a collection, enter the mongo cli with `make dbCli` and run the following:
 ```
-use chronologger
+use gooal
 db.templates.find()
 ```
 

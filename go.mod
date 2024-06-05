@@ -1,4 +1,4 @@
-module github.com/hay-i/chronologger
+module github.com/hay-i/gooal
 
 go 1.22
 

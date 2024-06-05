@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	"github.com/hay-i/chronologger/auth"
-	"github.com/hay-i/chronologger/components"
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/auth"
+	"github.com/hay-i/gooal/components"
+	"github.com/hay-i/gooal/views"
 	"github.com/labstack/echo/v4"
 )
 

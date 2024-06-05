@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

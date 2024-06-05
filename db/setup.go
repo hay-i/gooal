@@ -15,7 +15,7 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 		panic(err)
 	}
 
-	database := client.Database("chronologger")
+	database := client.Database("gooal")
 
 	createCollections(ctx, database)
 

@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"github.com/hay-i/chronologger/components"
+	"github.com/hay-i/gooal/components"
 
 	"github.com/labstack/echo/v4"
 )

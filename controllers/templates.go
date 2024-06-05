@@ -6,11 +6,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/hay-i/chronologger/components"
-	"github.com/hay-i/chronologger/db"
-	"github.com/hay-i/chronologger/formparser"
-	"github.com/hay-i/chronologger/logger"
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/components"
+	"github.com/hay-i/gooal/db"
+	"github.com/hay-i/gooal/formparser"
+	"github.com/hay-i/gooal/logger"
+	"github.com/hay-i/gooal/models"
 
 	"github.com/labstack/echo/v4"
 )

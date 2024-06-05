@@ -14,7 +14,7 @@ import "strings"
 import (
 	"fmt"
 
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/views"
 )
 
 func btn() templ.CSSClass {
@@ -78,7 +78,7 @@ func head() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><link rel=\"stylesheet\" href=\"/static/scss/styles.css\"><script src=\"/static/js/main.js\"></script><script src=\"/static/js/htmx.min.js\"></script><script src=\"/static/js/htmx-class-tools.js\"></script><script src=\"/static/js/Sortable.min.js\"></script><title>Chronologger</title></head><style>\n        .btn:hover {\n            background-color: #00CC00;\n        }\n    </style>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<head><link rel=\"stylesheet\" href=\"/static/scss/styles.css\"><script src=\"/static/js/main.js\"></script><script src=\"/static/js/htmx.min.js\"></script><script src=\"/static/js/htmx-class-tools.js\"></script><script src=\"/static/js/Sortable.min.js\"></script><title>Gooal</title></head><style>\n        .btn:hover {\n            background-color: #00CC00;\n        }\n    </style>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -242,7 +242,7 @@ func PageBase(flashes views.Flashes, signedIn bool, child templ.Component) templ
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <main class=\"width-wrap\"><h1>Chronologger</h1>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <main class=\"width-wrap\"><h1>Gooal</h1>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -318,7 +318,7 @@ func BaseBody(flashes views.Flashes, child templ.Component) templ.Component {
 					templ_7745c5c3_Buffer = templ.GetBuffer()
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"width-wrap\"><h1>Chronologger</h1>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<main class=\"width-wrap\"><h1>Gooal</h1>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

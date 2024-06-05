@@ -3,7 +3,7 @@ package views
 import (
 	"testing"
 
-	"github.com/hay-i/chronologger/test"
+	"github.com/hay-i/gooal/test"
 )
 
 func TestAddFlash(t *testing.T) {

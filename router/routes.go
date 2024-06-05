@@ -5,8 +5,8 @@ import (
 
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/hay-i/chronologger/controllers"
-	"github.com/hay-i/chronologger/views"
+	"github.com/hay-i/gooal/controllers"
+	"github.com/hay-i/gooal/views"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,7 +15,7 @@ import (
 func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	e := echo.New()
 
-	database := client.Database("chronologger")
+	database := client.Database("gooal")
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
