@@ -65,3 +65,10 @@ func Save(database *mongo.Database, client *mongo.Client, ctx context.Context) e
 		return renderNoBase(c, components.Save())
 	}
 }
+
+func Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		logger.LogInfo("Delete")
+		return renderNoBase(c, components.Delete())
+	}
+}

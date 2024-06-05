@@ -27,23 +27,6 @@ aside{
     border: 1px solid blue;
 }
 
-.right .draggable-input::after{
-    content: "X";
-    display: block;
-    text-align: center;
-    color: #fff;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    opacity: 0;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.right .draggable-input:hover::after{
-    opacity: 1;
-}
-
 .form-group .input-wrapper{
     display: flex;
     align-items: center;

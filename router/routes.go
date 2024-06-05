@@ -41,6 +41,7 @@ func Initialize(client *mongo.Client, ctx context.Context) *echo.Echo {
 	templates.GET("/build", controllers.Build())
 	templates.GET("/builder", controllers.Builder())
 	templates.POST("/save", controllers.Save(database, client, ctx))
+	templates.DELETE("/questions/delete", controllers.Delete())
 
 	return e
 }
