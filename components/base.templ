@@ -48,7 +48,7 @@ templ nav(signedIn bool) {
 				<a href={ templ.SafeURL("/") }>
 					<img src="/static/svg/logo.svg" alt="Gooal" class="header__logo"/>
 				</a>
-				<nav class="header__nav">
+				<nav class="header__nav" hx-boost="true">
 					if signedIn {
 						<a href={ templ.SafeURL("/") }>Home</a>
 						<a href={ templ.SafeURL("/my-templates") }>My Templates</a>

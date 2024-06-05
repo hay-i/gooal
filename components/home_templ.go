@@ -23,14 +23,15 @@ func Splash() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"splash\"><div class=\"splash__top\"><img src=\"/static/svg/splash-bg.svg\" role=\"presentation\" class=\"splash__bg\"><h1 class=\"splash__title\">Map your journey,<br>Measure your success.</h1>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"splash\"><div class=\"splash__top\" hx-boost=\"true\"><img src=\"/static/svg/splash-bg.svg\" role=\"presentation\" class=\"splash__bg\"><h1 class=\"splash__title\">Map your journey,<br>Measure your success.</h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = anchorButton(
-			templ.Attributes{"href": "/questionnaire/step-one"},
+			"/questionnaire/step-one",
 			"Get Started",
 			primary,
+			templ.Attributes{},
 		).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -103,10 +104,6 @@ func Home() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!--\n\t<a href={ templ.SafeURL(\"/templates\") }>Our Templates</a>\n\t<a href={ templ.SafeURL(\"/questionnaire/step-one\") }>Get Started</a>\n    -->")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
 		templ_7745c5c3_Err = Splash().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

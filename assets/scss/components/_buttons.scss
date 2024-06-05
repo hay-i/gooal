@@ -9,4 +9,11 @@
   text-decoration: none;
   border-radius: 999px;
   font-size: 1.25rem;
+
+  cursor: pointer;
+  transition: 150ms;
+
+  &:hover {
+    opacity: 0.6;
+  }
 }

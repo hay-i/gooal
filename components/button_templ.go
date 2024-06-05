@@ -79,7 +79,7 @@ func button(attrs templ.Attributes, content string, variant buttonVariant) templ
 	})
 }
 
-func anchorButton(attrs templ.Attributes, content string, variant buttonVariant) templ.Component {
+func anchorButton(url string, content string, variant buttonVariant, attrs templ.Attributes) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -109,7 +109,7 @@ func anchorButton(attrs templ.Attributes, content string, variant buttonVariant)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var6 templ.SafeURL = templ.URL(attrs["href"].(string))
+		var templ_7745c5c3_Var6 templ.SafeURL = templ.SafeURL(url)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var6)))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

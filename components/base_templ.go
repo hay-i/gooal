@@ -143,7 +143,7 @@ func nav(signedIn bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><img src=\"/static/svg/logo.svg\" alt=\"Gooal\" class=\"header__logo\"></a><nav class=\"header__nav\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><img src=\"/static/svg/logo.svg\" alt=\"Gooal\" class=\"header__logo\"></a><nav class=\"header__nav\" hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

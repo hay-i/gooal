@@ -2,13 +2,14 @@ package components
 
 templ Splash() {
 	<section class="splash">
-		<div class="splash__top">
+		<div class="splash__top" hx-boost="true">
 			<img src="/static/svg/splash-bg.svg" role="presentation" class="splash__bg"/>
 			<h1 class="splash__title">Map your journey,<br/>Measure your success.</h1>
 			@anchorButton(
-				templ.Attributes{"href": "/questionnaire/step-one"},
+				"/questionnaire/step-one",
 				"Get Started",
 				primary,
+				templ.Attributes{},
 			)
 		</div>
 		<div class="splash__fake-cards-container">
@@ -32,9 +33,5 @@ templ FakeCard() {
 }
 
 templ Home() {
-	<!--
-	<a href={ templ.SafeURL("/templates") }>Our Templates</a>
-	<a href={ templ.SafeURL("/questionnaire/step-one") }>Get Started</a>
-    -->
 	@Splash()
 }
