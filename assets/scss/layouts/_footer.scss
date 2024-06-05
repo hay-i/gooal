@@ -1,0 +1,36 @@
+.footer {
+  background-color: var(--clr-teritary);
+
+  &__inside {
+    padding-top: 4rem;
+    padding-bottom: 6rem;
+
+    display: flex;
+    flex-direction: column;
+
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__logo {
+    img {
+      width: 150px;
+    }
+  }
+
+  &__nav {
+    ul {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 2rem;
+    }
+
+    a {
+      color: var(--clr-white);
+      text-decoration: none;
+    }
+  }
+}

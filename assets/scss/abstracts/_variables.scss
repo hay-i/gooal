@@ -1,9 +1,10 @@
 :root {
-  --clr-primary: #000;
-  --clr-secondary: #000;
-  --clr-teritary: #fff;
+  --clr-primary: #2c4a2d;
+  --clr-secondary: #4c7f4e;
+  --clr-teritary: #1e1e1e;
 
-  --clr-grey: #ececec;
+  --clr-grey: #d9d9d9;
+  --clr-grey-bg: #ececec;
   --clr-white: #fff;
   --clr-black: #000;
 
@@ -28,7 +29,6 @@
 }
 
 @media (prefers-reduced-motion) {
-  /* styles to apply if the user's settings are set to reduced motion */
   * {
     transition: none !important;
   }

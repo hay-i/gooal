@@ -7,9 +7,28 @@ import (
 templ StepOne() {
 	<div id="questionnaire-wrapper">
 		<h1>Get Started with tracking your goals: Step one</h1>
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary")
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary")
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary")
+		<div class="questionnaire">
+			<ul class="questionnaire__grid">
+				<li>
+					<button class="questionnaire-card" hx-get="/questionnaire/step-two?goal=fitness" hx-target="#questionnaire-wrapper" hx-push-url="true">
+						<img src="/static/svg/fitness.svg" role="Presentation" class="questionnaire-card__img"/>
+						Fitness
+					</button>
+				</li>
+				<li>
+					<button class="questionnaire-card" hx-get="/questionnaire/step-two?goal=finance" hx-target="#questionnaire-wrapper" hx-push-url="true">
+						<img src="/static/svg/finance.svg" role="Presentation" class="questionnaire-card__img"/>
+						Financial
+					</button>
+				</li>
+				<li>
+					<button class="questionnaire-card" hx-get="/questionnaire/step-two?goal=career" hx-target="#questionnaire-wrapper" hx-push-url="true">
+						<img src="/static/svg/social.svg" role="Presentation" class="questionnaire-card__img"/>
+						Social
+					</button>
+				</li>
+			</ul>
+		</div>
 	</div>
 }
 

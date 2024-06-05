@@ -27,23 +27,7 @@ func StepOne() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"questionnaire-wrapper\"><h1>Get Started with tracking your goals: Step one</h1>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"questionnaire-wrapper\"><h1>Get Started with tracking your goals: Step one</h1><div class=\"questionnaire\"><ul class=\"questionnaire__grid\"><li><button class=\"questionnaire-card\" hx-get=\"/questionnaire/step-two?goal=fitness\" hx-target=\"#questionnaire-wrapper\" hx-push-url=\"true\"><img src=\"/static/svg/fitness.svg\" role=\"Presentation\" class=\"questionnaire-card__img\"> Fitness</button></li><li><button class=\"questionnaire-card\" hx-get=\"/questionnaire/step-two?goal=finance\" hx-target=\"#questionnaire-wrapper\" hx-push-url=\"true\"><img src=\"/static/svg/finance.svg\" role=\"Presentation\" class=\"questionnaire-card__img\"> Financial</button></li><li><button class=\"questionnaire-card\" hx-get=\"/questionnaire/step-two?goal=career\" hx-target=\"#questionnaire-wrapper\" hx-push-url=\"true\"><img src=\"/static/svg/social.svg\" role=\"Presentation\" class=\"questionnaire-card__img\"> Social</button></li></ul></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

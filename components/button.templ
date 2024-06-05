@@ -12,7 +12,13 @@ const (
 )
 
 templ button(attrs templ.Attributes, content string, variant buttonVariant) {
-	<button { attrs... } class={ fmt.Sprintf("btn-%s", variant) }>
+	<button { attrs... } class={ fmt.Sprintf("btn--%s", variant) }>
 		{ content }
 	</button>
+}
+
+templ anchorButton(url string, content string, variant buttonVariant, attrs templ.Attributes) {
+	<a { attrs... } href={ templ.SafeURL(url) } class={ fmt.Sprintf("btn--%s", variant) }>
+		{ content }
+	</a>
 }

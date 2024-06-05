@@ -1,0 +1,74 @@
+.splash {
+  padding-top: 4rem;
+  padding-bottom: 8rem;
+  position: relative;
+
+  &__top {
+    display: grid;
+    place-items: center;
+    margin-bottom: 4rem;
+  }
+
+  &__title {
+    font-family: "Satoshi-Bold";
+    text-align: center;
+    font-size: 3rem;
+    color: var(--clr-primary);
+  }
+
+  &__bg {
+    position: absolute;
+    left: 20%;
+    top: 20%;
+    width: 80%;
+    z-index: -1;
+  }
+
+  &__fake-cards-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.fake-card {
+  padding: 2rem 1rem;
+  background-color: var(--clr-teritary);
+  border-radius: 12px;
+  color: var(--clr-white);
+  position: relative;
+
+  &__title {
+    font-size: 14px;
+    margin: 0;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 0.25rem;
+  }
+
+  &__btn {
+    padding: 1rem;
+    background-color: var(--clr-white);
+    font-size: 10px;
+    color: var(--clr-teritary);
+  }
+}
+
+.fake-card:nth-child(1) {
+  transform: rotate(-9.2deg);
+}
+.fake-card:nth-child(2) {
+  transform: rotate(3.84deg);
+  top: 3rem;
+}
+.fake-card:nth-child(3) {
+  transform: rotate(2.78deg);
+  top: 2rem;
+}
+.fake-card:nth-child(4) {
+  transform: rotate(-11.61deg);
+  top: 3rem;
+}

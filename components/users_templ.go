@@ -23,7 +23,7 @@ func SignUp() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/register\" method=\"post\"><input type=\"text\" placeholder=\"Username\" name=\"username\"> <input type=\"password\" placeholder=\"Password\" name=\"password\"> <button type=\"submit\">Sign Up</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/register\" method=\"post\"><input type=\"text\" placeholder=\"Username\" name=\"username\"> <input type=\"password\" placeholder=\"Password\" name=\"password\"> <button type=\"submit\">Sign Up</button></form><a href=\"/register\">Already have an account? Login</a>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +47,7 @@ func SignIn() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/login\" method=\"post\"><input type=\"text\" placeholder=\"Username\" name=\"username\"> <input type=\"password\" placeholder=\"Password\" name=\"password\"> <button type=\"submit\">Sign In</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"/login\" method=\"post\"><input type=\"text\" placeholder=\"Username\" name=\"username\"> <input type=\"password\" placeholder=\"Password\" name=\"password\"> <button type=\"submit\">Sign In</button></form><a href=\"/register\">Don't have an account? Register</a>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -78,7 +78,7 @@ func Profile(username string) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(username)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/users.templ`, Line: 19, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/users.templ`, Line: 21, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {

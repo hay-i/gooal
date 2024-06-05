@@ -6,25 +6,17 @@ import (
 	"github.com/hay-i/gooal/views"
 )
 
-css btn() {
-	display: inline-block;
-	border: 0;
-	background-color: #00FF00;
-	border-radius: 999px;
-	padding: 1rem 2rem;
-	transition: 150ms;
-	cursor: pointer;
-}
-
 templ base() {
 	<!DOCTYPE html>
-	<html>
+	<html lang="en">
 		{ children... }
 	</html>
 }
 
 templ head() {
 	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<link rel="stylesheet" href="/static/scss/styles.css"/>
 		<script src="/static/js/main.js"></script>
 		<script src="/static/js/htmx.min.js"></script>
@@ -32,11 +24,6 @@ templ head() {
 		<script src="/static/js/Sortable.min.js"></script>
 		<title>Gooal</title>
 	</head>
-	<style>
-        .btn:hover {
-            background-color: #00CC00;
-        }
-    </style>
 }
 
 templ body() {
@@ -46,16 +33,26 @@ templ body() {
 }
 
 templ nav(signedIn bool) {
-	<nav>
-		if signedIn {
-			<a href={ templ.SafeURL("/") }>Home</a>
-			<a href={ templ.SafeURL("/profile") }>My Profile</a>
-			<a href={ templ.SafeURL("/logout") }>Logout</a>
-		} else {
-			<a href={ templ.SafeURL("/register") }>Register</a>
-			<a href={ templ.SafeURL("/login") }>Login</a>
-		}
-	</nav>
+	<header class="header">
+		<div class="width-wrap">
+			<div class="header__inside">
+				<a href={ templ.SafeURL("/") }>
+					<img src="/static/svg/logo.svg" alt="Gooal" class="header__logo"/>
+				</a>
+				<nav class="header__nav" hx-boost="true">
+					if signedIn {
+						<a href={ templ.SafeURL("/") }>Home</a>
+						<a href={ templ.SafeURL("/my-templates") }>My Templates</a>
+						<a href={ templ.SafeURL("/profile") }>My Profile</a>
+						<a href={ templ.SafeURL("/logout") }>Logout</a>
+					} else {
+						<a href={ templ.SafeURL("/register") }>Register</a>
+						<a href={ templ.SafeURL("/login") }>Login</a>
+					}
+				</nav>
+			</div>
+		</div>
+	</header>
 }
 
 templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
@@ -64,12 +61,12 @@ templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
 		@body() {
 			@nav(signedIn)
 			<main class="width-wrap">
-				<h1>Gooal</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}
 				@child
 			</main>
+			@footer()
 		}
 	}
 }
@@ -79,7 +76,6 @@ templ BaseBody(flashes views.Flashes, child templ.Component) {
 		@head()
 		@body() {
 			<main class="width-wrap">
-				<h1>Gooal</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}

@@ -1,57 +1,56 @@
-.grid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
-main section{
-    border: 2px solid red;
+main section {
 }
 
-.draggable-input{
-    padding: 1rem;
-    border: 1px solid #ececec;
-    margin-bottom: 1rem;
-    cursor: move;
-    display: flex;
-    background-color: #ececec;
+.draggable-input {
+  padding: 1rem;
+  border: 1px solid #ececec;
+  margin-bottom: 1rem;
+  cursor: move;
+  display: flex;
+  background-color: #ececec;
 }
 
-.sortable-grid{
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
+.sortable-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
 }
 
-aside{
-    border: 1px solid blue;
+aside {
+  border: 1px solid blue;
 }
 
-.form-group .input-wrapper{
-    display: flex;
-    align-items: center;
+.form-group .input-wrapper {
+  display: flex;
+  align-items: center;
 }
 
-.edit-options{
-    margin-left: 10px;
-    cursor: pointer;
-    color: blue;
+.edit-options {
+  margin-left: 10px;
+  cursor: pointer;
+  color: blue;
 }
 
-.options-container{
-    display: none;
-    margin-top: 10px;
+.options-container {
+  display: none;
+  margin-top: 10px;
 }
 
-.options-container.visible{
-    display: block;
+.options-container.visible {
+  display: block;
 }
 
-.options-container input[type="text"]{
-    display: block;
-    margin-bottom: 5px;
+.options-container input[type="text"] {
+  display: block;
+  margin-bottom: 5px;
 }
 
-.right-section{
+.right-section {
   min-height: 500px;
 }

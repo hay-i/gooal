@@ -1,0 +1,36 @@
+.header {
+  &__inside {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--clr-primary);
+  }
+
+  &__logo {
+    width: 150px;
+  }
+
+  &__nav {
+    a {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      text-decoration: none;
+      color: var(--clr-tertiary);
+
+      &:not(:last-of-type) {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+a {
+  transition: 150ms;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}

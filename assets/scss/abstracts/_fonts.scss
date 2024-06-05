@@ -1,1 +1,17 @@
-//Fonts to go here
+@font-face {
+  font-family: "Satoshi-Bold";
+  font-weight: 600;
+  src: url("/static/fonts/Satoshi-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Satoshi-Medium";
+  font-weight: 400;
+  src: url("/static/fonts/Satoshi-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Synonym-Regular";
+  font-weight: 300;
+  src: url("/static/fonts/Synonym-Regular.otf") format("opentype");
+}
