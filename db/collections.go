@@ -13,6 +13,7 @@ func createCollections(ctx context.Context, database *mongo.Database) {
 	createAnswersCollection(ctx, database)
 }
 
+// TODO: Currently unused
 func createAnswersCollection(ctx context.Context, database *mongo.Database) {
 	collections, err := database.ListCollectionNames(ctx, bson.M{"name": "answers"})
 
@@ -73,10 +74,6 @@ func createTemplateCollection(ctx context.Context, database *mongo.Database) {
 			"description": bson.M{
 				"bsonType":    "string",
 				"description": "description of the template, which is required",
-			},
-			"default": bson.M{
-				"bsonType":    "bool",
-				"description": "whether the template is a default seeded template",
 			},
 			"created_at": bson.M{
 				"bsonType":    "date",

@@ -1,5 +1,7 @@
 package models
 
+// TODO: Currently unused
+
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

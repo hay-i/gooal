@@ -15,14 +15,9 @@ func Initialize(ctx context.Context) (*mongo.Client, error) {
 		panic(err)
 	}
 
-	database := client.Database("chronologger")
+	database := client.Database("gooal")
 
 	createCollections(ctx, database)
 
 	return client, err
-}
-
-func Seed(ctx context.Context, database *mongo.Database) {
-	seedTemplates(ctx, database)
-	seedAnswers(ctx, database)
 }

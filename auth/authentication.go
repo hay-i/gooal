@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/hay-i/chronologger/models"
+	"github.com/hay-i/gooal/models"
 	"github.com/labstack/echo/v4"
 )
 
 // TODO: Move Secret to ENV
-// https://github.com/hay-i/chronologger/issues/35
+// https://github.com/hay-i/gooal/issues/35
 var SecretKey = "my_secret"
 
 func SignToken(user models.User) (time.Time, string, error) {
@@ -32,7 +32,7 @@ func SetCookie(signedToken string, expiry time.Time, c echo.Context) {
 	cookie.Value = signedToken
 	cookie.Expires = expiry
 	cookie.HttpOnly = true // Make the cookie inaccessible to JavaScript running in the browser
-	// https://github.com/hay-i/chronologger/issues/35
+	// https://github.com/hay-i/gooal/issues/35
 	// cookie.Secure = true
 	c.SetCookie(cookie)
 }

@@ -7,15 +7,20 @@ import (
 templ StepOne() {
 	<div id="questionnaire-wrapper">
 		<h1>Get Started with tracking your goals: Step one</h1>
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary")
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary")
-		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=fitness", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Fitness", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=finance", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Financial", "primary")
+		@button(templ.Attributes{"hx-get": "/questionnaire/step-two?goal=career", "hx-swap": "outerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, "Career", "primary")
 	</div>
 }
 
 templ StepTwo(goal string, nextOptions []string) {
-	<h1>Step two</h1>
-	for _, option := range nextOptions {
-		@button(templ.Attributes{"hx-get": fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option), "hx-swap": "innerHTML", "hx-target": "#questionnaire-wrapper", "hx-push-url": "true"}, option, "primary")
-	}
+	<div id="questionnaire-wrapper">
+		<h1>Step two</h1>
+		for _, option := range nextOptions {
+			// The last step should be a link to the builder, not a hx-swap.
+			<a href={ templ.SafeURL(fmt.Sprintf("/templates/build?goal=%s&focus=%s", goal, option)) }>
+				@button(templ.Attributes{}, option, "primary")
+			</a>
+		}
+	</div>
 }

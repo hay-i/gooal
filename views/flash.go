@@ -19,7 +19,7 @@ const (
 )
 
 // TODO: Move Secret to ENV
-// https://github.com/hay-i/chronologger/issues/35
+// https://github.com/hay-i/gooal/issues/35
 var SessionStore = sessions.NewCookieStore([]byte("secret"))
 
 func getSession(w http.ResponseWriter, r *http.Request) *sessions.Session {
