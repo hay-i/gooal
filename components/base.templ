@@ -6,16 +6,6 @@ import (
 	"github.com/hay-i/gooal/views"
 )
 
-css btn() {
-	display: inline-block;
-	border: 0;
-	background-color: #00FF00;
-	border-radius: 999px;
-	padding: 1rem 2rem;
-	transition: 150ms;
-	cursor: pointer;
-}
-
 templ base() {
 	<!DOCTYPE html>
 	<html lang="en">
@@ -71,7 +61,6 @@ templ PageBase(flashes views.Flashes, signedIn bool, child templ.Component) {
 		@body() {
 			@nav(signedIn)
 			<main class="width-wrap">
-				<h1>Gooal</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}
@@ -87,7 +76,6 @@ templ BaseBody(flashes views.Flashes, child templ.Component) {
 		@head()
 		@body() {
 			<main class="width-wrap">
-				<h1>Gooal</h1>
 				for flashType, flash := range flashes {
 					@FlashMessage(flashType, flash)
 				}
