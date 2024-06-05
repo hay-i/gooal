@@ -11,7 +11,6 @@ import (
 	"github.com/hay-i/gooal/components"
 	"github.com/hay-i/gooal/db"
 	"github.com/hay-i/gooal/formparser"
-	"github.com/hay-i/gooal/logger"
 	"github.com/hay-i/gooal/models"
 	"github.com/hay-i/gooal/views"
 
@@ -89,7 +88,6 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 
 func Delete() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		logger.LogInfo("Delete")
 		return renderNoBase(c, components.Delete())
 	}
 }
