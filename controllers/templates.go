@@ -9,6 +9,7 @@ import (
 	"github.com/hay-i/chronologger/auth"
 	"github.com/hay-i/chronologger/components"
 	"github.com/hay-i/chronologger/db"
+	"github.com/hay-i/chronologger/formparser"
 	"github.com/hay-i/chronologger/logger"
 	"github.com/hay-i/chronologger/models"
 	"github.com/hay-i/chronologger/views"
@@ -187,7 +188,7 @@ func Save(database *mongo.Database, client *mongo.Client, ctx context.Context) e
 			logger.LogInfo("Key: %s, Value: %s", key, values[0])
 		}
 
-		db.SaveTemplate(database, ctx, formValues)
+		db.SaveTemplate(database, ctx, formparser.TemplateFromForm(formValues))
 
 		return renderNoBase(c, components.Save())
 	}

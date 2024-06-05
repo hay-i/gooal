@@ -19,14 +19,13 @@ const (
 )
 
 type Question struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty"`
-	Title       string             `bson:"title"`
-	Description string             `bson:"description,omitempty"`
-	Type        QuestionType       `bson:"type"`
-	Options     []string           `bson:"options,omitempty"`
-	Min         int                `bson:"min,omitempty"`
-	Max         int                `bson:"max,omitempty"`
-	Order       int                `bson:"order"`
+	ID      primitive.ObjectID `bson:"_id,omitempty"`
+	Label   string             `bson:"label"`
+	Type    QuestionType       `bson:"type"`
+	Options []string           `bson:"options,omitempty"`
+	Min     int                `bson:"min,omitempty"`
+	Max     int                `bson:"max,omitempty"`
+	Order   int                `bson:"order"`
 }
 
 type Template struct {
@@ -34,7 +33,6 @@ type Template struct {
 	Title       string             `bson:"title"`
 	Description string             `bson:"description"`
 	CreatedAt   time.Time          `bson:"created_at"`
-	Default     bool               `bson:"default,omitempty"`
 	Username    string             `bson:"username"`
 	Questions   []Question         `bson:"questions,omitempty"`
 }
