@@ -1,3 +1,5 @@
+<img src="assets/svg/logo.svg" width="128"/>
+
 # Gooal
 [![GO Test](https://github.com/hay-i/gooal/actions/workflows/go-test.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/go-test.yml/badge.svg)
 [![GO Formatting](https://github.com/hay-i/gooal/actions/workflows/go-format.yml/badge.svg)](https://github.com/hay-i/gooal/actions/workflows/go-format.yml/badge.svg)
