@@ -18,24 +18,21 @@ css btn() {
 
 templ base() {
 	<!DOCTYPE html>
-	<html>
+	<html lang="en">
 		{ children... }
 	</html>
 }
 
 templ head() {
 	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		<link rel="stylesheet" href="/static/scss/styles.css"/>
 		<script src="/static/js/main.js"></script>
 		<script src="/static/js/htmx.min.js"></script>
 		<script src="/static/js/htmx-class-tools.js"></script>
 		<title>Chronologger</title>
 	</head>
-	<style>
-        .btn:hover {
-            background-color: #00CC00;
-        }
-    </style>
 }
 
 templ body() {
