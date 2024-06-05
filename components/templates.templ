@@ -43,33 +43,33 @@ templ Build(goal, aim, username string) {
 	</div>
 }
 
-templ Builder(inputType models.QuestionType, id string) {
+templ Builder(inputType models.QuestionType, id, order string) {
 	switch inputType {
 		case models.TextQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("text-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("text-%s", id) } name={ fmt.Sprintf("text-%s", id) } placeholder="Text input"/>
+				<label hidden for={ fmt.Sprintf("text-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("text-%s-%s", id, order) } name={ fmt.Sprintf("text-%s-%s", id, order) } placeholder="Text input"/>
 				<input disabled="disabled" type="text"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.NumberQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("number-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("number-%s", id) } name={ fmt.Sprintf("number-%s", id) } placeholder="Number input"/>
+				<label hidden for={ fmt.Sprintf("number-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("number-%s-%s", id, order) } name={ fmt.Sprintf("number-%s-%s", id, order) } placeholder="Number input"/>
 				<input disabled="disabled" type="number"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.RangeQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("range-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("range-%s", id) } name={ fmt.Sprintf("range-%s", id) } placeholder="Range input"/>
+				<label hidden for={ fmt.Sprintf("range-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("range-%s-%s", id, order) } name={ fmt.Sprintf("range-%s-%s", id, order) } placeholder="Range input"/>
 				<input disabled="disabled" type="range"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.SelectQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("select-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("select-%s", id) } name={ fmt.Sprintf("select-%s", id) } placeholder="Select input"/>
+				<label hidden for={ fmt.Sprintf("select-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("select-%s-%s", id, order) } name={ fmt.Sprintf("select-%s-%s", id, order) } placeholder="Select input"/>
 				<select>
 					<option disabled="disabled">Option 1</option>
 					<option disabled="disabled">Option 2</option>
@@ -79,22 +79,22 @@ templ Builder(inputType models.QuestionType, id string) {
 			</div>
 		case models.RadioQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("radio-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("radio-%s", id) } name={ fmt.Sprintf("radio-%s", id) } placeholder="Radio input"/>
+				<label hidden for={ fmt.Sprintf("radio-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("radio-%s-%s", id, order) } name={ fmt.Sprintf("radio-%s-%s", id, order) } placeholder="Radio input"/>
 				<input type="radio" disabled="disabled"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.TextAreaQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("textarea-%s", id) }></label>
-				<input id={ fmt.Sprintf("textarea-%s", id) } name={ fmt.Sprintf("textarea-%s", id) } placeholder="Text area"/>
+				<label hidden for={ fmt.Sprintf("textarea-%s-%s", id, order) }></label>
+				<input id={ fmt.Sprintf("textarea-%s-%s", id, order) } name={ fmt.Sprintf("textarea-%s-%s", id, order) } placeholder="Text area"/>
 				<textarea disabled="disabled"></textarea>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.CheckboxQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("checkbox-%s", id) }></label>
-				<input type="text" id={ fmt.Sprintf("checkbox-%s", id) } name={ fmt.Sprintf("checkbox-%s", id) } placeholder="Checkbox"/>
+				<label hidden for={ fmt.Sprintf("checkbox-%s-%s", id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("checkbox-%s-%s", id, order) } name={ fmt.Sprintf("checkbox-%s-%s", id, order) } placeholder="Checkbox"/>
 				<fieldset>
 					<input type="checkbox" disabled="disabled"/>
 					<label>Option 1</label>

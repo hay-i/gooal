@@ -17,12 +17,42 @@ document.addEventListener("DOMContentLoaded", function () {
     },
     animation: 150,
     ghostClass: "blue-background-class",
+    onEnd: async (evt) => {
+      const itemEl = evt.item;
+      var newOrder = 1;
+      if (itemEl.previousSibling) {
+        newOrder =
+          parseInt(
+            itemEl.previousSibling.querySelector("input").id.split("-")[2],
+          ) + 1;
+      }
+      const label = itemEl.querySelector("label");
+      const input = itemEl.querySelector("input");
+
+      const currentInputValues = input.id.split("-");
+
+      // TODO: For some reason these aren't applying
+      const newFormValue = `${currentInputValues[0]}-${currentInputValues[1]}-${newOrder}`;
+      input.id = newFormValue;
+      input.name = newFormValue;
+      label.htmlFor = newFormValue;
+      updateSubsequentOrderItems(itemEl, newOrder);
+    },
     onAdd: async (evt) => {
       const itemEl = evt.item;
+      var newOrder = 1;
+      if (itemEl.previousSibling) {
+        newOrder =
+          parseInt(
+            itemEl.previousSibling.querySelector("input").id.split("-")[2],
+          ) + 1;
+      }
+      updateSubsequentOrderItems(itemEl, newOrder);
+
       const inputType = itemEl.getAttribute("data-type");
       // Hacky way to get the response to render without `Base` page
       const response = await fetch(
-        `/templates/builder?inputType=${inputType}`,
+        `/templates/builder?inputType=${inputType}&order=${newOrder}`,
         { headers: { "HX-Request": "true" } },
       );
       const formGroupHtml = await response.text();
@@ -46,3 +76,33 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   });
 });
+
+// TODO: Maybe this should be done directly with HTMX
+// but it seems like overkill to return the whole form again every time
+function updateSubsequentOrderItems(itemEl, order) {
+  var newOrder = order;
+  if (!itemEl.parentElement) return;
+  console.log(newOrder);
+
+  const elementsInQuestion = itemEl.parentElement.children;
+  for (let i = 0; i < elementsInQuestion.length; i++) {
+    const element = elementsInQuestion[i];
+
+    if (!element.querySelector("input") || !element.querySelector("label")) {
+      continue;
+    }
+
+    const label = element.querySelector("label");
+    const input = element.querySelector("input");
+
+    const currentInputValues = input.id.split("-");
+
+    if (parseInt(currentInputValues[2]) >= newOrder) {
+      const newFormValue = `${currentInputValues[0]}-${currentInputValues[1]}-${parseInt(currentInputValues[2]) + 1}`;
+      input.id = newFormValue;
+      input.name = newFormValue;
+      label.htmlFor = newFormValue;
+      newOrder++;
+    }
+  }
+}

@@ -58,9 +58,10 @@ func Builder() echo.HandlerFunc {
 
 		var inputType models.QuestionType
 		inputType = models.QuestionType(c.QueryParam("inputType"))
+		order := c.QueryParam("order")
 
 		objectId := primitive.NewObjectID()
-		component := components.Builder(inputType, objectId.Hex())
+		component := components.Builder(inputType, objectId.Hex(), order)
 
 		return renderNoBase(c, component)
 	}

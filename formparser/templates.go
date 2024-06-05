@@ -2,6 +2,7 @@ package formparser
 
 import (
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -27,7 +28,12 @@ func TemplateFromForm(formValues url.Values) models.Template {
 	for key, value := range formValues {
 		inputLabel := value[0]
 		splitKey := strings.Split(key, "-")
-		inputType, id := splitKey[0], splitKey[1]
+		inputType, id, order := splitKey[0], splitKey[1], splitKey[2]
+
+		orderInt, err := strconv.Atoi(order)
+		if err != nil {
+			logger.LogError("Error:", err)
+		}
 
 		objectID, err := primitive.ObjectIDFromHex(id)
 		if err != nil {
@@ -38,6 +44,7 @@ func TemplateFromForm(formValues url.Values) models.Template {
 			ID:    objectID,
 			Label: inputLabel,
 			Type:  models.QuestionType(inputType),
+			Order: orderInt,
 		})
 	}
 
