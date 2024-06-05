@@ -2,13 +2,33 @@ package components
 
 templ Splash() {
 	<section class="splash">
-		<h1 class="splash__title">Map your journey,<br/>Measure your success.</h1>
-		@anchorButton(
-			templ.Attributes{"href": "/questionnaire/step-one"},
-			"Get Started",
-			primary,
-		)
+		<div class="splash__top">
+			<img src="/static/svg/splash-bg.svg" role="presentation" class="splash__bg"/>
+			<h1 class="splash__title">Map your journey,<br/>Measure your success.</h1>
+			@anchorButton(
+				templ.Attributes{"href": "/questionnaire/step-one"},
+				"Get Started",
+				primary,
+			)
+		</div>
+		<div class="splash__fake-cards-container">
+			@FakeCard()
+			@FakeCard()
+			@FakeCard()
+			@FakeCard()
+		</div>
 	</section>
+}
+
+templ FakeCard() {
+	<div class="fake-card">
+		<h2 class="fake-card__title">Whats your goal?</h2>
+		<ul>
+			<li class="fake-card__btn">Sports</li>
+			<li class="fake-card__btn">Financial</li>
+			<li class="fake-card__btn">Social</li>
+		</ul>
+	</div>
 }
 
 templ Home() {
