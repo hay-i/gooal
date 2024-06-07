@@ -93,6 +93,36 @@ func DeleteInput() echo.HandlerFunc {
 	}
 }
 
+func CompleteTemplate(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		template := db.GetTemplate(ctx, database, id)
+		questionViews := make([]models.QuestionView, len(template.Questions))
+		for _, question := range template.Questions {
+			questionView := models.QuestionView{
+				ID:      question.ID,
+				Label:   question.Label,
+				Type:    question.Type,
+				Options: question.Options,
+				Min:     question.Min,
+				Max:     question.Max,
+				Order:   question.Order,
+			}
+			questionViews = append(questionViews, questionView)
+		}
+
+		sort.Slice(questionViews, func(i, j int) bool {
+			return questionViews[i].Order < questionViews[j].Order
+		})
+
+		return renderNoBase(c, components.Complete(template, questionViews))
+	}
+}
+
 func Complete(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
@@ -102,10 +132,41 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 
 		template := db.GetTemplate(ctx, database, id)
 
-		sort.Slice(template.Questions, func(i, j int) bool {
-			return template.Questions[i].Order < template.Questions[j].Order
+		if err := c.Request().ParseForm(); err != nil {
+			return err
+		}
+
+		formValues, err := c.FormParams()
+		if err != nil {
+			return err
+		}
+
+		questionViews := make([]models.QuestionView, len(template.Questions))
+
+		for _, question := range template.Questions {
+			val := formValues.Get(question.ID.Hex())
+			questionView := models.QuestionView{
+				ID:      question.ID,
+				Label:   question.Label,
+				Type:    question.Type,
+				Options: question.Options,
+				Min:     question.Min,
+				Max:     question.Max,
+				Order:   question.Order,
+				Value:   val,
+			}
+
+			if val == "" {
+				questionView.Error = "This field is required."
+			}
+
+			questionViews = append(questionViews, questionView)
+		}
+
+		sort.Slice(questionViews, func(i, j int) bool {
+			return questionViews[i].Order < questionViews[j].Order
 		})
 
-		return renderNoBase(c, components.Complete(template))
+		return renderNoBase(c, components.Complete(template, questionViews))
 	}
 }

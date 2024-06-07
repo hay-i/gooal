@@ -106,14 +106,16 @@ templ TemplateBuilderInput(inputType models.QuestionType, id, order string) {
 	}
 }
 
-templ completeTemplateInput(question models.Question) {
+templ completeTemplateInput(question models.QuestionView) {
 	<div class="form-group">
 		<label for={ question.ID.Hex() }>{ question.Label }</label>
 		switch question.Type {
 			case models.TextQuestion:
-				@input(templ.Attributes{"type": "text", "id": question.ID.Hex(), "name": question.ID.Hex(), "placeholder": "My answer is..."})
+				@input(templ.Attributes{"type": "text", "id": question.ID.Hex(), "name": question.ID.Hex(), "value": question.Value, "placeholder": "My answer is..."})
 			case models.TextAreaQuestion:
-				@textArea(templ.Attributes{"id": question.ID.Hex(), "name": question.ID.Hex(), "placeholder": "I did this"})
+				@textArea(templ.Attributes{"id": question.ID.Hex(), "name": question.ID.Hex(), "placeholder": "I did this"}) {
+					{ question.Value }
+				}
 			case models.NumberQuestion:
 				<input type="number" min="0" max="100" id={ question.ID.Hex() } name={ question.ID.Hex() } placeholder="Number input"/>
 			case models.RangeQuestion:
@@ -134,6 +136,9 @@ templ completeTemplateInput(question models.Question) {
 					<label>Option 2</label>
 				</fieldset>
 		}
+		if question.Error != "" {
+			<span>{ question.Error }</span>
+		}
 	</div>
 }
 
@@ -144,10 +149,14 @@ templ Save() {
 templ DeleteInput() {
 }
 
-templ Complete(template models.Template) {
-	<h1>{ template.Title }</h1>
-	<h2>{ template.Description }</h2>
-	for _, question := range template.Questions {
-		@completeTemplateInput(question)
-	}
+templ Complete(template models.Template, questionViews []models.QuestionView) {
+	<div id="template-form">
+		<h1>{ template.Title }</h1>
+		<h2>{ template.Description }</h2>
+		@form(templ.Attributes{"hx-post": fmt.Sprintf("/templates/%s/complete", template.ID.Hex()), "hx-swap": "outerHTML", "hx-target": "#template-form"}) {
+			for _, question := range questionViews {
+				@completeTemplateInput(question)
+			}
+		}
+	</div>
 }

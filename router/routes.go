@@ -41,7 +41,8 @@ func Initialize(client *mongo.Client) *echo.Echo {
 	templates.DELETE("/delete-input", controllers.DeleteInput())
 	templates.POST("/save", controllers.Save(database, client))
 
-	templates.GET("/:id/complete", controllers.Complete(database))
+	templates.GET("/:id/complete", controllers.CompleteTemplate(database))
+	templates.POST("/:id/complete", controllers.Complete(database))
 
 	return e
 }

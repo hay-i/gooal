@@ -16,5 +16,7 @@ templ input(attrs templ.Attributes) {
 }
 
 templ textArea(attrs templ.Attributes) {
-	<textarea { attrs... } class=""></textarea>
+	<textarea { attrs... } class="">
+		{ children... }
+	</textarea>
 }
