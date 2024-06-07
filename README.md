@@ -13,6 +13,8 @@ Gooal is a personal review app, built with Golang.
 
 # Development
 
+Note: You can see a full list of the [development documentation here](./docs/dev.md).
+
 You can get up and running using `make`, use `make help` to see a list of options.
 
 ## Installation
