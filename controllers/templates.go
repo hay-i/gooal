@@ -49,7 +49,7 @@ func Build() echo.HandlerFunc {
 	}
 }
 
-func Builder() echo.HandlerFunc {
+func Input() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -60,7 +60,7 @@ func Builder() echo.HandlerFunc {
 		order := c.QueryParam("order")
 
 		objectId := primitive.NewObjectID()
-		component := components.Builder(inputType, objectId.Hex(), order)
+		component := components.DetermineInput(inputType, objectId.Hex(), order)
 
 		return renderNoBase(c, component)
 	}
@@ -86,8 +86,8 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	}
 }
 
-func Delete() echo.HandlerFunc {
+func DeleteInput() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return renderNoBase(c, components.Delete())
+		return renderNoBase(c, components.DeleteInput())
 	}
 }

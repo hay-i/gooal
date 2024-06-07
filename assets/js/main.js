@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const inputType = itemEl.getAttribute("data-type");
       // Hacky way to get the response to render without `Base` page
       const response = await fetch(
-        `/templates/builder?inputType=${inputType}&order=${evt.newDraggableIndex}`,
+        `/templates/get-input?inputType=${inputType}&order=${evt.newDraggableIndex}`,
         { headers: { "HX-Request": "true" } },
       );
       const formGroupHtml = await response.text();
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
       itemEl
         .querySelector("[data-delete-row='true']")
         .addEventListener("click", async function () {
-          const deletionResponse = await fetch("/templates/questions/delete", {
+          const deletionResponse = await fetch("/templates/delete-input", {
             method: "DELETE",
             headers: { "HX-Request": "true" },
           });

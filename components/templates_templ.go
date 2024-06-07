@@ -97,7 +97,7 @@ func Build(goal, aim, username string) templ.Component {
 	})
 }
 
-func Builder(inputType models.QuestionType, id, order string) templ.Component {
+func DetermineInput(inputType models.QuestionType, id, order string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -346,7 +346,7 @@ func Save() templ.Component {
 	})
 }
 
-func Delete() templ.Component {
+func DeleteInput() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

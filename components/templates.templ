@@ -43,7 +43,7 @@ templ Build(goal, aim, username string) {
 	</div>
 }
 
-templ Builder(inputType models.QuestionType, id, order string) {
+templ DetermineInput(inputType models.QuestionType, id, order string) {
 	switch inputType {
 		case models.TextQuestion:
 			<div class="form-group">
@@ -110,5 +110,5 @@ templ Save() {
 	<h1>Template saved!</h1>
 }
 
-templ Delete() {
+templ DeleteInput() {
 }

@@ -37,9 +37,9 @@ func Initialize(client *mongo.Client) *echo.Echo {
 
 	templates := e.Group("/templates")
 	templates.GET("/build", controllers.Build())
-	templates.GET("/builder", controllers.Builder())
+	templates.GET("/get-input", controllers.Input())
+	templates.DELETE("/delete-input", controllers.DeleteInput())
 	templates.POST("/save", controllers.Save(database, client))
-	templates.DELETE("/questions/delete", controllers.Delete())
 
 	return e
 }
