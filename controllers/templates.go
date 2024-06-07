@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"sort"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -60,7 +61,7 @@ func Input() echo.HandlerFunc {
 		order := c.QueryParam("order")
 
 		objectId := primitive.NewObjectID()
-		component := components.DetermineInput(inputType, objectId.Hex(), order)
+		component := components.TemplateBuilderInput(inputType, objectId.Hex(), order)
 
 		return renderNoBase(c, component)
 	}
@@ -89,5 +90,22 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 func DeleteInput() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return renderNoBase(c, components.DeleteInput())
+	}
+}
+
+func Complete(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		template := db.GetTemplate(ctx, database, id)
+
+		sort.Slice(template.Questions, func(i, j int) bool {
+			return template.Questions[i].Order < template.Questions[j].Order
+		})
+
+		return renderNoBase(c, components.Complete(template))
 	}
 }
