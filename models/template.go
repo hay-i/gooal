@@ -29,15 +29,9 @@ type Question struct {
 }
 
 type QuestionView struct {
-	ID      primitive.ObjectID `bson:"_id,omitempty"`
-	Label   string             `bson:"label"`
-	Type    QuestionType       `bson:"type"`
-	Options []string           `bson:"options,omitempty"`
-	Min     int                `bson:"min,omitempty"`
-	Max     int                `bson:"max,omitempty"`
-	Order   int                `bson:"order"`
-	Error   string             `bson:"error,omitempty"`
-	Value   string             `bson:"value,omitempty"`
+	Question
+	Error string `bson:"error,omitempty"`
+	Value string `bson:"value,omitempty"`
 }
 
 type Template struct {

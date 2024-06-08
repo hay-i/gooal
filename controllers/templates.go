@@ -103,15 +103,7 @@ func CompleteTemplate(database *mongo.Database) echo.HandlerFunc {
 		template := db.GetTemplate(ctx, database, id)
 		questionViews := make([]models.QuestionView, len(template.Questions))
 		for _, question := range template.Questions {
-			questionView := models.QuestionView{
-				ID:      question.ID,
-				Label:   question.Label,
-				Type:    question.Type,
-				Options: question.Options,
-				Min:     question.Min,
-				Max:     question.Max,
-				Order:   question.Order,
-			}
+			questionView := models.QuestionView{Question: question}
 			questionViews = append(questionViews, questionView)
 		}
 
@@ -145,16 +137,7 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 
 		for _, question := range template.Questions {
 			val := formValues.Get(question.ID.Hex())
-			questionView := models.QuestionView{
-				ID:      question.ID,
-				Label:   question.Label,
-				Type:    question.Type,
-				Options: question.Options,
-				Min:     question.Min,
-				Max:     question.Max,
-				Order:   question.Order,
-				Value:   val,
-			}
+			questionView := models.QuestionView{Question: question, Value: val}
 
 			if val == "" {
 				questionView.Error = "This field is required."

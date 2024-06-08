@@ -108,18 +108,18 @@ templ TemplateBuilderInput(inputType models.QuestionType, id, order string) {
 
 templ completeTemplateInput(question models.QuestionView) {
 	<div class="form-group">
-		<label for={ question.ID.Hex() }>{ question.Label }</label>
-		switch question.Type {
+		<label for={ question.Question.ID.Hex() }>{ question.Label }</label>
+		switch question.Question.Type {
 			case models.TextQuestion:
-				@input(templ.Attributes{"type": "text", "id": question.ID.Hex(), "name": question.ID.Hex(), "value": question.Value, "placeholder": "My answer is..."})
+				@input(templ.Attributes{"type": "text", "id": question.Question.ID.Hex(), "name": question.Question.ID.Hex(), "value": question.Value, "placeholder": "My answer is..."})
 			case models.TextAreaQuestion:
-				@textArea(templ.Attributes{"id": question.ID.Hex(), "name": question.ID.Hex(), "placeholder": "I did this"}) {
+				@textArea(templ.Attributes{"id": question.Question.ID.Hex(), "name": question.Question.ID.Hex(), "placeholder": "I did this"}) {
 					{ question.Value }
 				}
 			case models.NumberQuestion:
-				<input type="number" min="0" max="100" id={ question.ID.Hex() } name={ question.ID.Hex() } placeholder="Number input"/>
+				<input type="number" min="0" max="100" id={ question.Question.ID.Hex() } name={ question.Question.ID.Hex() } placeholder="Number input"/>
 			case models.RangeQuestion:
-				<input type="range" min="0" max="100" id={ question.ID.Hex() } name={ question.ID.Hex() } placeholder="Range input"/>
+				<input type="range" min="0" max="100" id={ question.Question.ID.Hex() } name={ question.Question.ID.Hex() } placeholder="Range input"/>
 			case models.SelectQuestion:
 				<select>
 					<option>Option 1</option>
@@ -127,7 +127,7 @@ templ completeTemplateInput(question models.QuestionView) {
 					<option>Option 3</option>
 				</select>
 			case models.RadioQuestion:
-				<input type="radio" id={ fmt.Sprintf("%s-%s", question.ID.Hex(), question.ID.Hex()) } name={ fmt.Sprintf("%s-%s", question.ID.Hex(), question.ID.Hex()) } placeholder="Radio input"/>
+				<input type="radio" id={ fmt.Sprintf("%s-%s", question.Question.ID.Hex(), question.Question.ID.Hex()) } name={ fmt.Sprintf("%s-%s", question.Question.ID.Hex(), question.Question.ID.Hex()) } placeholder="Radio input"/>
 			case models.CheckboxQuestion:
 				<fieldset>
 					<input type="checkbox"/>
