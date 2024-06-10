@@ -8,11 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type QuestionAnswer struct {
-	QuestionID primitive.ObjectID `bson:"question_id"`
-	Answer     string             `bson:"answer"`
-}
-
 type Answer struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty"`
 	TemplateID      primitive.ObjectID `bson:"template_id"`
@@ -22,19 +17,10 @@ type Answer struct {
 }
 
 func (a Answer) FromForm(templateID primitive.ObjectID, username string, questionViews []QuestionView) Answer {
-	questionAnswers := make([]QuestionAnswer, len(questionViews))
-
-	for i, q := range questionViews {
-		questionAnswers[i] = QuestionAnswer{
-			QuestionID: q.ID,
-			Answer:     q.Value,
-		}
-	}
-
 	a.TemplateID = templateID
 	a.Username = username
 	a.CreatedAt = time.Now()
-	a.QuestionAnswers = questionAnswers
+	a.QuestionAnswers = QuestionAnswersFromForm(questionViews)
 
 	return a
 }
