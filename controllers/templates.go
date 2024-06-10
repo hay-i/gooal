@@ -1,9 +1,7 @@
 package controllers
 
 import (
-	"context"
 	"sort"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -69,9 +67,6 @@ func Input() echo.HandlerFunc {
 
 func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-
 		if err := c.Request().ParseForm(); err != nil {
 			return err
 		}
@@ -81,7 +76,7 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			return err
 		}
 
-		db.SaveTemplate(database, ctx, formparser.TemplateFromForm(formValues))
+		db.SaveTemplate(database, formparser.TemplateFromForm(formValues))
 
 		return renderNoBase(c, components.Save())
 	}
