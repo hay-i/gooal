@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/hay-i/gooal/auth"
@@ -30,20 +31,20 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 		if err != nil {
 			views.AddFlash(c, "Error while registering", views.FlashError)
 
-			return redirect(c, "/register")
+			return c.Redirect(http.StatusSeeOther, "/register")
 		}
 
 		expiry, signedToken, err := auth.SignToken(user)
 		if err != nil {
 			views.AddFlash(c, "Error while registering", views.FlashError)
 
-			return redirect(c, "/register")
+			return c.Redirect(http.StatusSeeOther, "/register")
 		}
 
 		auth.SetCookie(signedToken, expiry, c)
 		views.AddFlash(c, "You have successfully registered", views.FlashSuccess)
 
-		return redirect(c, "/")
+		return c.Redirect(http.StatusSeeOther, "/")
 	}
 }
 
@@ -61,27 +62,27 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 		if err != nil {
 			views.AddFlash(c, "Invalid username or password", views.FlashError)
 
-			return redirect(c, "/login")
+			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 		if err != nil {
 			views.AddFlash(c, "Invalid username or password", views.FlashError)
 
-			return redirect(c, "/login")
+			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 
 		expirationTime, signedToken, err := auth.SignToken(user)
 		if err != nil {
 			views.AddFlash(c, "Error while logging in", views.FlashError)
 
-			return redirect(c, "/login")
+			return c.Redirect(http.StatusSeeOther, "/login")
 		}
 
 		auth.SetCookie(signedToken, expirationTime, c)
 		views.AddFlash(c, "You have successfully logged in", views.FlashSuccess)
 
-		return redirect(c, "/")
+		return c.Redirect(http.StatusSeeOther, "/")
 	}
 }
 
@@ -107,30 +108,24 @@ func Logout() echo.HandlerFunc {
 
 		views.AddFlash(c, "You have successfully logged out", views.FlashSuccess)
 
-		return redirect(c, "/")
+		return c.Redirect(http.StatusSeeOther, "/")
 	}
 }
 
 func Profile() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		cookie, err := c.Cookie("token")
+		tokenString, err := auth.GetTokenFromCookie(c)
 		if err != nil {
-			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
-
-			return redirect(c, "/login")
+			return auth.HandleInvalidToken(c, "You must be logged in to access that page")
 		}
-
-		tokenString := cookie.Value
 
 		parsedToken, err := auth.ParseToken(tokenString)
-
 		if err != nil {
-			views.AddFlash(c, "Invalid or expired token", views.FlashError)
-
-			return redirect(c, "/login")
+			return auth.HandleInvalidToken(c, "Invalid or expired token")
 		}
 
-		component := components.Profile(parsedToken["sub"].(string))
+		username := auth.TokenToUsername(parsedToken)
+		component := components.Profile(username)
 
 		return renderBase(c, component)
 	}
