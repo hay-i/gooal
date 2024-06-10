@@ -4,20 +4,18 @@ import (
 	"context"
 	"time"
 
-	"github.com/hay-i/gooal/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// TODO: Make this generic and then have a separate function for each type of model
-func GetTemplate(database *mongo.Database, id string) models.Template {
+func Get(database *mongo.Database, collectionName string, id string) interface{} {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	collection := database.Collection("templates")
+	collection := database.Collection(collectionName)
 
-	var result models.Template
+	var result interface{}
 	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {

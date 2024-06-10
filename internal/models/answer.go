@@ -3,7 +3,9 @@ package models
 import (
 	"time"
 
+	"github.com/hay-i/gooal/internal/db"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type QuestionAnswer struct {
@@ -35,4 +37,8 @@ func (a Answer) FromForm(templateID primitive.ObjectID, username string, questio
 	a.QuestionAnswers = questionAnswers
 
 	return a
+}
+
+func (a Answer) Save(database *mongo.Database) {
+	db.Save(database, "answers", a)
 }

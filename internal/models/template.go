@@ -7,8 +7,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/hay-i/gooal/internal/db"
 	"github.com/hay-i/gooal/pkg/logger"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type QuestionType string
@@ -86,6 +88,14 @@ func (t Template) FromForm(formValues url.Values) Template {
 	t.Questions = templatesQuestions
 
 	return t
+}
+
+func (t Template) Save(database *mongo.Database) {
+	db.Save(database, "templates", t)
+}
+
+func GetTemplate(database *mongo.Database, id string) Template {
+	return db.Get(database, "templates", id).(Template)
 }
 
 func SortQuestionsByOrder(qs []QuestionView) []QuestionView {

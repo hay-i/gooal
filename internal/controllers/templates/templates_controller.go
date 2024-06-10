@@ -7,7 +7,6 @@ import (
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
 	"github.com/hay-i/gooal/internal/controllers"
-	"github.com/hay-i/gooal/internal/db"
 	"github.com/hay-i/gooal/internal/formparser"
 	"github.com/hay-i/gooal/internal/models"
 
@@ -65,7 +64,7 @@ func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		}
 
 		// TODO: Add validations for template builder
-		db.SaveTemplate(database, models.Template{}.FromForm(formValues))
+		models.Template{}.FromForm(formValues).Save(database)
 
 		return controllers.RenderNoBase(c, components.Save("Template"))
 	}
@@ -81,7 +80,7 @@ func CompleteTemplateGET(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 
-		template := db.GetTemplate(database, id)
+		template := models.GetTemplate(database, id)
 
 		questionViews := models.QuestionsToView(template.Questions)
 
@@ -93,7 +92,7 @@ func CompletePOST(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 
-		template := db.GetTemplate(database, id)
+		template := models.GetTemplate(database, id)
 
 		questionViews := models.QuestionsToView(template.Questions)
 
@@ -119,7 +118,7 @@ func CompletePOST(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		username := auth.TokenToUsername(parsedToken)
-		db.SaveAnswer(database, models.Answer{}.FromForm(template.ID, username, questionViews))
+		models.Answer{}.FromForm(template.ID, username, questionViews).Save(database)
 
 		return controllers.RenderNoBase(c, components.Save("Response to template"))
 	}
