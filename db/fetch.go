@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/hay-i/gooal/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -9,7 +10,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GetTemplate(ctx context.Context, database *mongo.Database, id string) models.Template {
+func GetTemplate(database *mongo.Database, id string) models.Template {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
 	collection := database.Collection("templates")
 
 	var result models.Template

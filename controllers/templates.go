@@ -97,10 +97,7 @@ func CompleteTemplate(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-
-		template := db.GetTemplate(ctx, database, id)
+		template := db.GetTemplate(database, id)
 		questionViews := make([]models.QuestionView, len(template.Questions))
 		for _, question := range template.Questions {
 			questionView := models.QuestionView{Question: question}
@@ -119,10 +116,7 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-
-		template := db.GetTemplate(ctx, database, id)
+		template := db.GetTemplate(database, id)
 
 		if err := c.Request().ParseForm(); err != nil {
 			return err
