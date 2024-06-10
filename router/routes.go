@@ -35,11 +35,14 @@ func Initialize(client *mongo.Client) *echo.Echo {
 
 	e.GET("/", controllers.Home())
 
-	templates := e.Group("/templates")
+	templates := e.Group("/templates", controllers.JwtAuthenticationMiddleware)
 	templates.GET("/build", controllers.Build())
-	templates.GET("/builder", controllers.Builder())
+	templates.GET("/get-input", controllers.Input())
+	templates.DELETE("/delete-input", controllers.DeleteInput())
 	templates.POST("/save", controllers.Save(database, client))
-	templates.DELETE("/questions/delete", controllers.Delete())
+
+	templates.GET("/:id/complete", controllers.CompleteTemplate(database))
+	templates.POST("/:id/complete", controllers.Complete(database))
 
 	return e
 }

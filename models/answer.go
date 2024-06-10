@@ -1,26 +1,38 @@
 package models
 
-// TODO: Currently unused
-
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Answer struct {
-	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	TemplateID primitive.ObjectID `bson:"template_id"`
+type QuestionAnswer struct {
 	QuestionID primitive.ObjectID `bson:"question_id"`
 	Answer     string             `bson:"answer"`
 }
 
-func AnswersForQuestion(answers []Answer, questionID primitive.ObjectID) []Answer {
-	var result []Answer
+type Answer struct {
+	ID              primitive.ObjectID `bson:"_id,omitempty"`
+	TemplateID      primitive.ObjectID `bson:"template_id"`
+	Username        string             `bson:"username"`
+	CreatedAt       time.Time          `bson:"created_at"`
+	QuestionAnswers []QuestionAnswer   `bson:"questions,omitempty"`
+}
 
-	for _, answer := range answers {
-		if answer.QuestionID == questionID {
-			result = append(result, answer)
+func (a Answer) FromForm(templateID primitive.ObjectID, username string, questionViews []QuestionView) Answer {
+	questionAnswers := make([]QuestionAnswer, len(questionViews))
+
+	for i, q := range questionViews {
+		questionAnswers[i] = QuestionAnswer{
+			QuestionID: q.ID,
+			Answer:     q.Value,
 		}
 	}
 
-	return result
+	a.TemplateID = templateID
+	a.Username = username
+	a.CreatedAt = time.Now()
+	a.QuestionAnswers = questionAnswers
+
+	return a
 }

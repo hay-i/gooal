@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"net/http"
-
 	"github.com/a-h/templ"
 	"github.com/hay-i/gooal/auth"
 	"github.com/hay-i/gooal/components"
@@ -28,10 +26,4 @@ func renderBase(c echo.Context, component templ.Component) error {
 	base := components.PageBase(flashes, auth.IsLoggedIn(c), component)
 
 	return base.Render(c.Request().Context(), c.Response().Writer)
-}
-
-func redirect(c echo.Context, url string) error {
-	// Old note: I wanted to send in http.StatusCreated, but it seems that the redirect doesn't work with that status code
-	// See: https://github.com/labstack/echo/issues/229#issuecomment-1518502318
-	return c.Redirect(http.StatusSeeOther, url)
 }

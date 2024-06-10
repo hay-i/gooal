@@ -10,3 +10,13 @@ templ form(attrs templ.Attributes) {
 templ hiddenInput(name, value string) {
 	<input type="hidden" name={ name } value={ value }/>
 }
+
+templ input(attrs templ.Attributes) {
+	<input { attrs... } class=""/>
+}
+
+templ textArea(attrs templ.Attributes) {
+	<textarea { attrs... } class="">
+		{ children... }
+	</textarea>
+}

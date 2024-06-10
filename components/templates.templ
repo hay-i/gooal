@@ -43,33 +43,33 @@ templ Build(goal, aim, username string) {
 	</div>
 }
 
-templ Builder(inputType models.QuestionType, id, order string) {
+templ TemplateBuilderInput(inputType models.QuestionType, id, order string) {
 	switch inputType {
 		case models.TextQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("text-%s-%s", id, order) }></label>
-				<input type="text" id={ fmt.Sprintf("text-%s-%s", id, order) } name={ fmt.Sprintf("text-%s-%s", id, order) } placeholder="Text input"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.TextQuestion, id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("%s-%s-%s", models.TextQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.TextQuestion, id, order) } placeholder="Text input"/>
 				<input disabled="disabled" type="text"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.NumberQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("number-%s-%s", id, order) }></label>
-				<input type="text" id={ fmt.Sprintf("number-%s-%s", id, order) } name={ fmt.Sprintf("number-%s-%s", id, order) } placeholder="Number input"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.NumberQuestion, id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("%s-%s-%s", models.NumberQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.NumberQuestion, id, order) } placeholder="Number input"/>
 				<input disabled="disabled" type="number"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.RangeQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("range-%s-%s", id, order) }></label>
-				<input type="text" id={ fmt.Sprintf("range-%s-%s", id, order) } name={ fmt.Sprintf("range-%s-%s", id, order) } placeholder="Range input"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.RangeQuestion, id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("%s-%s-%s", models.RangeQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.RangeQuestion, id, order) } placeholder="Range input"/>
 				<input disabled="disabled" type="range"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.SelectQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("select-%s-%s", id, order) }></label>
-				<input type="text" id={ fmt.Sprintf("select-%s-%s", id, order) } name={ fmt.Sprintf("select-%s-%s", id, order) } placeholder="Select input"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.SelectQuestion, id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("%s-%s-%s", models.SelectQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.SelectQuestion, id, order) } placeholder="Select input"/>
 				<select>
 					<option disabled="disabled">Option 1</option>
 					<option disabled="disabled">Option 2</option>
@@ -79,22 +79,22 @@ templ Builder(inputType models.QuestionType, id, order string) {
 			</div>
 		case models.RadioQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("radio-%s-%s", id, order) }></label>
-				<input type="text" id={ fmt.Sprintf("radio-%s-%s", id, order) } name={ fmt.Sprintf("radio-%s-%s", id, order) } placeholder="Radio input"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.RadioQuestion, id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("%s-%s-%s", models.RadioQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.RadioQuestion, id, order) } placeholder="Radio input"/>
 				<input type="radio" disabled="disabled"/>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.TextAreaQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("textarea-%s-%s", id, order) }></label>
-				<input id={ fmt.Sprintf("textarea-%s-%s", id, order) } name={ fmt.Sprintf("textarea-%s-%s", id, order) } placeholder="Text area"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.TextAreaQuestion, id, order) }></label>
+				<input id={ fmt.Sprintf("%s-%s-%s", models.TextAreaQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.TextAreaQuestion, id, order) } placeholder="Text area"/>
 				<textarea disabled="disabled"></textarea>
 				<button type="button" data-delete-row="true">X</button>
 			</div>
 		case models.CheckboxQuestion:
 			<div class="form-group">
-				<label hidden for={ fmt.Sprintf("checkbox-%s-%s", id, order) }></label>
-				<input type="text" id={ fmt.Sprintf("checkbox-%s-%s", id, order) } name={ fmt.Sprintf("checkbox-%s-%s", id, order) } placeholder="Checkbox"/>
+				<label hidden for={ fmt.Sprintf("%s-%s-%s", models.CheckboxQuestion, id, order) }></label>
+				<input type="text" id={ fmt.Sprintf("%s-%s-%s", models.CheckboxQuestion, id, order) } name={ fmt.Sprintf("%s-%s-%s", models.CheckboxQuestion, id, order) } placeholder="Checkbox"/>
 				<fieldset>
 					<input type="checkbox" disabled="disabled"/>
 					<label>Option 1</label>
@@ -106,9 +106,57 @@ templ Builder(inputType models.QuestionType, id, order string) {
 	}
 }
 
-templ Save() {
-	<h1>Template saved!</h1>
+templ completeTemplateInput(question models.QuestionView) {
+	<div class="form-group">
+		<label for={ question.Question.ID.Hex() }>{ question.Label }</label>
+		switch question.Question.Type {
+			case models.TextQuestion:
+				@input(templ.Attributes{"type": "text", "id": question.Question.ID.Hex(), "name": question.Question.ID.Hex(), "value": question.Value, "placeholder": "My answer is..."})
+			case models.TextAreaQuestion:
+				@textArea(templ.Attributes{"id": question.Question.ID.Hex(), "name": question.Question.ID.Hex(), "placeholder": "I did this"}) {
+					{ question.Value }
+				}
+			case models.NumberQuestion:
+				<input type="number" min="0" max="100" id={ question.Question.ID.Hex() } name={ question.Question.ID.Hex() } placeholder="Number input"/>
+			case models.RangeQuestion:
+				<input type="range" min="0" max="100" id={ question.Question.ID.Hex() } name={ question.Question.ID.Hex() } placeholder="Range input"/>
+			case models.SelectQuestion:
+				<select>
+					<option>Option 1</option>
+					<option>Option 2</option>
+					<option>Option 3</option>
+				</select>
+			case models.RadioQuestion:
+				<input type="radio" id={ fmt.Sprintf("%s-%s", question.Question.ID.Hex(), question.Question.ID.Hex()) } name={ fmt.Sprintf("%s-%s", question.Question.ID.Hex(), question.Question.ID.Hex()) } placeholder="Radio input"/>
+			case models.CheckboxQuestion:
+				<fieldset>
+					<input type="checkbox"/>
+					<label>Option 1</label>
+					<input type="checkbox"/>
+					<label>Option 2</label>
+				</fieldset>
+		}
+		if question.Error != "" {
+			<span>{ question.Error }</span>
+		}
+	</div>
 }
 
-templ Delete() {
+templ Save(objToSave string) {
+	<h1>{ objToSave } saved!</h1>
+}
+
+templ DeleteInput() {
+}
+
+templ Complete(template models.Template, questionViews []models.QuestionView) {
+	<div id="template-form">
+		<h1>{ template.Title }</h1>
+		<h2>{ template.Description }</h2>
+		@form(templ.Attributes{"hx-post": fmt.Sprintf("/templates/%s/complete", template.ID.Hex()), "hx-swap": "outerHTML", "hx-target": "#template-form"}) {
+			for _, question := range questionViews {
+				@completeTemplateInput(question)
+			}
+		}
+	</div>
 }

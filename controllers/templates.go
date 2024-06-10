@@ -1,9 +1,6 @@
 package controllers
 
 import (
-	"context"
-	"time"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -12,7 +9,6 @@ import (
 	"github.com/hay-i/gooal/db"
 	"github.com/hay-i/gooal/formparser"
 	"github.com/hay-i/gooal/models"
-	"github.com/hay-i/gooal/views"
 
 	"github.com/labstack/echo/v4"
 )
@@ -26,30 +22,24 @@ func Build() echo.HandlerFunc {
 		goal := c.QueryParam("goal")
 		focus := c.QueryParam("focus")
 
-		cookie, err := c.Cookie("token")
+		tokenString, err := auth.GetTokenFromCookie(c)
 		if err != nil {
-			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
-
-			return redirect(c, "/login")
+			return auth.HandleInvalidToken(c, "You must be logged in to access that page")
 		}
-
-		tokenString := cookie.Value
 
 		parsedToken, err := auth.ParseToken(tokenString)
-
 		if err != nil {
-			views.AddFlash(c, "Invalid or expired token", views.FlashError)
-
-			return redirect(c, "/login")
+			return auth.HandleInvalidToken(c, "Invalid or expired token")
 		}
 
-		component := components.Build(goal, focus, parsedToken["sub"].(string))
+		username := auth.TokenToUsername(parsedToken)
+		component := components.Build(goal, focus, username)
 
 		return renderNoBase(c, component)
 	}
 }
 
-func Builder() echo.HandlerFunc {
+func Input() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -60,7 +50,7 @@ func Builder() echo.HandlerFunc {
 		order := c.QueryParam("order")
 
 		objectId := primitive.NewObjectID()
-		component := components.Builder(inputType, objectId.Hex(), order)
+		component := components.TemplateBuilderInput(inputType, objectId.Hex(), order)
 
 		return renderNoBase(c, component)
 	}
@@ -68,26 +58,68 @@ func Builder() echo.HandlerFunc {
 
 func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-
-		if err := c.Request().ParseForm(); err != nil {
-			return err
-		}
-
-		formValues, err := c.FormParams()
+		formValues, err := formparser.ValidateFormValues(c)
 		if err != nil {
 			return err
 		}
 
-		db.SaveTemplate(database, ctx, formparser.TemplateFromForm(formValues))
+		// TODO: Add validations for template builder
+		db.SaveTemplate(database, models.Template{}.FromForm(formValues))
 
-		return renderNoBase(c, components.Save())
+		return renderNoBase(c, components.Save("Template"))
 	}
 }
 
-func Delete() echo.HandlerFunc {
+func DeleteInput() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return renderNoBase(c, components.Delete())
+		return renderNoBase(c, components.DeleteInput())
+	}
+}
+
+func CompleteTemplate(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+
+		template := db.GetTemplate(database, id)
+
+		questionViews := formparser.QuestionsToView(template.Questions)
+
+		return renderNoBase(c, components.Complete(template, questionViews))
+	}
+}
+
+func Complete(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+
+		template := db.GetTemplate(database, id)
+
+		questionViews := formparser.QuestionsToView(template.Questions)
+
+		formValues, err := formparser.ValidateFormValues(c)
+		if err != nil {
+			return err
+		}
+
+		questionViews = formparser.ApplyValidations(questionViews, formValues)
+
+		if formparser.HasErrors(questionViews) {
+			return renderNoBase(c, components.Complete(template, questionViews))
+		}
+
+		tokenString, err := auth.GetTokenFromCookie(c)
+		if err != nil {
+			return auth.HandleInvalidToken(c, "You must be logged in to access that page")
+		}
+
+		parsedToken, err := auth.ParseToken(tokenString)
+		if err != nil {
+			return auth.HandleInvalidToken(c, "Invalid or expired token")
+		}
+
+		username := auth.TokenToUsername(parsedToken)
+		db.SaveAnswer(database, models.Answer{}.FromForm(template.ID, username, questionViews))
+
+		return renderNoBase(c, components.Save("Response to template"))
 	}
 }
