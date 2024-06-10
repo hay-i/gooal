@@ -142,8 +142,8 @@ templ completeTemplateInput(question models.QuestionView) {
 	</div>
 }
 
-templ Save() {
-	<h1>Template saved!</h1>
+templ Save(objToSave string) {
+	<h1>{ objToSave } saved!</h1>
 }
 
 templ DeleteInput() {

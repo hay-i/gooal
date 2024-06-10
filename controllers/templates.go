@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"sort"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -25,6 +23,7 @@ func Build() echo.HandlerFunc {
 		goal := c.QueryParam("goal")
 		focus := c.QueryParam("focus")
 
+		// TODO: Extract all this
 		cookie, err := c.Cookie("token")
 		if err != nil {
 			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
@@ -67,18 +66,15 @@ func Input() echo.HandlerFunc {
 
 func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		if err := c.Request().ParseForm(); err != nil {
-			return err
-		}
-
-		formValues, err := c.FormParams()
+		formValues, err := formparser.ValidateFormValues(c)
 		if err != nil {
 			return err
 		}
 
-		db.SaveTemplate(database, formparser.TemplateFromForm(formValues))
+		// TODO: Add validations for template builder
+		db.SaveTemplate(database, models.Template{}.FromForm(formValues))
 
-		return renderNoBase(c, components.Save())
+		return renderNoBase(c, components.Save("Template"))
 	}
 }
 
@@ -93,15 +89,8 @@ func CompleteTemplate(database *mongo.Database) echo.HandlerFunc {
 		id := c.Param("id")
 
 		template := db.GetTemplate(database, id)
-		questionViews := make([]models.QuestionView, len(template.Questions))
-		for _, question := range template.Questions {
-			questionView := models.QuestionView{Question: question}
-			questionViews = append(questionViews, questionView)
-		}
 
-		sort.Slice(questionViews, func(i, j int) bool {
-			return questionViews[i].Order < questionViews[j].Order
-		})
+		questionViews := formparser.QuestionsToView(template.Questions)
 
 		return renderNoBase(c, components.Complete(template, questionViews))
 	}
@@ -113,32 +102,20 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 
 		template := db.GetTemplate(database, id)
 
-		if err := c.Request().ParseForm(); err != nil {
-			return err
-		}
+		questionViews := formparser.QuestionsToView(template.Questions)
 
-		formValues, err := c.FormParams()
+		formValues, err := formparser.ValidateFormValues(c)
 		if err != nil {
 			return err
 		}
 
-		questionViews := make([]models.QuestionView, len(template.Questions))
+		questionViews = formparser.ApplyValidations(questionViews, formValues)
 
-		for _, question := range template.Questions {
-			val := formValues.Get(question.ID.Hex())
-			questionView := models.QuestionView{Question: question, Value: val}
-
-			if val == "" {
-				questionView.Error = "This field is required."
-			}
-
-			questionViews = append(questionViews, questionView)
+		if formparser.HasErrors(questionViews) {
+			return renderNoBase(c, components.Complete(template, questionViews))
 		}
 
-		sort.Slice(questionViews, func(i, j int) bool {
-			return questionViews[i].Order < questionViews[j].Order
-		})
-
-		return renderNoBase(c, components.Complete(template, questionViews))
+		// TODO: Save
+		return renderNoBase(c, components.Save("Response to template"))
 	}
 }
