@@ -13,7 +13,6 @@ func createCollections(ctx context.Context, database *mongo.Database) {
 	createAnswersCollection(ctx, database)
 }
 
-// TODO: Currently unused
 func createAnswersCollection(ctx context.Context, database *mongo.Database) {
 	collections, err := database.ListCollectionNames(ctx, bson.M{"name": "answers"})
 
@@ -27,19 +26,19 @@ func createAnswersCollection(ctx context.Context, database *mongo.Database) {
 
 	jsonSchema := bson.M{
 		"bsonType": "object",
-		"required": []string{"template_id", "question_id", "answer"},
+		"required": []string{"template_id", "created_at", "username"},
 		"properties": bson.M{
 			"template_id": bson.M{
 				"bsonType":    "objectId",
 				"description": "id of the template the answers belong to, which is required",
 			},
-			"question_id": bson.M{
-				"bsonType":    "objectId",
-				"description": "id of the question the answers belong to, which is required",
+			"created_at": bson.M{
+				"bsonType":    "date",
+				"description": "date the template was created, which is required",
 			},
-			"answer": bson.M{
+			"username": bson.M{
 				"bsonType":    "string",
-				"description": "answer to the question, which is required",
+				"description": "username of the user who answered the template",
 			},
 		},
 	}
@@ -65,11 +64,15 @@ func createTemplateCollection(ctx context.Context, database *mongo.Database) {
 
 	jsonSchema := bson.M{
 		"bsonType": "object",
-		"required": []string{"title", "description"},
+		"required": []string{"title", "description", "created_at", "username"},
 		"properties": bson.M{
 			"title": bson.M{
 				"bsonType":    "string",
 				"description": "title of the template, which is required",
+			},
+			"username": bson.M{
+				"bsonType":    "string",
+				"description": "username of the user who created the template",
 			},
 			"description": bson.M{
 				"bsonType":    "string",
