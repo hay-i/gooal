@@ -2,7 +2,7 @@ hmr: ## Start the hot module replacement server
 	$(MAKE) -j2 sassWatch templProxy
 
 templProxy: up ## Start the hot module replacement server for templ
-	templ generate --watch --proxy="http://localhost:1323" --cmd="go run ."
+	templ generate --watch --proxy="http://localhost:1323" --cmd="go run cmd/gooal/main.go"
 
 sassWatch: ## Watch SASS changes
 	sass --watch .
