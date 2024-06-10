@@ -115,7 +115,26 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 			return renderNoBase(c, components.Complete(template, questionViews))
 		}
 
-		// TODO: Save
+		// TODO: Extract all this
+		cookie, err := c.Cookie("token")
+		if err != nil {
+			views.AddFlash(c, "You must be logged in to access that page", views.FlashError)
+
+			return redirect(c, "/login")
+		}
+
+		tokenString := cookie.Value
+
+		parsedToken, err := auth.ParseToken(tokenString)
+
+		if err != nil {
+			views.AddFlash(c, "Invalid or expired token", views.FlashError)
+
+			return redirect(c, "/login")
+		}
+
+		db.SaveAnswer(database, models.Answer{}.FromForm(template.ID, parsedToken["sub"].(string), questionViews))
+
 		return renderNoBase(c, components.Save("Response to template"))
 	}
 }

@@ -18,3 +18,21 @@ type Answer struct {
 	CreatedAt       time.Time          `bson:"created_at"`
 	QuestionAnswers []QuestionAnswer   `bson:"questions,omitempty"`
 }
+
+func (a Answer) FromForm(templateID primitive.ObjectID, username string, questionViews []QuestionView) Answer {
+	questionAnswers := make([]QuestionAnswer, len(questionViews))
+
+	for i, q := range questionViews {
+		questionAnswers[i] = QuestionAnswer{
+			QuestionID: q.ID,
+			Answer:     q.Value,
+		}
+	}
+
+	a.TemplateID = templateID
+	a.Username = username
+	a.CreatedAt = time.Now()
+	a.QuestionAnswers = questionAnswers
+
+	return a
+}
