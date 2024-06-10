@@ -1,4 +1,4 @@
-package controllers
+package middleware
 
 import (
 	"net/http"
@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func JwtAuthenticationMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
+func JwtAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
 		if err != nil {

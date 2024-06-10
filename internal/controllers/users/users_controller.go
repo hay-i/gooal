@@ -1,4 +1,4 @@
-package controllers
+package users
 
 import (
 	"net/http"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
+	"github.com/hay-i/gooal/internal/controllers"
 	"github.com/hay-i/gooal/internal/flash"
 	"github.com/hay-i/gooal/internal/models"
 
@@ -15,7 +16,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Register(database *mongo.Database) echo.HandlerFunc {
+func RegisterPOST(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestContext := c.Request().Context()
 		collection := database.Collection("users")
@@ -48,7 +49,7 @@ func Register(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func Login(database *mongo.Database) echo.HandlerFunc {
+func LoginPOST(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		requestContext := c.Request().Context()
 		collection := database.Collection("users")
@@ -86,23 +87,23 @@ func Login(database *mongo.Database) echo.HandlerFunc {
 	}
 }
 
-func SignUp() echo.HandlerFunc {
+func SignUpGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.SignUp()
 
-		return renderWithoutNav(c, component)
+		return controllers.RenderWithoutNav(c, component)
 	}
 }
 
-func SignIn() echo.HandlerFunc {
+func SignInGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.SignIn()
 
-		return renderWithoutNav(c, component)
+		return controllers.RenderWithoutNav(c, component)
 	}
 }
 
-func Logout() echo.HandlerFunc {
+func LogoutGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		auth.SetCookie("", time.Now(), c)
 
@@ -112,7 +113,7 @@ func Logout() echo.HandlerFunc {
 	}
 }
 
-func Profile() echo.HandlerFunc {
+func ProfileGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		tokenString, err := auth.GetTokenFromCookie(c)
 		if err != nil {
@@ -127,6 +128,6 @@ func Profile() echo.HandlerFunc {
 		username := auth.TokenToUsername(parsedToken)
 		component := components.Profile(username)
 
-		return renderBase(c, component)
+		return controllers.RenderBase(c, component)
 	}
 }

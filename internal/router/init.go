@@ -3,7 +3,11 @@ package router
 import (
 	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/hay-i/gooal/internal/controllers"
+	"github.com/hay-i/gooal/internal/controllers/homes"
+	gooal_middleware "github.com/hay-i/gooal/internal/controllers/middleware"
+	"github.com/hay-i/gooal/internal/controllers/questionnaires"
+	"github.com/hay-i/gooal/internal/controllers/templates"
+	"github.com/hay-i/gooal/internal/controllers/users"
 	"github.com/hay-i/gooal/internal/flash"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
@@ -19,30 +23,30 @@ func Initialize(client *mongo.Client) *echo.Echo {
 	e.Use(middleware.Recover())
 	e.Use(session.Middleware(flash.SessionStore))
 
-	e.GET("/register", controllers.SignUp())
-	e.POST("/register", controllers.Register(database))
-	e.GET("/login", controllers.SignIn())
-	e.POST("/login", controllers.Login(database))
-
-	e.GET("/logout", controllers.Logout(), controllers.JwtAuthenticationMiddleware)
-	e.GET("/profile", controllers.Profile(), controllers.JwtAuthenticationMiddleware)
-
-	questionnaire := e.Group("/questionnaire", controllers.JwtAuthenticationMiddleware)
-	questionnaire.GET("/step-one", controllers.StepOne())
-	questionnaire.GET("/step-two", controllers.StepTwo())
-
 	e.Static("/static", "internal/assets")
 
-	e.GET("/", controllers.Home())
+	e.GET("/register", users.SignUpGET())
+	e.POST("/register", users.RegisterPOST(database))
+	e.GET("/login", users.SignInGET())
+	e.POST("/login", users.LoginPOST(database))
 
-	templates := e.Group("/templates", controllers.JwtAuthenticationMiddleware)
-	templates.GET("/build", controllers.Build())
-	templates.GET("/get-input", controllers.Input())
-	templates.DELETE("/delete-input", controllers.DeleteInput())
-	templates.POST("/save", controllers.Save(database, client))
+	e.GET("/logout", users.LogoutGET(), gooal_middleware.JwtAuthentication)
+	e.GET("/profile", users.ProfileGET(), gooal_middleware.JwtAuthentication)
 
-	templates.GET("/:id/complete", controllers.CompleteTemplate(database))
-	templates.POST("/:id/complete", controllers.Complete(database))
+	questionnaire := e.Group("/questionnaire", gooal_middleware.JwtAuthentication)
+	questionnaire.GET("/step-one", questionnaires.StepOneGET())
+	questionnaire.GET("/step-two", questionnaires.StepTwoGET())
+
+	e.GET("/", homes.HomeGET())
+
+	templatesGroup := e.Group("/templates", gooal_middleware.JwtAuthentication)
+	templatesGroup.GET("/build", templates.BuildGET())
+	templatesGroup.GET("/get-input", templates.InputGET())
+	templatesGroup.DELETE("/delete-input", templates.InputDELETE())
+	templatesGroup.POST("/save", templates.SavePOST(database, client))
+
+	templatesGroup.GET("/:id/complete", templates.CompleteTemplateGET(database))
+	templatesGroup.POST("/:id/complete", templates.CompletePOST(database))
 
 	return e
 }

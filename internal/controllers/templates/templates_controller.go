@@ -1,4 +1,4 @@
-package controllers
+package templates
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
+	"github.com/hay-i/gooal/internal/controllers"
 	"github.com/hay-i/gooal/internal/db"
 	"github.com/hay-i/gooal/internal/formparser"
 	"github.com/hay-i/gooal/internal/models"
@@ -13,7 +14,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func Build() echo.HandlerFunc {
+func BuildGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -35,11 +36,11 @@ func Build() echo.HandlerFunc {
 		username := auth.TokenToUsername(parsedToken)
 		component := components.Build(goal, focus, username)
 
-		return renderNoBase(c, component)
+		return controllers.RenderNoBase(c, component)
 	}
 }
 
-func Input() echo.HandlerFunc {
+func InputGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -52,11 +53,11 @@ func Input() echo.HandlerFunc {
 		objectId := primitive.NewObjectID()
 		component := components.TemplateBuilderInput(inputType, objectId.Hex(), order)
 
-		return renderNoBase(c, component)
+		return controllers.RenderNoBase(c, component)
 	}
 }
 
-func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
+func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		formValues, err := formparser.ValidateFormValues(c)
 		if err != nil {
@@ -66,35 +67,35 @@ func Save(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		// TODO: Add validations for template builder
 		db.SaveTemplate(database, models.Template{}.FromForm(formValues))
 
-		return renderNoBase(c, components.Save("Template"))
+		return controllers.RenderNoBase(c, components.Save("Template"))
 	}
 }
 
-func DeleteInput() echo.HandlerFunc {
+func InputDELETE() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return renderNoBase(c, components.DeleteInput())
+		return controllers.RenderNoBase(c, components.DeleteInput())
 	}
 }
 
-func CompleteTemplate(database *mongo.Database) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		id := c.Param("id")
-
-		template := db.GetTemplate(database, id)
-
-		questionViews := formparser.QuestionsToView(template.Questions)
-
-		return renderNoBase(c, components.Complete(template, questionViews))
-	}
-}
-
-func Complete(database *mongo.Database) echo.HandlerFunc {
+func CompleteTemplateGET(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		id := c.Param("id")
 
 		template := db.GetTemplate(database, id)
 
-		questionViews := formparser.QuestionsToView(template.Questions)
+		questionViews := models.QuestionsToView(template.Questions)
+
+		return controllers.RenderNoBase(c, components.Complete(template, questionViews))
+	}
+}
+
+func CompletePOST(database *mongo.Database) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		id := c.Param("id")
+
+		template := db.GetTemplate(database, id)
+
+		questionViews := models.QuestionsToView(template.Questions)
 
 		formValues, err := formparser.ValidateFormValues(c)
 		if err != nil {
@@ -104,7 +105,7 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 		questionViews = formparser.ApplyValidations(questionViews, formValues)
 
 		if formparser.HasErrors(questionViews) {
-			return renderNoBase(c, components.Complete(template, questionViews))
+			return controllers.RenderNoBase(c, components.Complete(template, questionViews))
 		}
 
 		tokenString, err := auth.GetTokenFromCookie(c)
@@ -120,6 +121,6 @@ func Complete(database *mongo.Database) echo.HandlerFunc {
 		username := auth.TokenToUsername(parsedToken)
 		db.SaveAnswer(database, models.Answer{}.FromForm(template.ID, username, questionViews))
 
-		return renderNoBase(c, components.Save("Response to template"))
+		return controllers.RenderNoBase(c, components.Save("Response to template"))
 	}
 }

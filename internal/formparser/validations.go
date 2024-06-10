@@ -20,16 +20,6 @@ func ValidateFormValues(c echo.Context) (url.Values, error) {
 	return formValues, nil
 }
 
-func QuestionsToView(qs []models.Question) []models.QuestionView {
-	questionViews := make([]models.QuestionView, len(qs))
-	for i, question := range qs {
-		questionView := models.QuestionView{Question: question}
-		questionViews[i] = questionView
-	}
-
-	return models.SortQuestionsByOrder(questionViews)
-}
-
 func ApplyValidations(qs []models.QuestionView, formValues url.Values) []models.QuestionView {
 	for i := range qs {
 		val := formValues.Get(qs[i].ID.Hex())

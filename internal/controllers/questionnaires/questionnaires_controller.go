@@ -1,19 +1,20 @@
-package controllers
+package questionnaires
 
 import (
 	"github.com/hay-i/gooal/internal/components"
+	"github.com/hay-i/gooal/internal/controllers"
 
 	"github.com/labstack/echo/v4"
 )
 
-func StepOne() echo.HandlerFunc {
+func StepOneGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		component := components.StepOne()
-		return renderBase(c, component)
+		return controllers.RenderBase(c, component)
 	}
 }
 
-func StepTwo() echo.HandlerFunc {
+func StepTwoGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		if err := c.Request().ParseForm(); err != nil {
 			return err
@@ -33,6 +34,6 @@ func StepTwo() echo.HandlerFunc {
 		}
 
 		component := components.StepTwo(goal, nextOptions)
-		return renderNoBase(c, component)
+		return controllers.RenderNoBase(c, component)
 	}
 }

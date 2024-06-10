@@ -61,3 +61,7 @@ func GetTokenFromCookie(c echo.Context) (string, error) {
 
 	return cookie.Value, nil
 }
+
+func TokenToUsername(token jwt.MapClaims) string {
+	return token["sub"].(string)
+}

@@ -27,7 +27,7 @@ func StepOne() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"questionnaire-wrapper\"><h1>Get Started with tracking your goals: Step one</h1><div class=\"questionnaire\"><ul class=\"questionnaire__grid\"><li><button class=\"questionnaire-card\" hx-get=\"/questionnaire/step-two?goal=fitness\" hx-target=\"#questionnaire-wrapper\" hx-push-url=\"true\"><img src=\"/static/svg/fitness.svg\" role=\"Presentation\" class=\"questionnaire-card__img\"> Fitness</button></li><li><button class=\"questionnaire-card\" hx-get=\"/questionnaire/step-two?goal=finance\" hx-target=\"#questionnaire-wrapper\" hx-push-url=\"true\"><img src=\"/static/svg/finance.svg\" role=\"Presentation\" class=\"questionnaire-card__img\"> Financial</button></li><li><button class=\"questionnaire-card\" hx-get=\"/questionnaire/step-two?goal=career\" hx-target=\"#questionnaire-wrapper\" hx-push-url=\"true\"><img src=\"/static/svg/social.svg\" role=\"Presentation\" class=\"questionnaire-card__img\"> Social</button></li></ul></div></div>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -51,12 +51,12 @@ func StepTwo(goal string, nextOptions []string) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"questionnaire-wrapper\"><h1>Step two</h1>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, option := range nextOptions {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <a href=\"")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -65,7 +65,7 @@ func StepTwo(goal string, nextOptions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -73,12 +73,12 @@ func StepTwo(goal string, nextOptions []string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a>")
+			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 5)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 6)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

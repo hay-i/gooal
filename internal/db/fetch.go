@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// TODO: Make this generic and then have a separate function for each type of model
 func GetTemplate(database *mongo.Database, id string) models.Template {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
