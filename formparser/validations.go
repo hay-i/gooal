@@ -2,7 +2,6 @@ package formparser
 
 import (
 	"net/url"
-	"sort"
 
 	"github.com/hay-i/gooal/models"
 	"github.com/labstack/echo/v4"
@@ -28,16 +27,7 @@ func QuestionsToView(qs []models.Question) []models.QuestionView {
 		questionViews[i] = questionView
 	}
 
-	// TODO: move to model?
-	return sortQuestionsByOrder(questionViews)
-}
-
-func sortQuestionsByOrder(qs []models.QuestionView) []models.QuestionView {
-	sort.Slice(qs, func(i, j int) bool {
-		return qs[i].Order < qs[j].Order
-	})
-
-	return qs
+	return models.SortQuestionsByOrder(questionViews)
 }
 
 func ApplyValidations(qs []models.QuestionView, formValues url.Values) []models.QuestionView {

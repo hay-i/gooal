@@ -2,6 +2,7 @@ package models
 
 import (
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -85,4 +86,12 @@ func (t Template) FromForm(formValues url.Values) Template {
 	t.Questions = templatesQuestions
 
 	return t
+}
+
+func SortQuestionsByOrder(qs []QuestionView) []QuestionView {
+	sort.Slice(qs, func(i, j int) bool {
+		return qs[i].Order < qs[j].Order
+	})
+
+	return qs
 }
