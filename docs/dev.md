@@ -4,7 +4,7 @@
 
 Gooal is built on the "GOTH" stack. [Go](https://go.dev/) for the majority, [templ](https://templ.guide/) for our HTML & [HTMX](https://htmx.org/) for the interactivity.
 
-Our CSS is using [SASS](https://sass-lang.com/) and are using very minimal JS to accomplish any front end functionality. At the time of writing, [sortable](https://github.com/SortableJS/Sortable) and HTMX are the only externl libraries we have minified in the codebase outside of any code we've written ourselves.
+Our CSS is using [SASS](https://sass-lang.com/) and are using very minimal JS to accomplish any front end functionality. At the time of writing, [sortable](https://github.com/SortableJS/Sortable) and HTMX are the only external libraries we have minified in the codebase outside of any code we've written ourselves.
 
 We've also chosen [MongoDB](https://www.mongodb.com/) for our database for it's flexible schemas.
 
