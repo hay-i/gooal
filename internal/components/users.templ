@@ -1,21 +1,23 @@
 package components
 
-templ SignUp() {
-	<form action="/register" method="post">
+import "fmt"
+
+templ SignUp(returnTo string) {
+	<form action={ templ.SafeURL(fmt.Sprintf("/register%s", returnTo)) } method="post">
 		<input type="text" placeholder="Username" name="username"/>
 		<input type="password" placeholder="Password" name="password"/>
 		<button type="submit">Sign Up</button>
 	</form>
-	<a href="/register">Already have an account? Login</a>
+	<a href={ templ.SafeURL(fmt.Sprintf("/login%s", returnTo)) }>Already have an account? Login</a>
 }
 
-templ SignIn() {
-	<form action="/login" method="post">
+templ SignIn(returnTo string) {
+	<form action={ templ.SafeURL(fmt.Sprintf("/login%s", returnTo)) } method="post">
 		<input type="text" placeholder="Username" name="username"/>
 		<input type="password" placeholder="Password" name="password"/>
 		<button type="submit">Sign In</button>
 	</form>
-	<a href="/register">Don't have an account? Register</a>
+	<a href={ templ.SafeURL(fmt.Sprintf("/register%s", returnTo)) }>Don't have an account? Register</a>
 }
 
 templ Profile(username string) {

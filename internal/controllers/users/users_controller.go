@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -18,6 +19,14 @@ import (
 
 func RegisterPOST(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		returnToParam := c.QueryParam("return_to")
+		returnTo := "/"
+		var returnToQueryParam string
+		if returnToParam != "" {
+			returnTo = returnToParam
+			returnToQueryParam = "?return_to=" + returnTo
+		}
+
 		requestContext := c.Request().Context()
 		collection := database.Collection("users")
 		var user models.User
@@ -32,25 +41,33 @@ func RegisterPOST(database *mongo.Database) echo.HandlerFunc {
 		if err != nil {
 			flash.Add(c, "Error while registering", flash.Error)
 
-			return c.Redirect(http.StatusSeeOther, "/register")
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/register%s", returnToQueryParam))
 		}
 
 		expiry, signedToken, err := auth.SignToken(user)
 		if err != nil {
 			flash.Add(c, "Error while registering", flash.Error)
 
-			return c.Redirect(http.StatusSeeOther, "/register")
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/register%s", returnToQueryParam))
 		}
 
 		auth.SetCookie(signedToken, expiry, c)
 		flash.Add(c, "You have successfully registered", flash.Success)
 
-		return c.Redirect(http.StatusSeeOther, "/")
+		return c.Redirect(http.StatusSeeOther, returnTo)
 	}
 }
 
 func LoginPOST(database *mongo.Database) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		returnToParam := c.QueryParam("return_to")
+		returnTo := "/"
+		var returnToQueryParam string
+		if returnToParam != "" {
+			returnTo = returnToParam
+			returnToQueryParam = "?return_to=" + returnTo
+		}
+
 		requestContext := c.Request().Context()
 		collection := database.Collection("users")
 		var credentials models.User
@@ -63,33 +80,39 @@ func LoginPOST(database *mongo.Database) echo.HandlerFunc {
 		if err != nil {
 			flash.Add(c, "Invalid username or password", flash.Error)
 
-			return c.Redirect(http.StatusSeeOther, "/login")
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/login%s", returnToQueryParam))
 		}
 
 		err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
 		if err != nil {
 			flash.Add(c, "Invalid username or password", flash.Error)
 
-			return c.Redirect(http.StatusSeeOther, "/login")
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/login%s", returnToQueryParam))
 		}
 
 		expirationTime, signedToken, err := auth.SignToken(user)
 		if err != nil {
 			flash.Add(c, "Error while logging in", flash.Error)
 
-			return c.Redirect(http.StatusSeeOther, "/login")
+			return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/login%s", returnToQueryParam))
 		}
 
 		auth.SetCookie(signedToken, expirationTime, c)
 		flash.Add(c, "You have successfully logged in", flash.Success)
 
-		return c.Redirect(http.StatusSeeOther, "/")
+		return c.Redirect(http.StatusSeeOther, returnTo)
 	}
 }
 
 func SignUpGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		component := components.SignUp()
+		returnToParam := c.QueryParam("return_to")
+		var returnTo string
+		if returnToParam != "" {
+			returnTo = "?return_to=" + returnToParam
+		}
+
+		component := components.SignUp(returnTo)
 
 		return controllers.RenderWithoutNav(c, component)
 	}
@@ -97,7 +120,13 @@ func SignUpGET() echo.HandlerFunc {
 
 func SignInGET() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		component := components.SignIn()
+		returnToParam := c.QueryParam("return_to")
+		var returnTo string
+		if returnToParam != "" {
+			returnTo = "?return_to=" + returnToParam
+		}
+
+		component := components.SignIn(returnTo)
 
 		return controllers.RenderWithoutNav(c, component)
 	}
