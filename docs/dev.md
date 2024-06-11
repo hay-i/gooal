@@ -10,6 +10,8 @@ We've also chosen [MongoDB](https://www.mongodb.com/) for our database for it's 
 
 ## Installation
 
+Providing you have the necessary development tools installed, you can get up and running using the `make` commands. Use `make help` to see a list of options.
+
 1) Install Golang using [asdf](https://asdf-vm.com/guide/getting-started.html) / `asdf plugin add golang && asdf install`
 2) Install Templ from the [docs](https://templ.guide/quick-start/installation) / `go install github.com/a-h/templ/cmd/templ@v0.2.598`
 3) Install Docker
@@ -56,5 +58,3 @@ db.templates.find()
 ### [vim-dadbod](https://github.com/tpope/vim-dadbod)
 
 To connect, add a connection to `mongodb://root:example@127.0.0.1:27017/gooal?authSource=admin`
-
-Providing you have the necessary development tools installed, you can get up and running using the `make` commands. Use `make help` to see a list of options.
