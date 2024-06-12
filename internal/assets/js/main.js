@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         { headers: { "HX-Request": "true" } },
       );
       const formGroupHtml = await response.text();
-      itemEl.innerHTML = formGroupHtml;
+      itemEl.outerHTML = formGroupHtml;
 
       updateItemsOrders(itemEl);
 

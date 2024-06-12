@@ -81,6 +81,7 @@ func ApplyTemplateBuilderValidations(formValues url.Values) TemplateView {
 
 	formValues.Del("title")
 	formValues.Del("description")
+	formValues.Del("username")
 
 	templateQuestions := make([]QuestionView, len(formValues))
 

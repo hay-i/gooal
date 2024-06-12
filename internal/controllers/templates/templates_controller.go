@@ -95,9 +95,7 @@ func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 		templateView := models.ApplyTemplateBuilderValidations(formValues)
 
 		if templateView.HasErrors() {
-			// How do we get the goal and focus here?
-			// Might be in the query params
-			component := components.Build("", "", username, models.TemplateView{})
+			component := components.BuildTemplateForm(username, templateView)
 			return controllers.RenderNoBase(c, component)
 		}
 
