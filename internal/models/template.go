@@ -2,9 +2,12 @@ package models
 
 import (
 	"net/url"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/hay-i/gooal/internal/db"
+	"github.com/hay-i/gooal/pkg/logger"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -59,4 +62,59 @@ func (t TemplateView) HasErrors() bool {
 	}
 
 	return false
+}
+
+// Could live in a validators package
+func ApplyTemplateBuilderValidations(formValues url.Values) TemplateView {
+	template := TemplateView{}
+
+	template.Title = formValues.Get("title")
+	template.Description = formValues.Get("description")
+
+	if formValues.Get("title") == "" {
+		template.TitleError = "Title is required"
+	}
+
+	if formValues.Get("description") == "" {
+		template.DescriptionError = "Description is required"
+	}
+
+	formValues.Del("title")
+	formValues.Del("description")
+
+	templateQuestions := make([]QuestionView, len(formValues))
+
+	i := 0
+	for key, value := range formValues {
+		splitKey := strings.Split(key, "-")
+		inputType, id, order := splitKey[0], splitKey[1], splitKey[2]
+		objectID, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			logger.LogError("Error:", err)
+		}
+
+		orderInt, err := strconv.Atoi(order)
+		if err != nil {
+			logger.LogError("Error:", err)
+		}
+
+		templateQuestions[i] = QuestionView{
+			Question: Question{
+				ID:    objectID,
+				Type:  QuestionType(inputType),
+				Order: orderInt,
+			},
+			Value: value[0],
+		}
+
+		if value[0] == "" {
+			templateQuestions[i].Error = "This field is required."
+		}
+
+		i++
+	}
+
+	template.QuestionViews = templateQuestions
+
+	return template
 }

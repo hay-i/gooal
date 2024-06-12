@@ -92,7 +92,7 @@ func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			return err
 		}
 
-		templateView := formparser.ValidateSubmission(formValues)
+		templateView := models.ApplyTemplateBuilderValidations(formValues)
 
 		if templateView.HasErrors() {
 			// How do we get the goal and focus here?
