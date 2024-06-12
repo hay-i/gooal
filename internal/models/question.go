@@ -74,3 +74,26 @@ func QuestionsFromForm(formValues url.Values) []Question {
 
 	return templatesQuestions
 }
+
+func QuestionsHaveErrors(qs []QuestionView) bool {
+	for _, question := range qs {
+		if question.Error != "" {
+			return true
+		}
+	}
+
+	return false
+}
+
+func ApplyAnsweringQuestionValidations(questionViews []QuestionView, formValues url.Values) []QuestionView {
+	for i := range questionViews {
+		val := formValues.Get(questionViews[i].ID.Hex())
+		questionViews[i].Value = val
+
+		if val == "" {
+			questionViews[i].Error = "This field is required."
+		}
+	}
+
+	return questionViews
+}

@@ -32,14 +32,14 @@ func AnswerTemplatePOST(database *mongo.Database) echo.HandlerFunc {
 
 		questionViews := models.QuestionsToView(template.Questions)
 
-		formValues, err := formparser.ValidateFormValues(c)
+		formValues, err := formparser.ParseForm(c)
 		if err != nil {
 			return err
 		}
 
-		questionViews = formparser.ApplyValidations(questionViews, formValues)
+		questionViews = models.ApplyAnsweringQuestionValidations(questionViews, formValues)
 
-		if formparser.HasErrors(questionViews) {
+		if models.QuestionsHaveErrors(questionViews) {
 			return controllers.RenderNoBase(c, components.Complete(template, questionViews))
 		}
 

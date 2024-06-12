@@ -58,11 +58,31 @@ func InputGET() echo.HandlerFunc {
 
 func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		formValues, err := formparser.ValidateFormValues(c)
+		formValues, err := formparser.ParseForm(c)
 		if err != nil {
 			return err
 		}
-
+		// questionViews = formparser.ApplyValidations(questionViews, formValues)
+		//
+		// if formparser.HasErrors(questionViews) {
+		// 	return controllers.RenderNoBase(c, components.Complete(template, questionViews))
+		// }
+		//
+		// tokenString, err := auth.GetTokenFromCookie(c)
+		// if err != nil {
+		// 	return auth.HandleInvalidToken(c, "You must be logged in to access that page")
+		// }
+		//
+		// parsedToken, err := auth.ParseToken(tokenString)
+		// if err != nil {
+		// 	return auth.HandleInvalidToken(c, "Invalid or expired token")
+		// }
+		//
+		// username := auth.TokenToUsername(parsedToken)
+		// models.Answer{}.FromForm(template.ID, username, questionViews).Save(database)
+		//
+		// return controllers.RenderNoBase(c, components.Save("Response to template"))
+		//
 		// TODO: Add validations for template builder
 		models.Template{}.FromForm(formValues).Save(database)
 
