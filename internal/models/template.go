@@ -18,6 +18,14 @@ type Template struct {
 	Questions   []Question         `bson:"questions,omitempty"`
 }
 
+type TemplateView struct {
+	Title            string
+	TitleError       string
+	Description      string
+	DescriptionError string
+	QuestionViews    []QuestionView
+}
+
 func (t Template) FromForm(formValues url.Values) Template {
 	t.Title = formValues.Get("title")
 	t.Description = formValues.Get("description")
@@ -39,4 +47,16 @@ func (t Template) Save(database *mongo.Database) {
 
 func GetTemplate(database *mongo.Database, id string) Template {
 	return db.Get(database, "templates", id).(Template)
+}
+
+func (t TemplateView) HasErrors() bool {
+	if t.TitleError != "" || t.DescriptionError != "" {
+		return true
+	}
+
+	if QuestionsHaveErrors(t.QuestionViews) {
+		return true
+	}
+
+	return false
 }

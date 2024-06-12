@@ -34,8 +34,12 @@ type Question struct {
 
 type QuestionView struct {
 	Question
-	Error string `bson:"error,omitempty"`
-	Value string `bson:"value,omitempty"`
+	Error string
+	Value string
+}
+
+func (q Question) OrderToString() string {
+	return strconv.Itoa(q.Order)
 }
 
 func SortQuestionsByOrder(qs []QuestionView) []QuestionView {

@@ -1,6 +1,8 @@
 package templates
 
 import (
+	"strconv"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
@@ -9,6 +11,7 @@ import (
 	"github.com/hay-i/gooal/internal/controllers"
 	"github.com/hay-i/gooal/internal/formparser"
 	"github.com/hay-i/gooal/internal/models"
+	"github.com/hay-i/gooal/pkg/logger"
 
 	"github.com/labstack/echo/v4"
 )
@@ -33,7 +36,7 @@ func BuildGET() echo.HandlerFunc {
 		}
 
 		username := auth.TokenToUsername(parsedToken)
-		component := components.Build(goal, focus, username)
+		component := components.Build(goal, focus, username, models.TemplateView{})
 
 		return controllers.RenderNoBase(c, component)
 	}
@@ -50,7 +53,21 @@ func InputGET() echo.HandlerFunc {
 		order := c.QueryParam("order")
 
 		objectId := primitive.NewObjectID()
-		component := components.TemplateBuilderInput(inputType, objectId.Hex(), order)
+
+		orderInt, err := strconv.Atoi(order)
+		if err != nil {
+			logger.LogError("Error:", err)
+		}
+
+		questionView := models.QuestionView{
+			Question: models.Question{
+				ID:    objectId,
+				Type:  inputType,
+				Order: orderInt,
+			},
+		}
+
+		component := components.TemplateBuilderInput(questionView)
 
 		return controllers.RenderNoBase(c, component)
 	}
@@ -58,32 +75,32 @@ func InputGET() echo.HandlerFunc {
 
 func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		tokenString, err := auth.GetTokenFromCookie(c)
+		if err != nil {
+			return auth.HandleInvalidToken(c, "You must be logged in to access that page")
+		}
+
+		parsedToken, err := auth.ParseToken(tokenString)
+		if err != nil {
+			return auth.HandleInvalidToken(c, "Invalid or expired token")
+		}
+
+		username := auth.TokenToUsername(parsedToken)
+
 		formValues, err := formparser.ParseForm(c)
 		if err != nil {
 			return err
 		}
-		// questionViews = formparser.ApplyValidations(questionViews, formValues)
-		//
-		// if formparser.HasErrors(questionViews) {
-		// 	return controllers.RenderNoBase(c, components.Complete(template, questionViews))
-		// }
-		//
-		// tokenString, err := auth.GetTokenFromCookie(c)
-		// if err != nil {
-		// 	return auth.HandleInvalidToken(c, "You must be logged in to access that page")
-		// }
-		//
-		// parsedToken, err := auth.ParseToken(tokenString)
-		// if err != nil {
-		// 	return auth.HandleInvalidToken(c, "Invalid or expired token")
-		// }
-		//
-		// username := auth.TokenToUsername(parsedToken)
-		// models.Answer{}.FromForm(template.ID, username, questionViews).Save(database)
-		//
-		// return controllers.RenderNoBase(c, components.Save("Response to template"))
-		//
-		// TODO: Add validations for template builder
+
+		templateView := formparser.ValidateSubmission(formValues)
+
+		if templateView.HasErrors() {
+			// How do we get the goal and focus here?
+			// Might be in the query params
+			component := components.Build("", "", username, models.TemplateView{})
+			return controllers.RenderNoBase(c, component)
+		}
+
 		models.Template{}.FromForm(formValues).Save(database)
 
 		return controllers.RenderNoBase(c, components.Save("Template"))
