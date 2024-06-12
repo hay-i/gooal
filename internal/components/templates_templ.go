@@ -239,154 +239,50 @@ func TemplateBuilderInput(questionView views.QuestionView) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
+		templ_7745c5c3_Err = labelInputFor(questionView).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		switch questionView.Question.Type {
 		case models.TextQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.TextQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.TextQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.TextQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Text input"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <input disabled=\"disabled\" type=\"text\"> <button type=\"button\" data-delete-row=\"true\">X</button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input disabled=\"disabled\" type=\"text\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case models.NumberQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.NumberQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.NumberQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.NumberQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Number input"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <input disabled=\"disabled\" type=\"number\"> <button type=\"button\" data-delete-row=\"true\">X</button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input disabled=\"disabled\" type=\"number\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case models.RangeQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.RangeQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.RangeQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.RangeQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Range input"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <input disabled=\"disabled\" type=\"range\"> <button type=\"button\" data-delete-row=\"true\">X</button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input disabled=\"disabled\" type=\"range\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case models.SelectQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.SelectQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.SelectQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.SelectQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Select input"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <select><option disabled=\"disabled\">Option 1</option> <option disabled=\"disabled\">Option 2</option> <option disabled=\"disabled\">Option 3</option></select> <button type=\"button\" data-delete-row=\"true\">X</button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<select><option disabled=\"disabled\">Option 1</option> <option disabled=\"disabled\">Option 2</option> <option disabled=\"disabled\">Option 3</option></select> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case models.RadioQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.RadioQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.RadioQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.RadioQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Radio input"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <input type=\"radio\" disabled=\"disabled\"> <button type=\"button\" data-delete-row=\"true\">X</button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input type=\"radio\" disabled=\"disabled\"> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case models.TextAreaQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.TextAreaQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.TextAreaQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.TextAreaQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Text area"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <textarea disabled=\"disabled\"></textarea> <button type=\"button\" data-delete-row=\"true\">X</button> ")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<textarea disabled=\"disabled\"></textarea> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		case models.CheckboxQuestion:
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<fieldset><input type=\"checkbox\" disabled=\"disabled\"> <label>Option 1</label> <input type=\"checkbox\" disabled=\"disabled\"> <label>Option 2</label></fieldset>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", models.CheckboxQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", models.CheckboxQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", models.CheckboxQuestion, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": "Checkbox"}).Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" <fieldset><input type=\"checkbox\" disabled=\"disabled\"> <label>Option 1</label> <input type=\"checkbox\" disabled=\"disabled\"> <label>Option 2</label></fieldset><button type=\"button\" data-delete-row=\"true\">X</button> ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button type=\"button\" data-delete-row=\"true\">X</button> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
 		}
 		if questionView.Error != "" {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<span>")
@@ -396,7 +292,7 @@ func TemplateBuilderInput(questionView views.QuestionView) templ.Component {
 			var templ_7745c5c3_Var11 string
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(questionView.Error)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 113, Col: 29}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 94, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {
@@ -418,7 +314,7 @@ func TemplateBuilderInput(questionView views.QuestionView) templ.Component {
 	})
 }
 
-func completeTemplateInput(question views.QuestionView) templ.Component {
+func labelInputFor(questionView views.QuestionView) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -429,6 +325,42 @@ func completeTemplateInput(question views.QuestionView) templ.Component {
 		templ_7745c5c3_Var12 := templ.GetChildren(ctx)
 		if templ_7745c5c3_Var12 == nil {
 			templ_7745c5c3_Var12 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label hidden for=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(fmt.Sprintf("%s-%s-%s", questionView.Question.Type, questionView.Question.ID.Hex(), questionView.Question.OrderToString())))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></label>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = input(templ.Attributes{"type": "text", "id": fmt.Sprintf("%s-%s-%s", questionView.Question.Type, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "name": fmt.Sprintf("%s-%s-%s", questionView.Question.Type, questionView.Question.ID.Hex(), questionView.Question.OrderToString()), "value": questionView.Value, "placeholder": fmt.Sprintf("%s input", questionView.Question.Type)}).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if !templ_7745c5c3_IsBuffer {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func completeTemplateInput(question views.QuestionView) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var13 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var13 == nil {
+			templ_7745c5c3_Var13 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"form-group\"><label for=\"")
@@ -443,12 +375,12 @@ func completeTemplateInput(question views.QuestionView) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var13 string
-		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(question.Label)
+		var templ_7745c5c3_Var14 string
+		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(question.Label)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 120, Col: 60}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 106, Col: 60}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -463,18 +395,18 @@ func completeTemplateInput(question views.QuestionView) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		case models.TextAreaQuestion:
-			templ_7745c5c3_Var14 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var15 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 				if !templ_7745c5c3_IsBuffer {
 					templ_7745c5c3_Buffer = templ.GetBuffer()
 					defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 				}
-				var templ_7745c5c3_Var15 string
-				templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(question.Value)
+				var templ_7745c5c3_Var16 string
+				templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(question.Value)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 126, Col: 21}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 112, Col: 21}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -483,7 +415,7 @@ func completeTemplateInput(question views.QuestionView) templ.Component {
 				}
 				return templ_7745c5c3_Err
 			})
-			templ_7745c5c3_Err = textArea(templ.Attributes{"id": question.Question.ID.Hex(), "name": question.Question.ID.Hex(), "placeholder": "I did this"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = textArea(templ.Attributes{"id": question.Question.ID.Hex(), "name": question.Question.ID.Hex(), "placeholder": "I did this"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var15), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -566,12 +498,12 @@ func completeTemplateInput(question views.QuestionView) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var16 string
-			templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(question.Error)
+			var templ_7745c5c3_Var17 string
+			templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(question.Error)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 149, Col: 25}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 135, Col: 25}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -600,21 +532,21 @@ func Save(objToSave string) templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var17 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var17 == nil {
-			templ_7745c5c3_Var17 = templ.NopComponent
+		templ_7745c5c3_Var18 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var18 == nil {
+			templ_7745c5c3_Var18 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var18 string
-		templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(objToSave)
+		var templ_7745c5c3_Var19 string
+		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(objToSave)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 156, Col: 16}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 142, Col: 16}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -637,9 +569,9 @@ func DeleteInput() templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var19 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var19 == nil {
-			templ_7745c5c3_Var19 = templ.NopComponent
+		templ_7745c5c3_Var20 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var20 == nil {
+			templ_7745c5c3_Var20 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		if !templ_7745c5c3_IsBuffer {
@@ -657,21 +589,21 @@ func Complete(template models.Template, questionViews []views.QuestionView) temp
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var20 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var20 == nil {
-			templ_7745c5c3_Var20 = templ.NopComponent
+		templ_7745c5c3_Var21 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var21 == nil {
+			templ_7745c5c3_Var21 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"template-form\"><h1>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var21 string
-		templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(template.Title)
+		var templ_7745c5c3_Var22 string
+		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(template.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 164, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 150, Col: 22}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -679,12 +611,12 @@ func Complete(template models.Template, questionViews []views.QuestionView) temp
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var22 string
-		templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(template.Description)
+		var templ_7745c5c3_Var23 string
+		templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(template.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 165, Col: 28}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/templates.templ`, Line: 151, Col: 28}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -692,7 +624,7 @@ func Complete(template models.Template, questionViews []views.QuestionView) temp
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var23 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var24 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 			if !templ_7745c5c3_IsBuffer {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
@@ -709,7 +641,7 @@ func Complete(template models.Template, questionViews []views.QuestionView) temp
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = form(templ.Attributes{"hx-post": fmt.Sprintf("/templates/%s/complete", template.ID.Hex()), "hx-swap": "outerHTML", "hx-target": "#template-form"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var23), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = form(templ.Attributes{"hx-post": fmt.Sprintf("/templates/%s/complete", template.ID.Hex()), "hx-swap": "outerHTML", "hx-target": "#template-form"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var24), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
