@@ -1,6 +1,8 @@
 package templates
 
 import (
+	"fmt"
+	"net/http"
 	"strconv"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -9,6 +11,7 @@ import (
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
 	"github.com/hay-i/gooal/internal/controllers"
+	"github.com/hay-i/gooal/internal/flash"
 	"github.com/hay-i/gooal/internal/form/parser"
 	"github.com/hay-i/gooal/internal/form/validator"
 	"github.com/hay-i/gooal/internal/models"
@@ -101,9 +104,11 @@ func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 			return controllers.RenderNoBase(c, component)
 		}
 
-		models.Template{}.FromForm(formValues).Save(database)
+		id := models.Template{}.FromForm(formValues).Save(database)
 
-		return controllers.RenderNoBase(c, components.Save("Template"))
+		flash.Add(c, "You've successfully saved your template", flash.Success)
+
+		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/templates/%s/complete", id))
 	}
 }
 

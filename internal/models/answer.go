@@ -25,6 +25,6 @@ func (a Answer) FromForm(templateID primitive.ObjectID, username string, questio
 	return a
 }
 
-func (a Answer) Save(database *mongo.Database) {
-	db.Save(database, "answers", a)
+func (a Answer) Save(database *mongo.Database) string {
+	return db.Save(database, "answers", a)
 }

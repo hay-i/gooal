@@ -35,8 +35,8 @@ func (t Template) FromForm(formValues url.Values) Template {
 	return t
 }
 
-func (t Template) Save(database *mongo.Database) {
-	db.Save(database, "templates", t)
+func (t Template) Save(database *mongo.Database) string {
+	return db.Save(database, "templates", t)
 }
 
 func GetTemplate(database *mongo.Database, id string) Template {
