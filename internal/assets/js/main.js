@@ -52,7 +52,6 @@
         itemEl
           .querySelector("[data-delete-row='true']")
           .addEventListener("click", async function () {
-            console.log("DELETING");
             const deletionResponse = await fetch("/templates/delete-input", {
               method: "DELETE",
               headers: { "HX-Request": "true" },
