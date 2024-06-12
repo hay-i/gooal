@@ -6,8 +6,10 @@ import (
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
 	"github.com/hay-i/gooal/internal/controllers"
-	"github.com/hay-i/gooal/internal/formparser"
+	"github.com/hay-i/gooal/internal/form/parser"
+	"github.com/hay-i/gooal/internal/form/validator"
 	"github.com/hay-i/gooal/internal/models"
+	"github.com/hay-i/gooal/internal/models/views"
 
 	"github.com/labstack/echo/v4"
 )
@@ -18,7 +20,7 @@ func AnswerTemplateGET(database *mongo.Database) echo.HandlerFunc {
 
 		template := models.GetTemplate(database, id)
 
-		questionViews := models.QuestionsToView(template.Questions)
+		questionViews := views.QuestionsToView(template.Questions)
 
 		return controllers.RenderNoBase(c, components.Complete(template, questionViews))
 	}
@@ -30,16 +32,16 @@ func AnswerTemplatePOST(database *mongo.Database) echo.HandlerFunc {
 
 		template := models.GetTemplate(database, id)
 
-		questionViews := models.QuestionsToView(template.Questions)
+		questionViews := views.QuestionsToView(template.Questions)
 
-		formValues, err := formparser.ParseForm(c)
+		formValues, err := parser.ParseForm(c)
 		if err != nil {
 			return err
 		}
 
-		questionViews = models.ApplyAnsweringQuestionValidations(questionViews, formValues)
+		questionViews = validator.ApplyAnsweringQuestionValidations(questionViews, formValues)
 
-		if models.QuestionsHaveErrors(questionViews) {
+		if views.QuestionsHaveErrors(questionViews) {
 			return controllers.RenderNoBase(c, components.Complete(template, questionViews))
 		}
 
@@ -54,7 +56,8 @@ func AnswerTemplatePOST(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		username := auth.TokenToUsername(parsedToken)
-		models.Answer{}.FromForm(template.ID, username, questionViews).Save(database)
+		questionAnswers := views.QuestionAnswersFromForm(questionViews)
+		models.Answer{}.FromForm(template.ID, username, questionAnswers).Save(database)
 
 		return controllers.RenderNoBase(c, components.Save("Response to template"))
 	}

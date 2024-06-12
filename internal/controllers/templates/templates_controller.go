@@ -9,8 +9,10 @@ import (
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
 	"github.com/hay-i/gooal/internal/controllers"
-	"github.com/hay-i/gooal/internal/formparser"
+	"github.com/hay-i/gooal/internal/form/parser"
+	"github.com/hay-i/gooal/internal/form/validator"
 	"github.com/hay-i/gooal/internal/models"
+	"github.com/hay-i/gooal/internal/models/views"
 	"github.com/hay-i/gooal/pkg/logger"
 
 	"github.com/labstack/echo/v4"
@@ -36,7 +38,7 @@ func BuildGET() echo.HandlerFunc {
 		}
 
 		username := auth.TokenToUsername(parsedToken)
-		component := components.Build(goal, focus, username, models.TemplateView{})
+		component := components.Build(goal, focus, username, views.TemplateView{})
 
 		return controllers.RenderNoBase(c, component)
 	}
@@ -59,7 +61,7 @@ func InputGET() echo.HandlerFunc {
 			logger.LogError("Error:", err)
 		}
 
-		questionView := models.QuestionView{
+		questionView := views.QuestionView{
 			Question: models.Question{
 				ID:    objectId,
 				Type:  inputType,
@@ -87,12 +89,12 @@ func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 
 		username := auth.TokenToUsername(parsedToken)
 
-		formValues, err := formparser.ParseForm(c)
+		formValues, err := parser.ParseForm(c)
 		if err != nil {
 			return err
 		}
 
-		templateView := models.ApplyTemplateBuilderValidations(formValues)
+		templateView := validator.ApplyTemplateBuilderValidations(formValues)
 
 		if templateView.HasErrors() {
 			component := components.BuildTemplateForm(username, templateView)

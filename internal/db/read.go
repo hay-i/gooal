@@ -9,13 +9,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func Get(database *mongo.Database, collectionName string, id string) interface{} {
+func Get(database *mongo.Database, collectionName string, id string) bson.M {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	collection := database.Collection(collectionName)
 
-	var result interface{}
+	var result bson.M
 	objectId, err := primitive.ObjectIDFromHex(id)
 
 	if err != nil {

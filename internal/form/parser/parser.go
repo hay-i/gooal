@@ -1,4 +1,4 @@
-package formparser
+package parser
 
 import (
 	"net/url"

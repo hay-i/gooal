@@ -3,10 +3,11 @@ package components
 import (
 	"fmt"
 
+	"github.com/hay-i/gooal/internal/models/views"
 	"github.com/hay-i/gooal/internal/models"
 )
 
-templ Build(goal, aim, username string, template models.TemplateView) {
+templ Build(goal, aim, username string, template views.TemplateView) {
 	<div>
 		<h1>{ goal }</h1>
 		<h2>{ aim }</h2>
@@ -32,7 +33,7 @@ templ Build(goal, aim, username string, template models.TemplateView) {
 	</div>
 }
 
-templ BuildTemplateForm(username string, template models.TemplateView) {
+templ BuildTemplateForm(username string, template views.TemplateView) {
 	@form(templ.Attributes{"hx-post": "/templates/save", "hx-swap": "outerHTML"}) {
 		<div class="form-group">
 			<label hidden for="title"></label>
@@ -61,7 +62,7 @@ templ BuildTemplateForm(username string, template models.TemplateView) {
 	}
 }
 
-templ TemplateBuilderInput(questionView models.QuestionView) {
+templ TemplateBuilderInput(questionView views.QuestionView) {
 	<div class="form-group">
 		switch questionView.Question.Type {
 			case models.TextQuestion:
@@ -115,7 +116,7 @@ templ TemplateBuilderInput(questionView models.QuestionView) {
 	</div>
 }
 
-templ completeTemplateInput(question models.QuestionView) {
+templ completeTemplateInput(question views.QuestionView) {
 	<div class="form-group">
 		<label for={ question.Question.ID.Hex() }>{ question.Label }</label>
 		switch question.Question.Type {
@@ -159,7 +160,7 @@ templ Save(objToSave string) {
 templ DeleteInput() {
 }
 
-templ Complete(template models.Template, questionViews []models.QuestionView) {
+templ Complete(template models.Template, questionViews []views.QuestionView) {
 	<div id="template-form">
 		<h1>{ template.Title }</h1>
 		<h2>{ template.Description }</h2>

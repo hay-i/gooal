@@ -15,17 +15,18 @@ const (
 	White  = "\033[37m"
 )
 
-// Example usage: `logger.LogInfo("Hello, %s", "world")`
+// Example usage:
+// - `logger.LogInfo("Hello, %s", "world")`
+// - `logger.LogInfo("Hello, %v", interface{})`
+
 func LogInfo(message string, args ...interface{}) {
 	fmt.Printf(Green+message+Reset+"\n", args...)
 }
 
-// Example usage: `logger.LogError("Hello, %s", "world")`
 func LogError(message string, args ...interface{}) {
 	fmt.Printf(Red+message+Reset+"\n", args...)
 }
 
-// Example usage: `logger.LogWarning("Hello, %s", "world")`
 func LogWarning(message string, args ...interface{}) {
 	fmt.Printf(Yellow+message+Reset+"\n", args...)
 }

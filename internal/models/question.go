@@ -2,7 +2,6 @@ package models
 
 import (
 	"net/url"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -32,22 +31,8 @@ type Question struct {
 	Order   int                `bson:"order"`
 }
 
-type QuestionView struct {
-	Question
-	Error string
-	Value string
-}
-
 func (q Question) OrderToString() string {
 	return strconv.Itoa(q.Order)
-}
-
-func SortQuestionsByOrder(qs []QuestionView) []QuestionView {
-	sort.Slice(qs, func(i, j int) bool {
-		return qs[i].Order < qs[j].Order
-	})
-
-	return qs
 }
 
 func QuestionsFromForm(formValues url.Values) []Question {
@@ -77,27 +62,4 @@ func QuestionsFromForm(formValues url.Values) []Question {
 	}
 
 	return templatesQuestions
-}
-
-func QuestionsHaveErrors(qs []QuestionView) bool {
-	for _, question := range qs {
-		if question.Error != "" {
-			return true
-		}
-	}
-
-	return false
-}
-
-func ApplyAnsweringQuestionValidations(questionViews []QuestionView, formValues url.Values) []QuestionView {
-	for i := range questionViews {
-		val := formValues.Get(questionViews[i].ID.Hex())
-		questionViews[i].Value = val
-
-		if val == "" {
-			questionViews[i].Error = "This field is required."
-		}
-	}
-
-	return questionViews
 }
