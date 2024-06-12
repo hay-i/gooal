@@ -39,18 +39,6 @@ func (t Template) Save(database *mongo.Database) {
 	db.Save(database, "templates", t)
 }
 
-func convertToTemplate(doc bson.M) Template {
-	var tmpl Template
-	data, err := bson.Marshal(doc)
-	if err != nil {
-		panic(err)
-	}
-	err = bson.Unmarshal(data, &tmpl)
-	if err != nil {
-		logger.LogError("Error converting to template: %v", err)
-	}
-	return tmpl
-}
 func GetTemplate(database *mongo.Database, id string) Template {
 	var template Template
 	doc := db.Get(database, "templates", id)
