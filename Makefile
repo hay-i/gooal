@@ -16,7 +16,7 @@ templ: ## Generate the templates
 build: templ sassGen ## Generate the templates and compile the SASS
 
 start: up ## Generate templates and start the server
-	go run .
+	go run cmd/gooal/main.go
 
 up: ## Start the docker containers
 	docker compose up -d

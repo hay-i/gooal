@@ -23,7 +23,7 @@ Providing you have the necessary development tools installed, you can get up and
 2) Start the docker containers using `make up`.
 3) Start the application with hot module reloading using `make hmr`.
 
-Alternatively, if you don't need hot module reloading, you can just run `go run .` or `make start`
+Alternatively, if you don't need hot module reloading, you can just run `go run cmd/gooal/main.go` or `make start`
 
 ## Testing
 
