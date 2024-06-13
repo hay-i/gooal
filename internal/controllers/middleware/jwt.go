@@ -13,7 +13,7 @@ import (
 func JwtAuthentication(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		cookie, err := c.Cookie("token")
-		currentURL := c.Request().URL.Path
+		currentURL := c.Request().URL.RequestURI()
 
 		if err != nil {
 			flash.Add(c, "You must be logged in to access that page", flash.Error)
