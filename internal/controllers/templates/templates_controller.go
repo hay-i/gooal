@@ -108,7 +108,8 @@ func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 
 		flash.Add(c, "You've successfully saved your template", flash.Success)
 
-		return c.Redirect(http.StatusSeeOther, fmt.Sprintf("/templates/%s/complete", id))
+		c.Response().Header().Set("HX-Redirect", fmt.Sprintf("/templates/%s/complete", id))
+		return c.NoContent(http.StatusOK)
 	}
 }
 

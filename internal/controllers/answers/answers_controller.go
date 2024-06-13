@@ -64,6 +64,7 @@ func AnswerTemplatePOST(database *mongo.Database) echo.HandlerFunc {
 
 		flash.Add(c, "You've successfully answered your template", flash.Success)
 
-		return c.Redirect(http.StatusSeeOther, "/")
+		c.Response().Header().Set("HX-Redirect", "/")
+		return c.NoContent(http.StatusOK)
 	}
 }
