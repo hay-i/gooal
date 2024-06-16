@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/hay-i/gooal/internal/db"
+	"github.com/hay-i/gooal/pkg/logger"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -33,10 +35,23 @@ func (t Template) FromForm(formValues url.Values) Template {
 	return t
 }
 
-func (t Template) Save(database *mongo.Database) {
-	db.Save(database, "templates", t)
+func (t Template) Save(database *mongo.Database) string {
+	return db.Save(database, "templates", t)
 }
 
 func GetTemplate(database *mongo.Database, id string) Template {
-	return db.Get(database, "templates", id).(Template)
+	var template Template
+	doc := db.Get(database, "templates", id)
+
+	data, err := bson.Marshal(doc)
+	if err != nil {
+		panic(err)
+	}
+
+	err = bson.Unmarshal(data, &template)
+	if err != nil {
+		logger.LogError("Error converting to template: %v", err)
+	}
+
+	return template
 }

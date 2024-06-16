@@ -1,14 +1,22 @@
 package templates
 
 import (
+	"fmt"
+	"net/http"
+	"strconv"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/hay-i/gooal/internal/auth"
 	"github.com/hay-i/gooal/internal/components"
 	"github.com/hay-i/gooal/internal/controllers"
-	"github.com/hay-i/gooal/internal/formparser"
+	"github.com/hay-i/gooal/internal/flash"
+	"github.com/hay-i/gooal/internal/form/parser"
+	"github.com/hay-i/gooal/internal/form/validator"
 	"github.com/hay-i/gooal/internal/models"
+	"github.com/hay-i/gooal/internal/models/views"
+	"github.com/hay-i/gooal/pkg/logger"
 
 	"github.com/labstack/echo/v4"
 )
@@ -33,7 +41,7 @@ func BuildGET() echo.HandlerFunc {
 		}
 
 		username := auth.TokenToUsername(parsedToken)
-		component := components.Build(goal, focus, username)
+		component := components.Build(goal, focus, username, views.TemplateView{})
 
 		return controllers.RenderNoBase(c, component)
 	}
@@ -50,7 +58,21 @@ func InputGET() echo.HandlerFunc {
 		order := c.QueryParam("order")
 
 		objectId := primitive.NewObjectID()
-		component := components.TemplateBuilderInput(inputType, objectId.Hex(), order)
+
+		orderInt, err := strconv.Atoi(order)
+		if err != nil {
+			logger.LogError("Error:", err)
+		}
+
+		questionView := views.QuestionView{
+			Question: models.Question{
+				ID:    objectId,
+				Type:  inputType,
+				Order: orderInt,
+			},
+		}
+
+		component := components.TemplateBuilderInput(questionView)
 
 		return controllers.RenderNoBase(c, component)
 	}
@@ -58,55 +80,6 @@ func InputGET() echo.HandlerFunc {
 
 func SavePOST(database *mongo.Database, client *mongo.Client) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		formValues, err := formparser.ValidateFormValues(c)
-		if err != nil {
-			return err
-		}
-
-		// TODO: Add validations for template builder
-		models.Template{}.FromForm(formValues).Save(database)
-
-		return controllers.RenderNoBase(c, components.Save("Template"))
-	}
-}
-
-func InputDELETE() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		return controllers.RenderNoBase(c, components.DeleteInput())
-	}
-}
-
-func CompleteTemplateGET(database *mongo.Database) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		id := c.Param("id")
-
-		template := models.GetTemplate(database, id)
-
-		questionViews := models.QuestionsToView(template.Questions)
-
-		return controllers.RenderNoBase(c, components.Complete(template, questionViews))
-	}
-}
-
-func CompletePOST(database *mongo.Database) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		id := c.Param("id")
-
-		template := models.GetTemplate(database, id)
-
-		questionViews := models.QuestionsToView(template.Questions)
-
-		formValues, err := formparser.ValidateFormValues(c)
-		if err != nil {
-			return err
-		}
-
-		questionViews = formparser.ApplyValidations(questionViews, formValues)
-
-		if formparser.HasErrors(questionViews) {
-			return controllers.RenderNoBase(c, components.Complete(template, questionViews))
-		}
-
 		tokenString, err := auth.GetTokenFromCookie(c)
 		if err != nil {
 			return auth.HandleInvalidToken(c, "You must be logged in to access that page")
@@ -118,8 +91,30 @@ func CompletePOST(database *mongo.Database) echo.HandlerFunc {
 		}
 
 		username := auth.TokenToUsername(parsedToken)
-		models.Answer{}.FromForm(template.ID, username, questionViews).Save(database)
 
-		return controllers.RenderNoBase(c, components.Save("Response to template"))
+		formValues, err := parser.ParseForm(c)
+		if err != nil {
+			return err
+		}
+
+		templateView := validator.ApplyTemplateBuilderValidations(formValues)
+
+		if templateView.HasErrors() {
+			component := components.BuildTemplateForm(username, templateView)
+			return controllers.RenderNoBase(c, component)
+		}
+
+		id := models.Template{}.FromForm(formValues).Save(database)
+
+		flash.Add(c, "You've successfully saved your template", flash.Success)
+
+		c.Response().Header().Set("HX-Redirect", fmt.Sprintf("/templates/%s/complete", id))
+		return c.NoContent(http.StatusOK)
+	}
+}
+
+func InputDELETE() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return controllers.RenderNoBase(c, components.DeleteInput())
 	}
 }

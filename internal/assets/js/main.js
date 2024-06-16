@@ -1,4 +1,23 @@
-document.addEventListener("DOMContentLoaded", function () {
+["DOMContentLoaded", "htmx:afterSwap"].forEach((eventType) => {
+  document.addEventListener(eventType, function () {
+    addRowRemovalListeners();
+    addLeftSortableListener();
+    addRightSortableListener();
+  });
+});
+
+function addRowRemovalListeners() {
+  document
+    .querySelectorAll("[data-delete-row='true']")
+    .forEach((deleteButton) => {
+      deleteButton.addEventListener("click", async function () {
+        const itemEl = deleteButton.parentElement;
+        deleteRow(itemEl);
+      });
+    });
+}
+
+function addLeftSortableListener() {
   new Sortable(document.querySelector("[data-sortable-left]"), {
     group: {
       name: "shared",
@@ -8,7 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
     animation: 150,
     ghostClass: "blue-background-class",
   });
+}
 
+function addRightSortableListener() {
   new Sortable(document.querySelector("[data-sortable-right]"), {
     group: {
       name: "shared",
@@ -51,7 +72,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     },
   });
-});
+}
+
+async function deleteRow(itemEl) {
+  const deletionResponse = await fetch("/templates/delete-input", {
+    method: "DELETE",
+    headers: { "HX-Request": "true" },
+  });
+  const deletedHtml = await deletionResponse.text();
+  itemEl.outerHTML = deletedHtml;
+}
 
 // TODO: Maybe this should be done directly with HTMX
 // but it seems like overkill to return the whole form again every time

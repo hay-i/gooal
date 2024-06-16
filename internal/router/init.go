@@ -3,6 +3,7 @@ package router
 import (
 	"go.mongodb.org/mongo-driver/mongo"
 
+	"github.com/hay-i/gooal/internal/controllers/answers"
 	"github.com/hay-i/gooal/internal/controllers/homes"
 	gooal_middleware "github.com/hay-i/gooal/internal/controllers/middleware"
 	"github.com/hay-i/gooal/internal/controllers/questionnaires"
@@ -45,8 +46,8 @@ func Initialize(client *mongo.Client) *echo.Echo {
 	templatesGroup.DELETE("/delete-input", templates.InputDELETE())
 	templatesGroup.POST("/save", templates.SavePOST(database, client))
 
-	templatesGroup.GET("/:id/complete", templates.CompleteTemplateGET(database))
-	templatesGroup.POST("/:id/complete", templates.CompletePOST(database))
+	templatesGroup.GET("/:id/complete", answers.AnswerTemplateGET(database))
+	templatesGroup.POST("/:id/complete", answers.AnswerTemplatePOST(database))
 
 	return e
 }

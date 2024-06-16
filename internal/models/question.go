@@ -2,7 +2,6 @@ package models
 
 import (
 	"net/url"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -32,18 +31,8 @@ type Question struct {
 	Order   int                `bson:"order"`
 }
 
-type QuestionView struct {
-	Question
-	Error string `bson:"error,omitempty"`
-	Value string `bson:"value,omitempty"`
-}
-
-func SortQuestionsByOrder(qs []QuestionView) []QuestionView {
-	sort.Slice(qs, func(i, j int) bool {
-		return qs[i].Order < qs[j].Order
-	})
-
-	return qs
+func (q Question) OrderToString() string {
+	return strconv.Itoa(q.Order)
 }
 
 func QuestionsFromForm(formValues url.Values) []Question {

@@ -16,15 +16,15 @@ type Answer struct {
 	QuestionAnswers []QuestionAnswer   `bson:"questions,omitempty"`
 }
 
-func (a Answer) FromForm(templateID primitive.ObjectID, username string, questionViews []QuestionView) Answer {
+func (a Answer) FromForm(templateID primitive.ObjectID, username string, questionAnswers []QuestionAnswer) Answer {
 	a.TemplateID = templateID
 	a.Username = username
 	a.CreatedAt = time.Now()
-	a.QuestionAnswers = QuestionAnswersFromForm(questionViews)
+	a.QuestionAnswers = questionAnswers
 
 	return a
 }
 
-func (a Answer) Save(database *mongo.Database) {
-	db.Save(database, "answers", a)
+func (a Answer) Save(database *mongo.Database) string {
+	return db.Save(database, "answers", a)
 }
