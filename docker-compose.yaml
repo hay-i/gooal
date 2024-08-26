@@ -1,5 +1,15 @@
 # Use root/example as user/password credentials
+version: "3.8"
+
 services:
+  app:
+    build: .
+    ports:
+      - "8080:8080",
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/gooal
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
