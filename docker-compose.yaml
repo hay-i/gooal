@@ -5,14 +5,14 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "1323:1323"
     environment:
-      - MONGO_URL=mongodb://mongo:27017/gooal
+      - MONGO_URL=mongodb://root:example@mongo:27017/gooal?authSource=admin
     depends_on:
       - mongo
 
   mongo:
-    image: mongo
+    image: mongo:5.0
     restart: always
     ports:
       - "27017:27017"
