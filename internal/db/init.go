@@ -2,13 +2,20 @@ package db
 
 import (
 	"context"
+	"log"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func Initialize(ctx context.Context) (*mongo.Client, error) {
-	clientOpts := options.Client().ApplyURI("mongodb://root:example@localhost:27017")
+	mongoURI := os.Getenv("MONGO_URL")
+	if mongoURI == "" {
+		log.Fatal("MONGO_URL environment variable not set")
+	}
+
+	clientOpts := options.Client().ApplyURI(mongoURI)
 	client, err := mongo.Connect(ctx, clientOpts)
 
 	if err != nil {
